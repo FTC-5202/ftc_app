@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
  */
 
 
-@TeleOp(name = "DummyRelic", group = "DummyBot")
+@TeleOp(name = "DummyRover", group = "DummyBot")
 //@Disabled
 public class DummyRelic extends LinearOpMode {
 
