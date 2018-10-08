@@ -48,14 +48,10 @@ public class DummyRover extends LinearOpMode {
 
 
             // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
-            robot.FL.setPower(0.6);
-            robot.BL.setPower(0.6);
+            robot.FLBL.setPower(0.6);
 
-            robot.FL.setPower(FLBL);
-            robot.BL.setPower(FLBL);
-            robot.FR.setPower(FRBR);
-            robot.BR.setPower(FRBR);
-
+            robot.FLBL.setPower(FLBL);
+            robot.FRBR.setPower(FRBR);
 
 //            telemetry.addData("Tank = ", Tank);
 //            telemetry.update();

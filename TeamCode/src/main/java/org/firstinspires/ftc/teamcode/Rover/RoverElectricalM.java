@@ -105,10 +105,8 @@ public class RoverElectricalM {
 
     public boolean bLedOn = true;
 
-    public DcMotor FLMotor = null;
-    public DcMotor BLMotor = null;
-    public DcMotor FRMotor = null;
-    public DcMotor BRMotor = null;
+    public DcMotor FLBLMotor = null;
+    public DcMotor FRBRMotor = null;
 
     HardwareMap hwMap = null;
     private ElapsedTime period = new ElapsedTime();
@@ -120,23 +118,14 @@ public class RoverElectricalM {
 
         hwMap = ahwMap;
 
-        BLMotor = hwMap.dcMotor.get("BL");
-        BRMotor = hwMap.dcMotor.get("BR");
-        FLMotor = hwMap.dcMotor.get("FL");
-        FRMotor = hwMap.dcMotor.get("FR");
+        FLBLMotor = hwMap.dcMotor.get("FLBL");
+        FRBRMotor = hwMap.dcMotor.get("FRBR");
 
-        FLMotor.setDirection(DcMotor.Direction.REVERSE);
-        BLMotor.setDirection(DcMotor.Direction.REVERSE);
+        FLBLMotor.setPower(0);
+        FRBRMotor.setPower(0);
 
-        BLMotor.setPower(0);
-        BRMotor.setPower(0);
-        FLMotor.setPower(0);
-        FRMotor.setPower(0);
-
-        BLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //was RUN_WITHOUT_ENCODERS
-        BRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FLBLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FRBRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
     public static void moveMotor(DcMotor motor, double pwr){
         if(pwr >= 1.0){
@@ -165,14 +154,12 @@ public class RoverElectricalM {
     public void moveLeftSide(double lPow){
         lPow = (lPow >= 1.0) ? 1.0 : lPow;
         lPow = (lPow <= -1.0) ? -1.0 : lPow;
-        BLMotor.setPower(lPow);
-        FLMotor.setPower(lPow);
+        FLBLMotor.setPower(lPow);
     }
 
     public void moveRightSide(double rPow){
         rPow = (rPow >= 1.0) ? 1.0 : rPow;
-        BRMotor.setPower(rPow);
-        FRMotor.setPower(rPow);
+        FRBRMotor.setPower(rPow);
     }
 
     public void moveDrivetrain(double lPow, double rPow){

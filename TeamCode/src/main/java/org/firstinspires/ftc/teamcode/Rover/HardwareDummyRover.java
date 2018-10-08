@@ -28,10 +28,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class HardwareDummyRover
 {
     /* Public OpMode members. */
-    public DcMotor  FL     = null;
-    public DcMotor  FR     = null;
-    public DcMotor  BL     = null;
-    public DcMotor  BR     = null;
+    public DcMotor  FLBL     = null;
+    public DcMotor  FRBR     = null;
 //    public Servo    DoublClamp1  = null;
 //    public Servo    DoublRelicY  = null;
 
@@ -52,19 +50,12 @@ public class HardwareDummyRover
         hwMap = ahwMap;
 
         // Define and Initialize Motors
-        FL   = hwMap.dcMotor.get("FL");
-        FR  = hwMap.dcMotor.get("FR");
-        BL  = hwMap.dcMotor.get("BL");
-        BR  = hwMap.dcMotor.get("BR");
-
-        FR.setDirection(DcMotor.Direction.REVERSE);
-        BR.setDirection(DcMotor.Direction.REVERSE);
+        FLBL   = hwMap.dcMotor.get("FLBL");
+        FRBR  = hwMap.dcMotor.get("FRBR");
 
         // Set all motors to zero power
-        FL.setPower(0);
-        FR.setPower(0);
-        BL.setPower(0);
-        BR.setPower(0);
+        FLBL.setPower(0);
+        FRBR.setPower(0);
     }
 
 

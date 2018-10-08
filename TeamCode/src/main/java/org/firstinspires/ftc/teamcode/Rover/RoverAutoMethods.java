@@ -20,10 +20,8 @@ public class RoverAutoMethods extends LinearOpMode {
         //This section sets up the brake behavior so when the power is off, motors hold current position
         //This is important for Lift1 and Lift2 so when we lift the glyph, it will stay in the air without running the motors
         r.moveDrivetrain(0,0);
-        r.FLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        r.BLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        r.FRMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        r.BRMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        r.FLBLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        r.FRBRMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
     public void setupServos() {
         //Setting initial positions for auto arm and paint roller arms
@@ -65,21 +63,21 @@ public class RoverAutoMethods extends LinearOpMode {
             //Distance is converted to ticks, then all motors are rotated until the target ticks are reached
             public void moveBot(double distance, int direction, double power, EndStatus status){
                 int target = inches_to_ticks(distance);
-                int startPos = r.FLMotor.getCurrentPosition();
-                int currentPos = r.FLMotor.getCurrentPosition();
+                int startPos = r.FLBLMotor.getCurrentPosition();
+                int currentPos = r.FLBLMotor.getCurrentPosition();
                 //Strangely enough, we had to reduce the right side power by 80% to get the robot to run straight
                 //Unfortunately, we do not yet understand why
                 r.moveDrivetrain(power * direction, power * 0.2 * direction);
 
-                while(Math.abs(currentPos - startPos) < target) currentPos = r.FLMotor.getCurrentPosition();
+                while(Math.abs(currentPos - startPos) < target) currentPos = r.FLBLMotor.getCurrentPosition();
 
                 if(status == EndStatus.STOP){
                     r.stopDrivetrain();
                     //To get repeatability in our auto programs, we found that we need to reset the encoders after every run of moveBot method
-                    r.FLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    r.FRMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    r.FLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    r.FRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);        }
+                    r.FLBLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    r.FRBRMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    r.FLBLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    r.FRBRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);        }
             }
 
             //The instance of moveBot below is the most commonly used method
@@ -96,13 +94,13 @@ public class RoverAutoMethods extends LinearOpMode {
 
             public enum Direction{LEFT, RIGHT}
 
-            //eTurnBot is used by all of our auto programs; angle(degrees), direction, and power are passed in from our autonomous program
+            //eTurnBot is used by all of our auto programs; angle(degrees), direction, and power are passed in FRBRom our autonomous program
             //We are currently not using an IMU for turning in autonomous.
-            //Rather, we track the angle turned by tracking the distance traveled by the front wheel on the outside of turn.
+            //Rather, we track the angle turned by tracking the distance traveled by the FRBRont wheel on the outside of turn.
 
             public void eTurnBot(double degrees, Direction dir, double lPow, double rPow, EndStatus status){
-                //"encoderMotor" is the motor that we track, we use FLMotor when powered
-                DcMotor encoderMotor = (lPow == 0.0) ? r.FRMotor : r.FLMotor;
+                //"encoderMotor" is the motor that we track, we use FLBLMotor when powered
+                DcMotor encoderMotor = (lPow == 0.0) ? r.FRBRMotor : r.FLBLMotor;
                 //Get the starting position for "encoderMotor"
                 int startPos = encoderMotor.getCurrentPosition();
                 //Angle is converted to radians
@@ -120,13 +118,13 @@ public class RoverAutoMethods extends LinearOpMode {
 
                 //Depending on desired turn dir and motor used, motor power is set in the section below
                 if(dir == Direction.RIGHT){
-                    if(encoderMotor.equals(r.FLMotor))  sgn = 1;
+                    if(encoderMotor.equals(r.FLBLMotor))  sgn = 1;
                     else sgn = -1;
                     lPow = Math.abs(lPow) * -1;
                     rPow = Math.abs(rPow);        }
 
                 else if(dir == Direction.LEFT){
-                    if(encoderMotor.equals(r.FLMotor))  sgn = -1;
+                    if(encoderMotor.equals(r.FLBLMotor))  sgn = -1;
                     else sgn = 1;
                     lPow = Math.abs(lPow);
                     rPow = Math.abs(rPow) * -1;        }
@@ -157,10 +155,10 @@ public class RoverAutoMethods extends LinearOpMode {
                 //To get repeatability in our auto programs, we found that we need to reset the encoders after every run of moveBot method
                 if(status == EndStatus.STOP){
                     r.stopDrivetrain();
-                    r.FLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    r.FRMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    r.FLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    r.FRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    r.FLBLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    r.FRBRMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    r.FLBLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    r.FRBRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 }
 
             }
