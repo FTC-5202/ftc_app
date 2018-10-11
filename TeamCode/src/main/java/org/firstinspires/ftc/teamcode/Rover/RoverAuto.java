@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Rover;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -26,11 +27,11 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
-import static org.firstinspires.ftc.teamcode.Rover.RoverAutoMethods.Direction.RIGHT;
-import static org.firstinspires.ftc.teamcode.Rover.RoverAutoMethods.Direction.LEFT;
+//import static org.firstinspires.ftc.teamcode.Rover.RoverAutoMethods.Direction.RIGHT;
+//import static org.firstinspires.ftc.teamcode.Rover.RoverAutoMethods.Direction.LEFT;
 @Autonomous(name="RoverAuto", group ="Rover")
 //@Disabled
-public class RoverAuto extends RoverAutoMethods {
+public class RoverAuto extends LinearOpMode {
     HardwareDummyRover r = new HardwareDummyRover();
 
     boolean Target1;
@@ -71,6 +72,7 @@ public class RoverAuto extends RoverAutoMethods {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        r.init(hardwareMap);
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          * We can pass Vuforia the handle to a camera preview resource (on the RC phone);
@@ -215,6 +217,8 @@ public class RoverAuto extends RoverAutoMethods {
         targetsRoverRuckus.activate();
         while (opModeIsActive()) {
 
+            r.FRBR.setPower(0.1);
+
             targetVisible = false;
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
@@ -246,15 +250,16 @@ public class RoverAuto extends RoverAutoMethods {
                 telemetry.addData("Visible Target", "none");
             }
             telemetry.update();
-
-            eTurnBot(180, LEFT, 0.5, 0.5);
             targetVisible = false;
+
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
                     targetVisible = true;
+                    sleep(500);
                     r.FLBL.setPower(0);
                     r.FRBR.setPower(0);
+                    sleep(10000);
 
                     // getUpdatedRobotLocation() will return null if no new information is available since
                     // the last time that call was made, or if the trackable is not currently visible.
@@ -263,9 +268,9 @@ public class RoverAuto extends RoverAutoMethods {
                         lastLocation = robotLocationTransform;
                     }
                     break;
+                    }
                 }
-            }
+
             }
         }
-
     }

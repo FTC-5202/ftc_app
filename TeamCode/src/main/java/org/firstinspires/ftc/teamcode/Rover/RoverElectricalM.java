@@ -124,69 +124,69 @@ public class RoverElectricalM {
         FLBLMotor.setPower(0);
         FRBRMotor.setPower(0);
 
-        FLBLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FRBRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-    public static void moveMotor(DcMotor motor, double pwr){
-        if(pwr >= 1.0){
-            motor.setPower(1.0);
+       // FLBLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+       // FRBRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+   //}
+   // public static void moveMotor(DcMotor motor, double pwr){
+      //  if(pwr >= 1.0){
+       //     motor.setPower(1.0);
+      //  }
+        //else if(pwr <= -1.0){
+           // motor.setPower(-1.0);
+       // }
+       // else {
+           // motor.setPower(pwr);
+        //}
+    //}
+
+   // public static void moveServo(Servo servo, double pos){
+      //  if(pos >= 1.0){
+      //      servo.setPosition(1.0);
         }
-        else if(pwr <= -1.0){
-            motor.setPower(-1.0);
-        }
-        else {
-            motor.setPower(pwr);
-        }
-    }
+      //  else if (pos <= 0.0){
+       //     servo.setPosition(0.0);
+       // }
+       // else {
+          //  servo.setPosition(pos);
+       // }
+   // }
 
-    public static void moveServo(Servo servo, double pos){
-        if(pos >= 1.0){
-            servo.setPosition(1.0);
-        }
-        else if (pos <= 0.0){
-            servo.setPosition(0.0);
-        }
-        else {
-            servo.setPosition(pos);
-        }
-    }
+    //public void moveLeftSide(double lPow){
+       // lPow = (lPow >= 1.0) ? 1.0 : lPow;
+        //lPow = (lPow <= -1.0) ? -1.0 : lPow;
+       // FLBLMotor.setPower(lPow);
+   // }
 
-    public void moveLeftSide(double lPow){
-        lPow = (lPow >= 1.0) ? 1.0 : lPow;
-        lPow = (lPow <= -1.0) ? -1.0 : lPow;
-        FLBLMotor.setPower(lPow);
-    }
+    //public void moveRightSide(double rPow){
+        //rPow = (rPow >= 1.0) ? 1.0 : rPow;
+        //FRBRMotor.setPower(rPow);
+   // }
 
-    public void moveRightSide(double rPow){
-        rPow = (rPow >= 1.0) ? 1.0 : rPow;
-        FRBRMotor.setPower(rPow);
-    }
+   // public void moveDrivetrain(double lPow, double rPow){
+       // moveLeftSide(lPow);
+       // moveRightSide(rPow);
+   // }
 
-    public void moveDrivetrain(double lPow, double rPow){
-        moveLeftSide(lPow);
-        moveRightSide(rPow);
-    }
-
-    public void stopDrivetrain(){
-        moveDrivetrain(0,0);
+   // public void stopDrivetrain(){
+       // moveDrivetrain(0,0);
     }
 
 
-    public void waitForTick(long periodMs) throws InterruptedException {
+   // public void waitForTick(long periodMs) throws InterruptedException {
 
-        long remaining = periodMs - (long) period.milliseconds();
+        //long remaining = periodMs - (long) period.milliseconds();
 
-        if (remaining > 0)
-            Thread.sleep(remaining);
+       // if (remaining > 0)
+        //    Thread.sleep(remaining);
 
-        period.reset();
+      //  period.reset();
 
-    }
-    public double power(double val){
-        int sgn = (val >= 0) ? 1 : -1;
-        double holder = Math.pow(val, 2.0) * sgn;
-        return holder;
-    }
-}
+    //}
+   // public double power(double val){
+        //int sgn = (val >= 0) ? 1 : -1;
+       // double holder = Math.pow(val, 2.0) * sgn;
+       // return holder;
+    //}
+//}
 
 
