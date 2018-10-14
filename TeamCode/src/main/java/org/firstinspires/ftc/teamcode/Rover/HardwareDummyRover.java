@@ -56,6 +56,9 @@ public class HardwareDummyRover
         // Set all motors to zero power
         FLBL.setPower(0);
         FRBR.setPower(0);
+
+        FLBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        FRBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
 
