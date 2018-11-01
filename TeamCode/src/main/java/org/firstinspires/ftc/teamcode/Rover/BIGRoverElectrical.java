@@ -2,41 +2,20 @@ package org.firstinspires.ftc.teamcode.Rover;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-//import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.teamcode.TH3O.TH3OAutoMethods;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.qualcomm.hardware.bosch.BNO055IMU.AngleUnit.RADIANS;
-import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
+
+//import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 
 
 /**
@@ -77,12 +56,23 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * is explained below.
  */
 
-public class RoverElectricalM {
+public class BIGRoverElectrical {
 
     //Orientation lastAngles = new Orientation();
     //public double globalAngle;
-    public DcMotor FLBLMotor = null;
-    public DcMotor FRBRMotor = null;
+    public DcMotor FLMotor = null;
+    public DcMotor FRMotor = null;
+    public DcMotor BLMotor = null;
+    public DcMotor BRMotor = null;
+    public DcMotor RarmLif = null;
+    public DcMotor LarmLif = null;
+    public DcMotor Lift = null;
+    public Servo LSrot = null;
+    public Servo RSrot = null;
+    public Servo LSgrab = null;
+    public Servo RSgrab = null;
+    public Servo RSLif = null;
+    public Servo LSLif = null;
     public Rev2mDistanceSensor sensorRange;
     //    public void runOpMode() throws InterruptedException {    }
     /*
@@ -123,7 +113,7 @@ public class RoverElectricalM {
 
 //    public RoverElectricalM r = new RoverElectricalM();
 
-    public RoverElectricalM() {
+    public BIGRoverElectrical() {
     }
 
 
@@ -151,19 +141,41 @@ public class RoverElectricalM {
                 hwMap = ahwMap;
 
 
-                FLBLMotor = hwMap.dcMotor.get("FLBL");
-                FRBRMotor = hwMap.dcMotor.get("FRBR");
+                FLMotor = hwMap.dcMotor.get("fl motor");
+                FRMotor = hwMap.dcMotor.get("fr motor");
+                BLMotor = hwMap.dcMotor.get("bl motor");
+                BRMotor = hwMap.dcMotor.get("br motor");
+                Lift = hwMap.dcMotor.get("mlift");
+
+                LarmLif = hwMap.dcMotor.get("larm lift");
+                RarmLif = hwMap.dcMotor.get("rarm lift");
+                RSrot = hwMap.servo.get("rs rot");
+                LSrot = hwMap.servo.get("ls rot");
+                RSgrab = hwMap.servo.get("rs grab");
+                LSgrab = hwMap.servo.get("ls grab");
+                RSLif = hwMap.servo.get("rs lift");
+                LSLif = hwMap.servo.get("ls lift");
+
+
                 //sensorColor = hwMap.get(ColorSensor.class, "sensor_color");
-                sensorRange = hwMap.get(Rev2mDistanceSensor.class, "sensor_range");
-                Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)sensorRange;
+                //sensorRange = hwMap.get(Rev2mDistanceSensor.class, "sensor_range");
+                //Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)sensorRange;
                // sensorRangeR = hwMap.get(DistanceSensor.class, "sensor_range_R");
 
-                FLBLMotor.setPower(0);
-                FRBRMotor.setPower(0);
-//10/27 oommented out the two lines just below for drive straight testing
+                FLMotor.setPower(0);
+                FRMotor.setPower(0);
+                BLMotor.setPower(0);
+                BRMotor.setPower(0);
+                RarmLif.setPower(0);
+                LarmLif.setPower(0);
+                //10/27 oommented out the two lines just below for drive straight testing
 //10/27 uncommented two lines below
-                FLBLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                FRBRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                FLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                FRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                BLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                BRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                LarmLif.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                RarmLif.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
                 //FLBLMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -206,13 +218,15 @@ public class RoverElectricalM {
             public void moveLeftSide ( double lPow){
                 lPow = (lPow >= 1.0) ? 1.0 : lPow;
                 lPow = (lPow <= -1.0) ? -1.0 : lPow;
-                FLBLMotor.setPower(lPow);
+                FLMotor.setPower(lPow);
+                BLMotor.setPower(lPow);
             }
 
             public void moveRightSide ( double rPow){
                 rPow = (rPow >= 1.0) ? 1.0 : rPow;
                 rPow = (rPow <= -1.0) ? -1.0 : rPow;
-                FRBRMotor.setPower(rPow);
+                FRMotor.setPower(rPow);
+                BRMotor.setPower(rPow);
             }
 
             public void moveDrivetrain ( double lPow, double rPow){

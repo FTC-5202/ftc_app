@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.TH3O;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import static com.qualcomm.hardware.bosch.BNO055IMU.AngleUnit.RADIANS;
 
 /**
  * Created by Hannah on 10/26/2017.

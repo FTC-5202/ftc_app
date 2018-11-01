@@ -19,10 +19,10 @@ import static com.qualcomm.hardware.bosch.BNO055IMU.AngleUnit.DEGREES;
 @Autonomous
 public class NewIMU2Dummy extends LinearOpMode {
 
-    public DcMotor BLMotor = null;
-    public DcMotor BRMotor = null;
-    public DcMotor FLMotor = null;
-    public DcMotor FRMotor = null;
+    public DcMotor FLBLMotor = null;
+    public DcMotor FRBRMotor = null;
+    //public DcMotor FLMotor = null;
+   // public DcMotor FRMotor = null;
     //DigitalChannel touch;
     BNO055IMU imu;
     Orientation
@@ -34,17 +34,17 @@ public class NewIMU2Dummy extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException
     {
-        BLMotor = hardwareMap.get(DcMotor.class, "BL");
-        BRMotor = hardwareMap.get(DcMotor.class, "BR");
-        FLMotor = hardwareMap.get(DcMotor.class, "FL");
-        FRMotor = hardwareMap.get(DcMotor.class, "FR");
+        FLBLMotor = hardwareMap.get(DcMotor.class, "FLBL");
+        FRBRMotor = hardwareMap.get(DcMotor.class, "FRBR");
+        //FLMotor = hardwareMap.get(DcMotor.class, "FL");
+        //FRMotor = hardwareMap.get(DcMotor.class, "FR");
 
-        FLMotor.setDirection(DcMotor.Direction.REVERSE);
+        FLBLMotor.setDirection(DcMotor.Direction.REVERSE);
 
-        BLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        BRMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        FLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        FRMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        FLBLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        FRBRMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //FLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //FRMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // get a reference to REV Touch sensor.
         //touch = hardwareMap.digitalChannel.get("touch_sensor");
@@ -112,10 +112,8 @@ public class NewIMU2Dummy extends LinearOpMode {
             */
 
 
-            BLMotor.setPower(-power - correction);
-            FLMotor.setPower(-power - correction);
-            BRMotor.setPower(-power);
-            FRMotor.setPower(-power);
+            FLBLMotor.setPower(power - correction);
+            FRBRMotor.setPower(power - correction);
 
             // We record the sensor values because we will test them in more than
             // one place with time passing between those places. See the lesson on
@@ -155,10 +153,10 @@ public class NewIMU2Dummy extends LinearOpMode {
         }
 
         // turn the motors off.
-        BLMotor.setPower(0);
-        FLMotor.setPower(0);
-        BRMotor.setPower(0);
-        FRMotor.setPower(0);
+        FLBLMotor.setPower(0);
+        //FLMotor.setPower(0);
+        FRBRMotor.setPower(0);
+        //FRMotor.setPower(0);
     }
 
     /**
@@ -248,10 +246,10 @@ public class NewIMU2Dummy extends LinearOpMode {
         else return;
 
         // set power to rotate.
-        BLMotor.setPower(leftPower);
-        FLMotor.setPower(leftPower);
-        BRMotor.setPower(rightPower);
-        FRMotor.setPower(rightPower);
+        FLBLMotor.setPower(-leftPower);
+        FRBRMotor.setPower(leftPower);
+        //BRMotor.setPower(rightPower);
+        //FRMotor.setPower(rightPower);
 
         // rotate until turn is completed.
         if (degrees < 0)
@@ -265,10 +263,10 @@ public class NewIMU2Dummy extends LinearOpMode {
             while (opModeIsActive() && getAngle() < degrees) {}
 
         // turn the motors off.
-        BLMotor.setPower(0);
-        FLMotor.setPower(0);
-        BRMotor.setPower(0);
-        FRMotor.setPower(0);
+        FLBLMotor.setPower(0);
+        //FLMotor.setPower(0);
+        FRBRMotor.setPower(0);
+        //FRMotor.setPower(0);
 
         // wait for rotation to stop.
         sleep(1000);

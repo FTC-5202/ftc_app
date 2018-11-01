@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Rover;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -25,7 +26,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  *   As the arm servo approaches 0, the arm position moves up (away from the floor).
  *   As the claw servo approaches 0, the claw opens up (drops the game element).
  */
-public class HardwareDummyRover
+public class HardwareDummyRover extends RoverElectricalM
+
 {
     /* Public OpMode members. */
     public DcMotor  FLBL     = null;
@@ -57,8 +59,10 @@ public class HardwareDummyRover
         FLBL.setPower(0);
         FRBR.setPower(0);
 
-        FLBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        FRBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        FLBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FRBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        FLBL.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
 

@@ -1,8 +1,13 @@
 package org.firstinspires.ftc.teamcode.Rover;
 
+import android.graphics.Color;
+
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -16,6 +21,7 @@ import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -34,64 +40,85 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
-//import static org.firstinspires.ftc.teamcode.Rover.RoverAutoMethods.Direction.RIGHT;
-//import static org.firstinspires.ftc.teamcode.Rover.RoverAutoMethods.Direction.LEFT;
+import static org.firstinspires.ftc.teamcode.Rover.RoverAutoMethods.Direction.RIGHT;
+import static org.firstinspires.ftc.teamcode.Rover.RoverAutoMethods.Direction.LEFT;
 @Autonomous(name="RoverAuto", group ="Rover")
 //@Disabled
-public class RoverAuto extends LinearOpMode {
-    HardwareDummyRover r = new HardwareDummyRover();
-
-    boolean Target1;
-    boolean TargetSpotted = false;
+public class RoverAuto extends RoverAutoMethods {
+    //    VuforiaLocalizer vuforia;
+//    boolean Target1;
+//    boolean targetSpotted = false;
     BNO055IMU imu;
-    Orientation
-            lastAngles = new Orientation();
-    double globalAngle, power = .15, correction; //(was 30)
+    Orientation lastAngles = new Orientation();
+    double globalAngle, power = .15, correction, robotHeading, robotX, robotY, robotToWall, distanceToTravel;
+    double distanceTraveled = 0;
+    // public Rev2mDistanceSensor sensorRange;
+    //DistanceSensor sensorRangeR;
+    //ColorSensor sensorColor;
 
-    /*
-     * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
-     * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
-     * A Vuforia 'Development' license key, can be obtained free of charge from the Vuforia developer
-     * web site at https://developer.vuforia.com/license-manager.
-     *
-     * Vuforia license keys are always 380 characters long, and look as if they contain mostly
-     * random data. As an example, here is a example of a fragment of a valid key:
-     *      ... yIgIzTqZ4mWjk9wd3cZO9T1axEqzuhxoGlfOOI2dRzKS4T0hQ8kT ...
-     * Once you've obtained a license key, copy the string from the Vuforia web site
-     * and paste it in to your code on the next line, between the double quotes.
-     */
-    private static final String VUFORIA_KEY = "AXLb9ZD/////AAAAGc+ylHTIf0+aorS8rw6aoBRMAiybD7XCkifjVKb1gFrWJ+pZOL6huLnful+ArD+R2XN3/ZGcwQl6+4jsRj2e3Y82Sm/yTgANmCQEqhIqLjfWNePdOqmT0apncNRVE8YfklK+VRNs976s0xR2rEPIl4tNaYoGOHqaJl8JfIrZ5CjIIxKV55C5PUdzzgAxR3NS8hR7wGu5H0rX1of4shVf1Nncn3WNKTrsOU//PPBjgE79RIN3G5aUC54lMNkzMfaJ2FwAfTXoMbSUygQiGu1Sh0UizQpgjqzPH8gIt6v8qt542i4Pk5T+gbrculkfzvFhzMQu81EyP2v4TfCNmCsSrFQdRl2Z7pTbWddtn5//e6Px";
+//    @Override
 
-    // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
-    // We will define some constants and conversions here
-    private static final float mmPerInch = 25.4f;
-    private static final float mmFTCFieldWidth = (12 * 6) * mmPerInch;       // the width of the FTC field (from the center point to the outer panels)
-    private static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
+    //    public void runOpMode() throws InterruptedException{
+    public void runOpMode() {
+        telemetry.addLine("Initializing...");
+        telemetry.update();
 
-    // Select which camera you want use.  The FRONT camera is the one on the same side as the screen.
-    // Valid choices are:  BACK or FRONT
-    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
+        boolean Target1;
+        boolean targetSpotted = false;
+        boolean drivetrainStopped = false;
+        boolean turnL = false;
+        double globalAngle = 0, power = .15, correction, robotHeading, robotX, robotY, robotToWall;
+        double distanceTraveled = 0;
+        double distanceToTravel = 0;
 
-    private OpenGLMatrix lastLocation = null;
-    private boolean targetVisible = false;
+        setupAll();
+//        DcMotor FLBLMotor = null;
+//        DcMotor FRBRMotor = null;
 
-    /**
-     * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
-     * localization engine.
-     */
-    VuforiaLocalizer vuforia;
+        //HardwareDummyRover r = new HardwareDummyRover();
+        /*
+         * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
+         * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
+         * A Vuforia 'Development' license key, can be obtained free of charge from the Vuforia developer
+         * web site at https://developer.vuforia.com/license-manager.
+         *
+         * Vuforia license keys are always 380 characters long, and look as if they contain mostly
+         * random data. As an example, here is a example of a fragment of a valid key:
+         *      ... yIgIzTqZ4mWjk9wd3cZO9T1axEqzuhxoGlfOOI2dRzKS4T0hQ8kT ...
+         * Once you've obtained a license key, copy the string from the Vuforia web site
+         * and paste it in to your code on the next line, between the double quotes.
+         */
+        final String VUFORIA_KEY = "AXLb9ZD/////AAAAGc+ylHTIf0+aorS8rw6aoBRMAiybD7XCkifjVKb1gFrWJ+pZOL6huLnful+ArD+R2XN3/ZGcwQl6+4jsRj2e3Y82Sm/yTgANmCQEqhIqLjfWNePdOqmT0apncNRVE8YfklK+VRNs976s0xR2rEPIl4tNaYoGOHqaJl8JfIrZ5CjIIxKV55C5PUdzzgAxR3NS8hR7wGu5H0rX1of4shVf1Nncn3WNKTrsOU//PPBjgE79RIN3G5aUC54lMNkzMfaJ2FwAfTXoMbSUygQiGu1Sh0UizQpgjqzPH8gIt6v8qt542i4Pk5T+gbrculkfzvFhzMQu81EyP2v4TfCNmCsSrFQdRl2Z7pTbWddtn5//e6Px";
+
+        // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
+        // We will define some constants and conversions here
+        final float mmPerInch = 25.4f;
+        final float mmFTCFieldWidth = (12 * 6) * mmPerInch;       // the width of the FTC field (from the center point to the outer panels)
+        final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
+
+        // Select which camera you want use.  The FRONT camera is the one on the same side as the screen.
+        // Valid choices are:  BACK or FRONT
+        final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
+
+        OpenGLMatrix lastLocation = null;
+        boolean targetVisible = false;
+
+        /**
+         * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
+         * localization engine.
+         */
 
 
-    @Override
-    public void runOpMode() throws InterruptedException {
-        r.init(hardwareMap);
-
+        //r.init(hardwareMap);
+        telemetry.addLine("Initializing...");
+        telemetry.update();
+//            setupAll();
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
-        parameters.mode                = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit           = RADIANS;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled      = false;
+        parameters.mode = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit = RADIANS;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled = false;
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
@@ -101,11 +128,13 @@ public class RoverAuto extends LinearOpMode {
         telemetry.update();
 
         // make sure the imu gyro is calibrated before continuing.
-        while (!isStopRequested() && !imu.isGyroCalibrated())
-        {
+        while (!isStopRequested() && !imu.isGyroCalibrated()) {
             sleep(50);
             idle();
         }
+
+        final float hsvValues[] = {0F, 0F, 0F};
+
 
         telemetry.addData("Mode", "waiting for start");
         telemetry.addData("imu calib status", imu.getCalibrationStatus().toString());
@@ -125,11 +154,11 @@ public class RoverAuto extends LinearOpMode {
         parametersVU.cameraDirection = CAMERA_CHOICE;
 
         //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parametersVU);
+        r.vuforia = ClassFactory.getInstance().createVuforia(parametersVU);
 
         // Load the data sets that for the trackable objects. These particular data
         // sets are stored in the 'assets' part of our application.
-        VuforiaTrackables targetsRoverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
+        VuforiaTrackables targetsRoverRuckus = r.vuforia.loadTrackablesFromAsset("RoverRuckus");
         VuforiaTrackable blueRover = targetsRoverRuckus.get(0);
         blueRover.setName("Blue-Rover");
         VuforiaTrackable redFootprint = targetsRoverRuckus.get(1);
@@ -243,9 +272,8 @@ public class RoverAuto extends LinearOpMode {
 
 
         /**  Let all the trackable listeners know where the phone is.  */
-        for (VuforiaTrackable trackable : allTrackables)
-        {
-            ((VuforiaTrackableDefaultListener)trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, parametersVU.cameraDirection);
+        for (VuforiaTrackable trackable : allTrackables) {
+            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, parametersVU.cameraDirection);
         }
 
         /** Wait for the game to begin */
@@ -253,25 +281,34 @@ public class RoverAuto extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
+        //Color.RGBToHSV(r.sensorColor.red() * 8, r.sensorColor.green() * 8, r.sensorColor.blue() * 8, hsvValues);
+
         /** Start tracking the data sets we care about. */
         targetsRoverRuckus.activate();
         while (opModeIsActive()) {
+
             correction = checkDirection();
+
             telemetry.addData("1 imu heading", lastAngles.firstAngle);
             telemetry.addData("2 global heading", globalAngle);
             telemetry.addData("3 correction", correction);
             telemetry.update();
 
-            while (!TargetSpotted) {
 
-                r.FRBR.setPower(0.3);
-                r.FLBL.setPower(-0.3);
+            while (!targetSpotted && opModeIsActive()) {
+
+                r.moveDrivetrain(-0.3, 0.3);
+//                    r.FRBRMotor.setPower(0.3);
+//                    r.FLBLMotor.setPower(0.3);
                 sleep(250);
-                r.FRBR.setPower(0);
-                r.FLBL.setPower(0);
+                r.stopDrivetrain();
+//                    r.FRBRMotor.setPower(0);
+//                    r.FLBLMotor.setPower(0);
                 sleep(250);
 
-                targetVisible = false;
+
+                // targetVisible = false;
+
                 for (VuforiaTrackable trackable : allTrackables) {
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                         telemetry.addData("Visible Target", trackable.getName());
@@ -288,7 +325,7 @@ public class RoverAuto extends LinearOpMode {
                 }
 
                 // Provide feedback as to where the robot is located (if we know).
-                if (targetVisible) {
+                if (targetVisible && !targetSpotted) {
                     // express position (translation) of robot in inches.
                     VectorF translation = lastLocation.getTranslation();
                     telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
@@ -297,48 +334,124 @@ public class RoverAuto extends LinearOpMode {
                     // express the rotation of the robot in degrees.
                     Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                     telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                    telemetry.update();
+                    r.stopDrivetrain();
+//                        r.FRBRMotor.setPower(0);
+//                        r.FLBLMotor.setPower(0);
+                    targetSpotted = true;
+                    robotHeading = Math.toRadians(rotation.thirdAngle);
+                    robotX = translation.get(0) / mmPerInch;
+                    robotY = translation.get(1) / mmPerInch;
+                    robotToWall = (72 - robotY - 6); //was -12
+                    distanceToTravel = robotToWall / Math.abs(Math.cos(robotHeading - Math.PI / 2));
+                    telemetry.addData("distance", distanceToTravel);
+                    telemetry.addData("robotToWall", robotToWall);
+                    telemetry.addData("robotHeading", robotHeading);
+                    telemetry.addData("Cos", Math.cos(robotHeading));
+                    telemetry.update();
+                    //sleep(5000);
 
-                    //r.FRBR.setPower(0);
-                    //r.FLBL.setPower(0);
-                    TargetSpotted = true;
-                } else {
-                    telemetry.addData("Visible Target", "none");
+                    //} else {
+                    //telemetry.addData("Visible Target", "none");
                 }
 
             }
-            telemetry.update();
+
+            getAngle();
+            if (targetSpotted && opModeIsActive()) {
+                if (distanceTraveled < distanceToTravel) {
+
+//                        correction = checkDirection();
+                    r.FLBLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    r.FRBRMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    r.FLBLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    r.FRBRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);//checkpoint
 
 
+                    telemetry.addLine("IMU Straight");//IMU works, however, out previous config was set up with four individual motors, so I need to do some tweaking to the commands
+                    telemetry.update();
 
-            }  //while opModeIsActive
-        }  //throws interrupted exception
+                    //moveBot(distanceToTravel, FORWARD, 0.5);
+                    moveStraight(distanceToTravel, FORWARD, 0.5);
+                    //r.moveDrivetrain(0.5, 0.5);
+                    sleep(1000);
+                    distanceTraveled = distanceToTravel;
+                    telemetry.addData("DistanceTraveled", distanceTraveled);
+                    telemetry.addData("Correction", r.correction);
+                    telemetry.update();
+                }
+                telemetry.addData("range", String.format("%.01f in", r.sensorRange.getDistance(DistanceUnit.INCH)));
+                //telemetry.addData("rangeR", String.format("%.01f in", sensorRangeR.getDistance(DistanceUnit.INCH)));
+                telemetry.update();
 
+                if (!turnL) {
+                    r.FLBLMotor.setPower(-0.25);
+                    r.FRBRMotor.setPower(0.25);
+                    turnL = true;
+
+                }
+                if (r.sensorRange.getDistance(DistanceUnit.INCH) <= 8 && !drivetrainStopped) {
+                    r.stopDrivetrain();
+                    drivetrainStopped = true;
+                    sleep(500);
+                    if (r.sensorRange.getDistance(DistanceUnit.INCH) <= 8 && drivetrainStopped) {
+                        r.moveDrivetrain(0.5, 0.5);
+                        //if (sensorColor.blue() >= 1) {
+                        //r.stopDrivetrain();
+
+                        if (r.sensorRange.getDistance(DistanceUnit.INCH) >= 8 && drivetrainStopped) {
+                            r.FLBLMotor.setPower(0.5);
+                            r.FRBRMotor.setPower(0.4);
+
+                        }
+
+                        else {
+                            r.FLBLMotor.setPower(0.4);
+                            r.FRBRMotor.setPower(0.5);
+                        }
+
+
+                    }
+
+
+                }
+
+                //FLBL.setPower(power);
+                //FRBR.setPower(power);
+
+
+                //FLBL.setPower(0);
+                //FRBR.setPower(0);
+
+            }   //while opModeIsActive
+        }    // end RunOpMode
+/*
     private void resetAngle()
     {
-        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS); //was DEGREES
 
         globalAngle = 0;
     }
-
-    /**
-     * Get current cumulative angle rotation from last reset.
-     * @return Angle in degrees. + = left, - = right.
-     */
-    private double getAngle()
+*/
+        /**
+         * Get current cumulative angle rotation from last reset.
+         * @return Angle in degrees. + = left, - = right.
+         */
+    /*public double getAngle()
     {
         // We experimentally determined the Z axis is the axis we want to use for heading angle.
         // We have to process the angle because the imu works in euler angles so the Z axis is
         // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
         // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
 
-        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS); //was DEGREES
 
         double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
 
-        if (deltaAngle < -180)
-            deltaAngle += 360;
-        else if (deltaAngle > 180)
-            deltaAngle -= 360;
+        if (deltaAngle < -3.1)//convert to radians - 180 degrees
+            deltaAngle += 6.3;//convert to radians - 360 degrees
+        else if (deltaAngle > 3.1)//convert to radians - 180 degrees
+            deltaAngle -= 6.3;//convert to radians - 360 degrees
 
         globalAngle += deltaAngle;
 
@@ -347,11 +460,12 @@ public class RoverAuto extends LinearOpMode {
         return globalAngle;
     }
 
+
     /**
      * See if we are moving in a straight line and if not return a power correction value.
      * @return Power adjustment, + is adjust left - is adjust right.
      */
-    private double checkDirection()
+/*    public double checkDirection()
     {
         // The gain value determines how sensitive the correction is to direction changes.
         // You will have to experiment with your robot to get small smooth direction changes
@@ -370,11 +484,68 @@ public class RoverAuto extends LinearOpMode {
         return correction;
     }
 
+    public double getAngle(){
+        // We experimentally determined the Z axis is the axis we want to use for heading angle.
+        // We have to process the angle because the imu works in euler angles so the Z axis is
+        // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
+        // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
+
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS); //was DEGREES
+
+        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+
+        if (deltaAngle < -3.1)//convert to radians - 180 degrees
+            deltaAngle += 6.3;//convert to radians - 360 degrees
+        else if (deltaAngle > 3.1)//convert to radians - 180 degrees
+            deltaAngle -= 6.3;//convert to radians - 360 degrees
+
+        globalAngle += deltaAngle;
+
+        lastAngles = angles;
+
+        return globalAngle;
+    }
+
+    public void moveStraight(double distance, int direction, double power, EndStatus status) {
+        int target = inches_to_ticks(distance);
+        //int startPos = r.LFMotor.getCurrentPosition();
+        //int currentPos = r.LFMotor.getCurrentPosition();
+        int startPos = r.FLBLMotor.getCurrentPosition();
+        int currentPos = r.FLBLMotor.getCurrentPosition();
+        //int startPos = FRBRMotor.getCurrentPosition();
+        //int currentPos = FRBRMotor.getCurrentPosition();
+        //Strangely enough, we had to reduce the right side power by 80% to get the robot to run straight
+        //Unfortunately, we do not yet understand why
+        r.moveDrivetrain(power * direction, power * direction);
+
+        // while(Math.abs(currentPos - startPos) < target) currentPos = r.LFMotor.getCurrentPosition();
+        while (Math.abs(currentPos - startPos) < target) {
+            currentPos = r.FLBLMotor.getCurrentPosition();
+            correction = checkDirection();
+            r.FLBLMotor.setPower(power - correction); // was0.15 REVERSE in Hr.FRBRMotor.setPower(power - correction); // was0.15
+
+        }
+
+        if (status == EndStatus.STOP) {
+            r.stopDrivetrain();
+            //To get repeatability in our auto programs, we found that we need to reset the encoders after every run of moveBot method
+            r.FLBLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            r.FRBRMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            r.FLBLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            r.FRBRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);        }
+    }
+
+
+
+    //The instance of moveBot below is the most commonly used method
+    public void moveStraight(double distance, int direction, double power){
+        moveStraight(distance, direction, power, RoverAutoMethods.EndStatus.STOP);    }
+
     /**
      * Rotate left or right the number of degrees. Does not support turning more than 180 degrees.
      * @param degrees Degrees to turn, + is left - is right
      */
-    private void rotate(int degrees, double power)
+/*    private void rotate(int degrees, double power)
     {
         double  leftPower, rightPower;
 
@@ -397,8 +568,9 @@ public class RoverAuto extends LinearOpMode {
         else return;
 
         // set power to rotate.
-        r.FLBL.setPower(leftPower);
-        r.FRBR.setPower(leftPower);
+        r.FLBLMotor.setPower(-leftPower); //REVERSE in HW
+        r.FRBRMotor.setPower(leftPower);
+
 
         // rotate until turn is completed.
         if (degrees < 0)
@@ -412,13 +584,16 @@ public class RoverAuto extends LinearOpMode {
             while (opModeIsActive() && getAngle() < degrees) {}
 
         // turn the motors off.
-        r.FLBL.setPower(0);
-        r.FRBR.setPower(0);
+        r.FLBLMotor.setPower(0);
+        r.FRBRMotor.setPower(0);
 
         // wait for rotation to stop.
         sleep(1000);
 
         // reset angle tracking on new heading.
         resetAngle();
-    }
+    }  //end rotate
+*/
+    } //end LinearOpMode
+
 }
