@@ -6,151 +6,326 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 /**
  * Created by Hannah on 11/16/2017.
  */
-@TeleOp (name = "RoverTele")
+@TeleOp (name = "BIGRoverTele")
 //@Disabled
 public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
 
     //
 
-        public void init () {
+    public void init() {
 
-            setupAll();
+        setupAll();
+    }
+
+    //Front on the robot is the side where the claws are.  Opposite side from the hanging lift.
+    //Thus the right side is the side which has the robot power switch.
+    double FR;      //Front Right motor power
+    double BR;      //Back Right motor power
+    double FL;      //Front Left motor power
+    double BL;      //Back Left motor power
+    double Lift;    //power for the motor that will be used to hang.
+    double RarmLifPow;      //The long arm on the right side of the robot.
+    double LarmLifPow;      //The long arm on the left side of the robot.
+    double POS = 0;
+    boolean lb_pressed;
+    boolean rb_pressed;
+    boolean isForward =     true;   //True means that the the claw side of the robot is currently forward for driving.
+
+
+    boolean rb1Pressed =    false;  //Program toggles this between false and true after gamepad1's right button has been pressed.
+                                    //Used in conjunction with the button being pressed to make the button toggle between two actions.
+    boolean a_pressed = false;      //Similar to rb1 pressed for gamepad2, button a
+    boolean b_pressed = false;      //Similar to rb1 pressed for gamepad2, button b
+    boolean x_pressed = false;      //Similar to rb1 pressed for gamepad2, button x
+    boolean y_pressed = false;      //Similar to rb1 pressed for gamepad2, button y
+    boolean dpad_right_pressed =    false;  //Similar to rb1 pressed for gamepad2, dpad right
+    boolean dpad_up_pressed =       false;  //Similar to rb1 pressed for gamepad2, dpad up
+    boolean dpad_left_pressed =     false;  //Similar to rb1 pressed for gamepad2, dpad left
+    boolean dpad_down_pressed =     false;  //Similar to rb1 pressed for gamepad2, dpad down
+    boolean left_trigger_pressed =  false;  //Similar to rb1 pressed for gamepad2, dpad down
+    boolean right_trigger_pressed = false;  //Similar to rb1 pressed for gamepad2, dpad down
+    boolean right_trigger_state =   false;  //Similar to rb1 pressed for gamepad2, dpad down
+
+    boolean LSgrab_state =          false;  //State of the left claw
+    boolean RSgrab_state =          false;  //State of the right claw
+    boolean left_trigger_state =    false;  //State of the left trigger
+
+
+
+    public void loop() {
+
+        //Lift is the power for the motor that will be used to hang.
+        Lift = gamepad1.left_trigger;
+        r.Lift.setPower(Lift / 1.0);//changed from 1.5
+
+        Lift = gamepad1.right_trigger;
+        r.Lift.setPower(-Lift / 1.0); //changed from 1.5
+
+//The first time gamepad1's right bumper is pressed and release, the hanging lift side of the robot will become the "front" side for driving purposes.
+//After the first time, each press/release of the right bumper will toggle which end of the robot is the "front".
+        if (gamepad1.right_bumper && !rb1Pressed) {
+            rb1Pressed = true;
         }
-        double FR;
-        double BR;
-        double FL;
-        double BL;
-        double Lift;
-        double RarmLifPow;
-        double LarmLifPow;
-        double LSRotPow;
-        double RSRotPow;
-        double LSgrabPow;
-        double RSgrabPow;
-        double RSLifPow;
-        double LSLifPow;
-        double lb_pressed = 1;
-        double rb_pressed = 1;
-        boolean isForward = true;
-        boolean rb1Pressed = false;
-        boolean dpad_pressed = false;
-        boolean a_pressed = false;
+        if (!gamepad1.right_bumper && rb1Pressed) {
+            isForward = !isForward;
+            rb1Pressed = false;
+        }
 
-        public void loop () {
+//The code within the if (!isForward) section below (before the else statement) sets up the behaviors we want when the robot has the hanging side as forward.
+        if (!isForward) {
 
-            //r.moveServo(r.Larm, 0.2);
-            //r.moveServo(r.Rarm, 0.6);
+            BL = gamepad1.right_stick_y;
+            BR = gamepad1.left_stick_y;
+            FL = gamepad1.right_stick_y;
+            FR = gamepad1.left_stick_y;
 
-        /*LB = gamepad1.left_stick_y + gamepad1.left_stick_x;
-        RF = gamepad1.right_stick_y - gamepad1.right_stick_x;
-        LF = gamepad1.left_stick_y - gamepad1.left_stick_x;
-        RB = gamepad1.right_stick_y + gamepad1.right _stick_x;*/
-            //RLEX = gamepad2.left_stick_y;
-
-
-            Lift = gamepad1.left_trigger;
-            r.Lift.setPower(Lift/1.0);//changed from 1.5
-
-            Lift = gamepad1.right_trigger;
-            r.Lift.setPower(-Lift / 1.0); //changed from 1.5
-
-            if (gamepad1.right_bumper && !rb1Pressed) {
-                rb1Pressed = true;
-            }
-            if (!gamepad1.right_bumper && rb1Pressed) {
-                isForward = !isForward;
-                rb1Pressed = false;
+//The left trigger on gamepad2 will only cause action if it is pressed more than halfway.
+            if (gamepad2.left_trigger >= 0.5) {
+                left_trigger_pressed = true;
             }
 
-            if (!isForward) {
-                BL = gamepad1.right_stick_y;
-                BR = gamepad1.left_stick_y;
-                FL = gamepad1.right_stick_y;
-                FR = gamepad1.left_stick_y;
-            } else {
-                BL = -gamepad1.left_stick_y;
-                BR = -gamepad1.right_stick_y;
-                FL = -gamepad1.left_stick_y;
-                FR = -gamepad1.right_stick_y;
-            }
-
-            r.BLMotor.setPower(BL);
-            r.BRMotor.setPower(BR);
-            r.FLMotor.setPower(FL);
-            r.FRMotor.setPower(FR);
-
-            LarmLifPow = gamepad2.left_stick_y;
-            RarmLifPow = gamepad2.right_stick_y;
-
-            if (gamepad2.dpad_down) {
-                r.LSgrab.setPosition(0.7);
-                dpad_pressed = true;
-
-                if (gamepad2.dpad_down && !dpad_pressed) {
-                    r.LSgrab.setPosition(0.3);
-                    dpad_pressed = false;
+//If the left trigger was pressed and has not been pressed again, and if
+            if (left_trigger_pressed == true) { // good
+                if (gamepad2.left_trigger < 0.5) {
+                    if (left_trigger_state == false) {
+                        r.LSLif.setPosition(0.77);
+                        left_trigger_state = true;
+                    }
+                    else if (left_trigger_state == true) {
+                        r.LSLif.setPosition(0.5);
+                        left_trigger_state = false;
+                    }
+                    left_trigger_pressed = false;
                 }
             }
 
-            if (gamepad2.a) {
-                r.RSgrab.setPosition(0.7);
-                a_pressed = true;
+            if (gamepad2.right_trigger >= 0.5) { // good
+                right_trigger_pressed = true;
+            }
 
-                if (gamepad2.a && !a_pressed) {
-                    r.RSgrab.setPosition(0.3);
+            if (right_trigger_pressed == true) { // good
+                if (gamepad2.right_trigger < 0.5) {
+                    if (right_trigger_state == false) {
+                        r.RSLif.setPosition(0);
+                        right_trigger_state = true;
+                    }
+                    else if (right_trigger_state == true) {
+                        r.RSLif.setPosition(0.4);
+                        right_trigger_state = false;
+                    }
+                    right_trigger_pressed = false;
+                }
+            }
+            if (gamepad2.a) { // good
+                a_pressed = true;
+            }
+
+            if (a_pressed == true) { // good
+                if (gamepad2.a == false) {
+                    if (LSgrab_state == false) {
+                        r.LSgrab.setPosition(0.6);
+                        LSgrab_state = true;
+                    }
+                    else if (LSgrab_state == true) {
+                        r.LSgrab.setPosition(0.2);
+                        LSgrab_state = false;
+                    }
+                    a_pressed = false;
+                }
+            }
+            if (gamepad2.dpad_down) { // good
+                dpad_down_pressed = true;
+            }
+
+            if (dpad_down_pressed == true) { // good
+                if (gamepad2.dpad_down == false) {
+                    if (RSgrab_state == false) {
+                        r.RSgrab.setPosition(0.3);
+                        RSgrab_state = true;
+                    }
+                    else if (RSgrab_state == true) {
+                        r.RSgrab.setPosition(0.65);
+                        RSgrab_state = false;
+                    }
+                    dpad_down_pressed = false;
+                }
+            }
+
+            if (gamepad2.b) { // good
+                b_pressed = true;
+
+            }
+            if (b_pressed == true) { // good
+                if (gamepad2.b == false) {
+                    r.LSrot.setPosition(0.0);
+                    b_pressed = false;
+                }
+            }
+
+            if (gamepad2.x) { // good
+                x_pressed = true;
+            }
+
+            if (x_pressed == true) { // good
+                if (gamepad2.x == false) {
+                    r.LSrot.setPosition(1.0);
+                    x_pressed = false;
+                }
+            }
+
+            if (gamepad2.y) { //good
+                y_pressed = true;
+            }
+
+            if (y_pressed == true) { //good
+                if (gamepad2.y == false) {
+                    r.LSrot.setPosition(0.7);
+                    y_pressed = false;
+                }
+            }
+
+            if (gamepad2.dpad_right) { // good
+                dpad_right_pressed = true;
+            }
+
+            if (dpad_right_pressed == true) { // good
+                if (gamepad2.dpad_right == false) {
+                    r.RSrot.setPosition(0.0);
+
+                    dpad_right_pressed = false;
+                }
+            }
+
+            if (gamepad2.dpad_up) { // good
+                dpad_up_pressed = true;
+            }
+
+            if (dpad_up_pressed == true) { // good - positions need work
+                if (gamepad2.dpad_up == false) {
+                    if (RSgrab_state == false) {
+                        r.RSrot.setPosition(0.3);
+                        RSgrab_state = true;
+                    } else if (RSgrab_state == true) {
+                        r.RSgrab.setPosition(0.0);
+                        RSgrab_state = false;
+                    }
+                    dpad_up_pressed = false;
+                }
+            }
+
+            if (gamepad2.dpad_left) { // good
+                dpad_left_pressed = true;
+            }
+
+            if (dpad_left_pressed == true) { // good
+                if (gamepad2.dpad_left == false) {
+                    r.RSrot.setPosition(1.0);
+                    dpad_left_pressed = false;
+                }
+            }
+
+        }
+        else {
+            BL = -gamepad1.left_stick_y;
+            BR = -gamepad1.right_stick_y;
+            FL = -gamepad1.left_stick_y;
+            FR = -gamepad1.right_stick_y;
+
+            r.RSrot.setPosition(0.3);
+            r.LSrot.setPosition(0.7);
+
+            if (gamepad2.left_trigger >= 0.5) {
+                left_trigger_pressed = true;
+            }
+
+            if (left_trigger_pressed == true) {
+                if (gamepad2.left_trigger < 0.5) {
+                    if (left_trigger_state == false) {
+                        r.LSLif.setPosition(1.0);
+                        left_trigger_state = true;
+                    }
+                    else if (left_trigger_state == true) {
+                        r.LSLif.setPosition(0.5);
+                        left_trigger_state = false;
+                    }
+                    left_trigger_pressed = false;
+                }
+            }
+
+            if (gamepad2.right_trigger >= 0.5) {
+                right_trigger_pressed = true;
+            }
+
+            if (right_trigger_pressed == true) {
+                if (gamepad2.right_trigger < 0.5) {
+                    if (right_trigger_state == false) {
+                        r.RSLif.setPosition(0);
+                        right_trigger_state = true;
+                    }
+                    else if (right_trigger_state == true) {
+                        r.RSLif.setPosition(0.4);
+                        right_trigger_state = false;
+                    }
+                    right_trigger_pressed = false;
+                }
+            }
+
+            if (gamepad2.dpad_down) {
+                dpad_down_pressed = true;
+            }
+
+            if (dpad_down_pressed == true) {
+                if (gamepad2.dpad_down == false) {
+                    if (LSgrab_state == false) {
+                        r.LSgrab.setPosition(0.6);
+                        LSgrab_state = true;
+                    }
+                    else if (LSgrab_state == true) {
+                        r.LSgrab.setPosition(0.2);
+                        LSgrab_state = false;
+                    }
+                    dpad_down_pressed = false;
+                }
+            }
+            if (gamepad2.a) {
+                a_pressed = true;
+            }
+
+            if (a_pressed == true) {
+                if (gamepad2.a == false) {
+                    if (RSgrab_state == false) {
+                        r.RSgrab.setPosition(0.3);
+                        RSgrab_state = true;
+                    }
+                    else if (RSgrab_state == true) {
+                        r.RSgrab.setPosition(0.65);
+                        RSgrab_state = false;
+                    }
                     a_pressed = false;
                 }
             }
 
-            if (gamepad2.left_bumper) {
-                r.LSrot.setPosition(0.8);
-                lb_pressed = 1;
-
-                if (gamepad2.left_bumper && lb_pressed == 1) {
-                    r.LSrot.setPosition(0.4);
-                    lb_pressed = 2;
-
-                    if (gamepad2.left_bumper && lb_pressed == 2) {
-                        r.LSrot.setPosition(0);
-                    }
-                }
-
-            }
-
-            if (gamepad2.right_bumper) {
-                r.RSrot.setPosition(0.8);
-                rb_pressed = 1;
-
-                if (gamepad2.right_bumper && rb_pressed == 1) {
-                    r.RSrot.setPosition(0.4);
-                    rb_pressed = 2;
-
-                    if (gamepad2.right_bumper && rb_pressed == 2) {
-                        r.RSrot.setPosition(0);
-                    }
-                }
-
-            }
-
-            if (gamepad2.left_trigger == 1) {
-                r.RSLif.setPosition(0.6);
-            }
-
-            if (gamepad2.left_trigger == 0) {
-                r.LSLif.setPosition(0.3);
-            }
-
-            if (gamepad2.right_trigger == 1) {
-                r.RSLif.setPosition(0.6);
-            }
-
-            if (gamepad2.right_trigger == 0) {
-                r.RSLif.setPosition(0.3);
-            }
-
         }
+
+        r.BLMotor.setPower(BL); //good
+        r.BRMotor.setPower(BR);
+        r.FLMotor.setPower(FL);
+        r.FRMotor.setPower(FR);
+
+        LarmLifPow = gamepad2.left_stick_y; //good
+        r.LarmLif.setPower(LarmLifPow/1.0);
+        RarmLifPow = -gamepad2.right_stick_y;
+        r.RarmLif.setPower(RarmLifPow/1.0);
+
+
+
+
+
+
 
 
 
     }
+
+}
 

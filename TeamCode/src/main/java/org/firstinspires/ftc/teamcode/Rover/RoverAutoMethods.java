@@ -25,7 +25,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 public class RoverAutoMethods extends LinearOpMode {
     //Creates version of hardware class called "r" for robot
-    public RoverElectricalM r = new RoverElectricalM();
+    RoverElectricalM r = new RoverElectricalM();
 
     public RoverAutoMethods() {  }
 
@@ -42,37 +42,30 @@ public class RoverAutoMethods extends LinearOpMode {
         //This section sets up the brake behavior so when the power is off, motors hold current position
         //This is important for Lift1 and Lift2 so when we lift the glyph, it will stay in the air without running the motors
 //10/27 commented out the line just below
-        //r.moveDrivetrain(0, 0);
-        r.FLBLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        r.FRBRMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        //r.LRMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //r.RRMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //r.LFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //r.RFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //r.Lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //r.Lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        r.moveDrivetrain(0,0);
+        r.FRBRMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        r.FLBLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //r.RarmLif.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //r.LarmLif.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        r.FLBLMotor.setDirection(DcMotor.Direction.REVERSE);
+        //r.BLMotor.setDirection(DcMotor.Direction.REVERSE);
+
+
     }
 
     public void setupServos() {
-        //Setting initial positions for auto arm and paint roller arms
-        // r.moveServo(r.Rarm, 0.9);
-        //r.moveServo(r.Rprgrab1, 1.0);
-        // r.moveServo(r.Lprgrab1, 0.0);
-        //r.moveServo(r.Rprgrab2, 1.0);
-        //r.moveServo(r.Lprgrab2, 0.0);
+       // r.moveServo(r.LSrot, 0.7);
+        //r.moveServo(r.LSgrab, 0.2);
+       // r.moveServo(r.RSrot, 0.3); //was 0.15
+       // r.moveServo(r.RSgrab, 0.65); //was 7
+       // r.moveServo(r.RSLif, 0);
+       // r.moveServo(r.LSLif, 1.0);
     }
 
-    public void setupSensors() {
-        //Rev2mDistanceSensor sensorRange;
-        //DistanceSensor sensorRangeR;
-        //ColorSensor sensorColor;
+   // public void setupSensors() {
 
-        //BNO055IMU imu;
-        //The following section sets up the Color Sensor name in the Configuration on the phones
-        //We add this line here because the RevColor Sensor is only for auto
-        // r.RVc2 = hardwareMap.colorSensor.get("rvCS2");
-    }
+   // }
 
     //setupAll will be used in all of our auto programs
 
@@ -80,7 +73,7 @@ public class RoverAutoMethods extends LinearOpMode {
         r.init(hardwareMap);
         setupMotors();
         setupServos();
-        setupSensors();
+       // setupSensors();
     }
 
     /* Ticks per rotation / inches (circumference) per rotation = ticks per inch
@@ -103,7 +96,7 @@ public class RoverAutoMethods extends LinearOpMode {
 
     //moveBot is used by all of our auto programs; distance(inches), direction, and power are passed in from our autonomous program
     //Distance is converted to ticks, then all motors are rotated until the target ticks are reached
-    public void moveBot(double distance, int direction, double power, EndStatus status) {
+    /*public void moveBot(double distance, int direction, double power, EndStatus status) {
         r.FLBLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         r.FRBRMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         r.FLBLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -133,6 +126,21 @@ public class RoverAutoMethods extends LinearOpMode {
             //r.RFMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);        }
         }
 
+    }
+    */
+
+    public void moveBot(double distance, int direction, double power, EndStatus status) {
+        int target = inches_to_ticks(distance);
+        int startPos = r.FLBLMotor.getCurrentPosition();
+        int currentPos = r.FLBLMotor.getCurrentPosition();
+
+        while (Math.abs(currentPos - startPos) < target) currentPos = r.FLBLMotor.getCurrentPosition();
+
+        if (status == EndStatus.STOP) {
+            r.stopDrivetrain();
+            r.FLBLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            r.FLBLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
     }
 
         //The instance of moveBot below is the most commonly used method
@@ -173,8 +181,9 @@ public class RoverAutoMethods extends LinearOpMode {
         while (Math.abs(currentPos - startPos) < target) {
             currentPos = r.FLBLMotor.getCurrentPosition();
             r.correction = checkDirection();
-            r.FLBLMotor.setPower(power - r.correction); // was0.15, was -correction
+            r.FLBLMotor.setPower(power - r.correction);// was0.15, was -correction
             r.FRBRMotor.setPower(.6 * power - r.correction); // was0.15, was -correction
+
 
         }
 
@@ -206,6 +215,7 @@ public class RoverAutoMethods extends LinearOpMode {
         public void eTurnBot ( double degrees, Direction dir, double lPow, double rPow, EndStatus status){
             //"encoderMotor" is the motor that we track, we use LFMotor when powered
             DcMotor encoderMotor = (lPow == 0.0) ? r.FRBRMotor : r.FLBLMotor;
+            //DcMotor encoderMotor = (lPow == 0.0) ? r.BRMotor : r.BLMotor;
             //Get the starting position for "encoderMotor"
             int startPos = encoderMotor.getCurrentPosition();
             //Angle is converted to radians

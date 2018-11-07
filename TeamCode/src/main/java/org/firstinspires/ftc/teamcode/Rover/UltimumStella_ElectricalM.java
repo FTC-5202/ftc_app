@@ -2,11 +2,10 @@ package org.firstinspires.ftc.teamcode.Rover;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -58,7 +57,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * is explained below.
  */
 
-public class BIGRoverElectrical {
+public class UltimumStella_ElectricalM {
 
     //Orientation lastAngles = new Orientation();
     //public double globalAngle;
@@ -66,17 +65,8 @@ public class BIGRoverElectrical {
     public DcMotor FRMotor = null;
     public DcMotor BLMotor = null;
     public DcMotor BRMotor = null;
-    public DcMotor RarmLif = null;
-    public DcMotor LarmLif = null;
-    public DcMotor Lift = null;
-    public Servo LSrot = null;
-    public Servo RSrot = null;
-    public Servo LSgrab = null;
-    public Servo RSgrab = null;
-    public Servo RSLif = null;
-    public Servo LSLif = null;
     public Rev2mDistanceSensor sensorRange;
-    public DigitalChannel sensorTouch;
+    public TouchSensor sensorTouch;
     //    public void runOpMode() throws InterruptedException {    }
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -116,7 +106,7 @@ public class BIGRoverElectrical {
 
 //    public RoverElectricalM r = new RoverElectricalM();
 
-    public BIGRoverElectrical() {
+    public UltimumStella_ElectricalM() {
     }
 
 
@@ -130,8 +120,8 @@ public class BIGRoverElectrical {
     The diameter of the mecanum wheels is 4 in
     In our drivetrain, we are using 45 to 35 tooth gears configured for a 1.28 gear ratio*/
 
-            final double TICKS_PER_INCH = 1120 / (4 * Math.PI); //change
-            final double WHEEL_GEAR_RATIO = 0.78 / 1.0; //was 1.28/1.0 - change?
+            final double TICKS_PER_INCH = 1120 / (4 * Math.PI);
+            final double WHEEL_GEAR_RATIO = 0.78 / 1.0; //was 1.28/1.0
             public final int FORWARD = 1; //was -1
             public final int BACKWARD = -1; //was 1
             //inches_to_ticks receives a distance in inches and returns the number of ticks
@@ -144,45 +134,25 @@ public class BIGRoverElectrical {
                 hwMap = ahwMap;
 
 
-                FLMotor = hwMap.dcMotor.get("fl motor");
-                FRMotor = hwMap.dcMotor.get("fr motor");
-                BLMotor = hwMap.dcMotor.get("bl motor");
-                BRMotor = hwMap.dcMotor.get("br motor");
-                Lift = hwMap.dcMotor.get("mlift");
-
-                LarmLif = hwMap.dcMotor.get("larm lift");
-                RarmLif = hwMap.dcMotor.get("rarm lift");
-                RSrot = hwMap.servo.get("rs rot");
-                LSrot = hwMap.servo.get("ls rot");
-                RSgrab = hwMap.servo.get("rs grab");
-                LSgrab = hwMap.servo.get("ls grab");
-                RSLif = hwMap.servo.get("rs lift");
-                LSLif = hwMap.servo.get("ls lift");
-
-                // get a reference to our digitalTouch object.
-                sensorTouch = hwMap.get(DigitalChannel.class, "sensor_touch");
-
-                // set the digital channel to input.
-                sensorTouch.setMode(DigitalChannel.Mode.INPUT);
-
-
+                FLMotor = hwMap.dcMotor.get("FL");
+                FRMotor = hwMap.dcMotor.get("FR");
+                BLMotor = hwMap.dcMotor.get("BL");
+                BRMotor = hwMap.dcMotor.get("BR");
                 //sensorColor = hwMap.get(ColorSensor.class, "sensor_color");
-                //sensorRange = hwMap.get(Rev2mDistanceSensor.class, "sensor_range");
-                //Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)sensorRange;
+                sensorRange = hwMap.get(Rev2mDistanceSensor.class, "sensor_range");
+                Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)sensorRange;
                // sensorRangeR = hwMap.get(DistanceSensor.class, "sensor_range_R");
 
                 FLMotor.setPower(0);
                 FRMotor.setPower(0);
                 BLMotor.setPower(0);
-                BRMotor.setPower(0);
-                RarmLif.setPower(0);
-                LarmLif.setPower(0);
+                FRMotor.setPower(0);
+//10/27 oommented out the two lines just below for drive straight testing
+//10/27 uncommented two lines below
                 FLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 FRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 BLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 BRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                LarmLif.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                RarmLif.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
                 //FLBLMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -233,7 +203,7 @@ public class BIGRoverElectrical {
                 rPow = (rPow >= 1.0) ? 1.0 : rPow;
                 rPow = (rPow <= -1.0) ? -1.0 : rPow;
                 FRMotor.setPower(rPow);
-                BRMotor.setPower(rPow);
+
             }
 
             public void moveDrivetrain ( double lPow, double rPow){
