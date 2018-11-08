@@ -2,8 +2,12 @@ package org.firstinspires.ftc.teamcode.Rover;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.firstinspires.ftc.teamcode.TH3O.TH3OAutoMethods;
+
+import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
+import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODERS;
 
 public class UltimumStella_AutoMethods extends LinearOpMode {
 
@@ -21,6 +25,10 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
         r.BRMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         r.FLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         r.BLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        r.FLMotor.setMode(RUN_USING_ENCODER);
+        r.BLMotor.setMode(RUN_USING_ENCODER);
+        r.FRMotor.setMode(RUN_USING_ENCODER);
+        r.BRMotor.setMode(RUN_USING_ENCODER);
         r.RarmLif.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         r.LarmLif.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         r.FLMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -29,14 +37,15 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
 
     public void setupServos() {
         r.moveServo(r.LSrot, 0.7);
-        r.moveServo(r.LSgrab, 0.2);
+        r.moveServo(r.LSgrab, 0.65);
         r.moveServo(r.RSrot, 0.3); //was 0.15
-        r.moveServo(r.RSgrab, 0.65); //was 7
+        r.moveServo(r.RSgrab, 0.2); //was 7
         r.moveServo(r.RSLif, 0);
         r.moveServo(r.LSLif, 1.0);
     }
 
     public void setupSensors() {
+        r.sensorTouch.setMode(DigitalChannel.Mode.INPUT);
 
     }
 
@@ -67,15 +76,15 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
 
     public void moveBot(double distance, int direction, double power, EndStatus status) {
         int target = inches_to_ticks(distance);
-        int startPos = r.FLMotor.getCurrentPosition();
-        int currentPos = r.FLMotor.getCurrentPosition();
+        int startPos = r.BLMotor.getCurrentPosition();
+        int currentPos = r.BLMotor.getCurrentPosition();
 
-        while (Math.abs(currentPos - startPos) < target) currentPos = r.FLMotor.getCurrentPosition();
+        while (Math.abs(currentPos - startPos) < target) currentPos = r.BLMotor.getCurrentPosition();
 
         if (status == EndStatus.STOP) {
             r.stopDrivetrain();
-            r.FLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            r.FLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            r.BLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            r.BLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 
@@ -92,7 +101,7 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
 
     public void eTurnBot(double degrees, Direction dir, double lPow, double rPow, EndStatus status){
         //"encoderMotor" is the motor that we track, we use LFMotor when powered
-        DcMotor encoderMotor = (lPow == 0.0) ? r.FRMotor : r.FLMotor;
+        DcMotor encoderMotor = (lPow == 0.0) ? r.BRMotor : r.BLMotor;
         //Get the starting position for "encoderMotor"
         int startPos = encoderMotor.getCurrentPosition();
         //Angle is converted to radians
@@ -110,13 +119,13 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
 
         //Depending on desired turn dir and motor used, motor power is set in the section below
         if(dir == Direction.RIGHT){
-            if(encoderMotor.equals(r.FLMotor))  sgn = 1;
+            if(encoderMotor.equals(r.BLMotor))  sgn = 1;
             else sgn = -1;
             lPow = Math.abs(lPow) * -1;
             rPow = Math.abs(rPow);        }
 
         else if(dir == Direction.LEFT){
-            if(encoderMotor.equals(r.FLMotor))  sgn = -1;
+            if(encoderMotor.equals(r.BLMotor))  sgn = -1;
             else sgn = 1;
             lPow = Math.abs(lPow);
             rPow = Math.abs(rPow) * -1;        }
@@ -148,9 +157,9 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
         //To get repeatability in our auto programs, we found that we need to reset the encoders after every run of moveBot method
         if(status == EndStatus.STOP){
             r.stopDrivetrain();
-            r.FLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            r.BLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
            // r.RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            r.FLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            r.BLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
            // r.RFMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
 

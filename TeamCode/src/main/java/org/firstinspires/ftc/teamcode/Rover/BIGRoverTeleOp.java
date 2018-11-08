@@ -84,17 +84,22 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
                 left_trigger_pressed = true;
             }
 
-//If the left trigger was pressed and has not been pressed again, and if
+//If the left trigger was pressed and has not been pressed again past halfway, and if it's state is false, which is the IC,
+//set the claw arm servo to the desired position and turn its state to true.
+//Next 2 lines could be combined into one if statement.
             if (left_trigger_pressed == true) { // good
                 if (gamepad2.left_trigger < 0.5) {
                     if (left_trigger_state == false) {
                         r.LSLif.setPosition(0.77);
                         left_trigger_state = true;
                     }
+//the else if here is not needed, it could be just else
+//if left_trigger_state is true, set the servo to a different position (what position?) and turn its state to false.
                     else if (left_trigger_state == true) {
                         r.LSLif.setPosition(0.5);
                         left_trigger_state = false;
                     }
+//don't do this section again unless the gamepad2 trigger is pressed more than halfway.
                     left_trigger_pressed = false;
                 }
             }
@@ -116,6 +121,8 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
                     right_trigger_pressed = false;
                 }
             }
+
+
             if (gamepad2.a) { // good
                 a_pressed = true;
             }
@@ -232,7 +239,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
             FR = -gamepad1.right_stick_y;
 
             r.RSrot.setPosition(0.3);
-            r.LSrot.setPosition(0.7);
+            r.LSrot.setPosition(0.65);
 
             if (gamepad2.left_trigger >= 0.5) {
                 left_trigger_pressed = true;
@@ -241,11 +248,11 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
             if (left_trigger_pressed == true) {
                 if (gamepad2.left_trigger < 0.5) {
                     if (left_trigger_state == false) {
-                        r.LSLif.setPosition(1.0);
+                        r.LSLif.setPosition(0.4);
                         left_trigger_state = true;
                     }
                     else if (left_trigger_state == true) {
-                        r.LSLif.setPosition(0.5);
+                        r.LSLif.setPosition(1.0);
                         left_trigger_state = false;
                     }
                     left_trigger_pressed = false;

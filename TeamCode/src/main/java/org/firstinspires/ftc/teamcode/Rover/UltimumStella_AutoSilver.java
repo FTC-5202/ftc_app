@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Rover;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import android.graphics.Color;
+import android.os.SystemClock;
 
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -55,6 +56,14 @@ public class UltimumStella_AutoSilver extends UltimumStella_AutoMethods {
         telemetry.addLine("Initializing...");
         telemetry.update();
 
+        ElapsedTime period = new ElapsedTime();
+        long start = 0;
+// ...
+        long current = System.currentTimeMillis();
+        long timeElapsed = 0;
+
+        double MotorPow = 0.5;
+
         setupAll();
 
         telemetry.addLine("Initializing...");
@@ -64,26 +73,41 @@ public class UltimumStella_AutoSilver extends UltimumStella_AutoMethods {
         telemetry.addData(">", "Press Play to start tracking");
         telemetry.update();
         waitForStart();
+        start = System.currentTimeMillis();
 
         //Color.RGBToHSV(r.sensorColor.red() * 8, r.sensorColor.green() * 8, r.sensorColor.blue() * 8, hsvValues);
 
         /** Start tracking the data sets we care about. */
         //targetsRoverRuckus.activate();
         while (opModeIsActive()) {
+            current = System.currentTimeMillis();
             // if the digital channel returns true it's HIGH and the button is unpressed.
-            if (r.sensorTouch.getState() == true) {
+            //if (r.sensorTouch.getState() == true && (timeElapsed < 10000)) {
+            while (r.sensorTouch.getState() == true && (timeElapsed < 20000)) {
                 r.Lift.setPower(1.0);
+                timeElapsed = System.currentTimeMillis()- start;
             }
 
+            if (timeElapsed > 20000) MotorPow = 0;
+
             r.Lift.setPower(0);
-            moveBot(30, FORWARD, 0.5, EndStatus.STOP);
-            r.stopDrivetrain();
+           // moveBot(30, FORWARD, 0.5, EndStatus.STOP);
+
+            r.FRMotor.setPower(MotorPow);
+            r.FLMotor.setPower(MotorPow);
+            r.BRMotor.setPower(MotorPow);
+            r.BLMotor.setPower(MotorPow);
+            sleep(1750);
+            MotorPow = 0;
+            //r.stopDrivetrain();
 //            r.RSLif.setPosition(0.8);
 //            r.LSLif.setPosition(0.2);
         }
 
 
     }
+
+}
 
     //correction = checkDirection();
 
@@ -95,4 +119,4 @@ public class UltimumStella_AutoSilver extends UltimumStella_AutoMethods {
 
 
 
-}
+

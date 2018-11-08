@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Rover;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import android.graphics.Color;
+import android.os.SystemClock;
 
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -50,52 +51,72 @@ import static org.firstinspires.ftc.teamcode.Rover.RoverAutoMethods.Direction.LE
 public class UltimumStella_AutoGold extends UltimumStella_AutoMethods {
 
 
-        public void runOpMode() {
+    public void runOpMode() {
 
-            telemetry.addLine("Initializing...");
-            telemetry.update();
+        telemetry.addLine("Initializing...");
+        telemetry.update();
 
-//            boolean sensorTouch = false;
+        ElapsedTime period = new ElapsedTime();
+        long start = 0;
+// ...
+        long current = System.currentTimeMillis();
+        long timeElapsed = 0;
 
+        double MotorPow = 0.5;
 
-            setupAll();
+        setupAll();
 
-            telemetry.addLine("Initializing...");
-            telemetry.update();
+        telemetry.addLine("Initializing...");
+        telemetry.update();
 
-            /** Wait for the game to begin */
-            telemetry.addData(">", "Press Play to start tracking");
-            telemetry.update();
-            waitForStart();
+        /** Wait for the game to begin */
+        telemetry.addData(">", "Press Play to start tracking");
+        telemetry.update();
+        waitForStart();
+        start = System.currentTimeMillis();
 
-            //Color.RGBToHSV(r.sensorColor.red() * 8, r.sensorColor.green() * 8, r.sensorColor.blue() * 8, hsvValues);
+        //Color.RGBToHSV(r.sensorColor.red() * 8, r.sensorColor.green() * 8, r.sensorColor.blue() * 8, hsvValues);
 
-            /** Start tracking the data sets we care about. */
-            //targetsRoverRuckus.activate();
-            while (opModeIsActive()) {
-                // if the digital channel returns true it's HIGH and the button is unpressed.
-                if (r.sensorTouch.getState() == true) {
-                   r.Lift.setPower(1.0);
-                   }
-
-                r.Lift.setPower(0);
-                moveBot(50, FORWARD, 0.5, EndStatus.STOP);
-                r.stopDrivetrain();
-//                r.RSLif.setPosition(0.8);
-//                r.LSLif.setPosition(0.2     );
-                }
-
-
+        /** Start tracking the data sets we care about. */
+        //targetsRoverRuckus.activate();
+        while (opModeIsActive()) {
+            current = System.currentTimeMillis();
+            // if the digital channel returns true it's HIGH and the button is unpressed.
+            //if (r.sensorTouch.getState() == true && (timeElapsed < 10000)) {
+            while (r.sensorTouch.getState() == true && (timeElapsed < 20000)) {
+                r.Lift.setPower(1.0);
+                timeElapsed = System.currentTimeMillis()- start;
             }
 
-                //correction = checkDirection();
+            if (timeElapsed > 20000) MotorPow = 0;
 
-                //telemetry.addData("1 imu heading", lastAngles.firstAngle);
-                //telemetry.addData("2 global heading", globalAngle);
-                //telemetry.addData("3 correction", correction);
-                //telemetry.update();
+            r.Lift.setPower(0);
+            // moveBot(30, FORWARD, 0.5, EndStatus.STOP);
 
-
-
-
+            r.FRMotor.setPower(MotorPow);
+            r.FLMotor.setPower(MotorPow);
+            r.BRMotor.setPower(MotorPow);
+            r.BLMotor.setPower(MotorPow);
+            sleep(2250);
+            MotorPow = 0;
+            //r.stopDrivetrain();
+//            r.RSLif.setPosition(0.8);
+//            r.LSLif.setPosition(0.2);
         }
+
+
+    }
+
+}
+
+//correction = checkDirection();
+
+//telemetry.addData("1 imu heading", lastAngles.firstAngle);
+//telemetry.addData("2 global heading", globalAngle);
+//telemetry.addData("3 correction", correction);
+//telemetry.update();
+
+
+
+
+
