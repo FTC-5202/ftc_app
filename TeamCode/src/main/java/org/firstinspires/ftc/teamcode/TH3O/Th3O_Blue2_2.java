@@ -18,7 +18,7 @@ import static org.firstinspires.ftc.teamcode.TH3O.TH3OAutoMethods.Direction.RIGH
  *  by Hannah on 1/12/2018.
  */
 @Autonomous(name = "Th-3O Blue2")
-//@Disabled
+@Disabled
 public class Th3O_Blue2_2 extends TH3OAutoMethods {
 
     VuforiaLocalizer vuforia;

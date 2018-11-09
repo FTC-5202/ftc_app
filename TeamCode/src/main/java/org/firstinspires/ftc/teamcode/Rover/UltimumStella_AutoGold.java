@@ -2,50 +2,7 @@ package org.firstinspires.ftc.teamcode.Rover;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import android.graphics.Color;
-import android.os.SystemClock;
-
-import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.qualcomm.hardware.bosch.BNO055IMU;
-
-import static com.qualcomm.hardware.bosch.BNO055IMU.AngleUnit.RADIANS;
-import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
-import static org.firstinspires.ftc.teamcode.Rover.RoverAutoMethods.Direction.RIGHT;
-import static org.firstinspires.ftc.teamcode.Rover.RoverAutoMethods.Direction.LEFT;
 
 @Autonomous (name="UltimumStella Gold")
 public class UltimumStella_AutoGold extends UltimumStella_AutoMethods {
@@ -63,6 +20,7 @@ public class UltimumStella_AutoGold extends UltimumStella_AutoMethods {
         long timeElapsed = 0;
 
         double MotorPow = 0.5;
+        double LiftPow = 1.0;
 
         setupAll();
 
@@ -80,25 +38,29 @@ public class UltimumStella_AutoGold extends UltimumStella_AutoMethods {
         /** Start tracking the data sets we care about. */
         //targetsRoverRuckus.activate();
         while (opModeIsActive()) {
-            current = System.currentTimeMillis();
+
             // if the digital channel returns true it's HIGH and the button is unpressed.
             //if (r.sensorTouch.getState() == true && (timeElapsed < 10000)) {
             while (r.sensorTouch.getState() == true && (timeElapsed < 20000)) {
-                r.Lift.setPower(1.0);
+                r.Lift.setPower(LiftPow);
                 timeElapsed = System.currentTimeMillis()- start;
             }
 
-            if (timeElapsed > 20000) MotorPow = 0;
+            if (timeElapsed > 20000) {MotorPow = 0; LiftPow=0;}
 
             r.Lift.setPower(0);
-            // moveBot(30, FORWARD, 0.5, EndStatus.STOP);
+            moveBot(40, FORWARD, MotorPow, EndStatus.STOP);
 
-            r.FRMotor.setPower(MotorPow);
-            r.FLMotor.setPower(MotorPow);
-            r.BRMotor.setPower(MotorPow);
-            r.BLMotor.setPower(MotorPow);
-            sleep(2250);
-            MotorPow = 0;
+//            r.FRMotor.setPower(MotorPow);
+//            r.FLMotor.setPower(MotorPow);
+//            r.BRMotor.setPower(MotorPow);
+//            r.BLMotor.setPower(MotorPow);
+//            sleep(2250);
+            MotorPow = 0.;
+            r.Lift.setPower(-LiftPow);
+            sleep(5000);
+            LiftPow = 0.;
+
             //r.stopDrivetrain();
 //            r.RSLif.setPosition(0.8);
 //            r.LSLif.setPosition(0.2);

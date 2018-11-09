@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode.Rover;
+package org.firstinspires.ftc.teamcode.Rover.LitttleRover;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
 
 @Autonomous(name = "DumRelTele", group = "Relic")
-//@Disabled
+@Disabled
 public class DummyRover extends LinearOpMode {
     OpenGLMatrix lastLocation = null;
 

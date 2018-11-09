@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.TH3O.OldTheo;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -12,6 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created by Hannah on 11/16/2017.
  */
 @TeleOp (name = "TH3O TeleOpNT")
+@Disabled
 public class Th3ONewTest extends LinearOpMode {
     public boolean bLedOn = true;
 

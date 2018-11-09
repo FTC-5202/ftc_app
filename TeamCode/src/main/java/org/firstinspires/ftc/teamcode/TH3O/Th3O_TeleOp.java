@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.TH3O;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 /**
  * Created by Hannah on 11/16/2017.
  */
 @TeleOp (name = "TH3O TeleOpH1")
+@Disabled
 public class Th3O_TeleOp extends Th3OTeleOpMethods {
 
     public void init() {

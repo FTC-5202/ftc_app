@@ -20,7 +20,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 @Autonomous(name = "Roller2", group = "Concept")
-//@Disabled
+@Disabled
 public class Roller2 extends LinearOpMode {
     CRServo crs;
     CRServo crs2;

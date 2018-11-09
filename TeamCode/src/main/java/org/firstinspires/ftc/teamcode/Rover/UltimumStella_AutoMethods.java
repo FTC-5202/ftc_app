@@ -4,6 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.Rover.LitttleRover.RoverAutoMethods;
 import org.firstinspires.ftc.teamcode.TH3O.TH3OAutoMethods;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
@@ -61,7 +66,7 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
     The diameter of the mecanum wheels is 4 in
     In our drivetrain, we are using 45 to 35 tooth gears configured for a 1.28 gear ratio*/
 
-    final double TICKS_PER_INCH = 1120 / (4 * Math.PI);
+    final double TICKS_PER_INCH = 1120 / (6 * Math.PI);
     final double WHEEL_GEAR_RATIO = 1.0 / 1.0; //was 1.28/1.0
     //    double globalAngle, correction;
     final int FORWARD = 1; //was -1
@@ -78,6 +83,7 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
         int target = inches_to_ticks(distance);
         int startPos = r.BLMotor.getCurrentPosition();
         int currentPos = r.BLMotor.getCurrentPosition();
+        r.moveDrivetrain(power * direction, power * 1.0* direction);
 
         while (Math.abs(currentPos - startPos) < target) currentPos = r.BLMotor.getCurrentPosition();
 
@@ -168,4 +174,101 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
     public void eTurnBot(double degrees, Direction dir, double lPow, double rPow){
         eTurnBot(degrees, dir, lPow, rPow, EndStatus.STOP);
     }
+    public void moveStraight(double distance, int direction, double power, RoverAutoMethods.EndStatus status) {
+        r.FLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        r.FRMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        r.BLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        r.BRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        r.FLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        r.FRMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        r.BLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        r.BRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        int target = inches_to_ticks(distance);
+        telemetry.addData("distanceinTicks", target);
+        //int startPos = r.LFMotor.getCurrentPosition();
+        //int currentPos = r.LFMotor.getCurrentPosition();
+        int startPos = r.BLMotor.getCurrentPosition();
+        int currentPos = r.BLMotor.getCurrentPosition();
+        telemetry.addData("Start Pos", startPos);
+        telemetry.addData("Current Pos", currentPos);
+        telemetry.update();
+        //int startPos = r.FRBRMotor.getCurrentPosition();
+        //int currentPos = r.FRBRMotor.getCurrentPosition();
+        //Strangely enough, we had to reduce the right side power by 80% to get the robot to run straight
+        //Unfortunately, we do not yet understand why
+        // r.moveDrivetrain(power * direction, power * direction);
+
+        // while(Math.abs(currentPos - startPos) < target) currentPos = r.LFMotor.getCurrentPosition();
+        while (Math.abs(currentPos - startPos) < target) {
+            currentPos = r.BLMotor.getCurrentPosition();
+            r.correction = checkDirection();
+            r.BLMotor.setPower(power - r.correction);// was0.15, was -correction
+            r.BRMotor.setPower(power - r.correction); // was0.15, was -correction
+
+
+        }
+
+        if (status == RoverAutoMethods.EndStatus.STOP) {
+            r.stopDrivetrain();
+            //To get repeatability in our auto programs, we found that we need to reset the encoders after every run of moveBot method
+            //r.FLBLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //r.FRBRMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //r.FLBLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //r.FRBRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+        //return target/TICKS_PER_INCH;
+    }
+
+
+
+    //The instance of moveBot below is the most commonly used method
+    public void moveStraight(double distance, int direction, double power){
+        moveStraight(distance, direction, power, RoverAutoMethods.EndStatus.STOP);    }
+
+    public double checkDirection()
+    {
+        // The gain value determines how sensitive the correction is to direction changes.
+        // You will have to experiment with your robot to get small smooth direction changes
+        // to stay on a straight line.
+        double correction, angle, gain = .10;
+
+        angle = getAngle();
+
+        if (angle == 0)
+            correction = 0;             // no adjustment.
+        else
+            correction = -angle;        // reverse sign of angle for correction.
+
+        correction = correction * gain;
+
+        return correction;
+    }
+    public double getAngle(){
+        // We experimentally determined the Z axis is the axis we want to use for heading angle.
+        // We have to process the angle because the imu works in euler angles so the Z axis is
+        // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
+        // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
+
+        Orientation angles = r.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS); //was DEGREES
+
+        double deltaAngle = angles.firstAngle - r.lastAngles.firstAngle;
+
+        if (deltaAngle < -3.1)//convert to radians - 180 degrees
+            deltaAngle += 6.3;//convert to radians - 360 degrees
+        else if (deltaAngle > 3.1)//convert to radians - 180 degrees
+            deltaAngle -= 6.3;//convert to radians - 360 degrees
+
+        r.globalAngle += deltaAngle;
+
+        r.lastAngles = angles;
+
+        return r.globalAngle;
+    }
+
+
+
+
+
+
 }

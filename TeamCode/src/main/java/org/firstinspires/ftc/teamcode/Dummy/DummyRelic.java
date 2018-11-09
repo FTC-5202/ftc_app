@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Dummy;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -9,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
 @TeleOp(name = "DummyRover", group = "DummyBot")
-//@Disabled
+@Disabled
 public class DummyRelic extends LinearOpMode {
 
     /* Declare OpMode members. */

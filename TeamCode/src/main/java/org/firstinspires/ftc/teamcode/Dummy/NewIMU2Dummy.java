@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Dummy;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -17,6 +18,7 @@ import static com.qualcomm.hardware.bosch.BNO055IMU.AngleUnit.DEGREES;
  * Created by FIRSTUser on 6/18/2018.
  */
 @Autonomous
+@Disabled
 public class NewIMU2Dummy extends LinearOpMode {
 
     public DcMotor FLBLMotor = null;

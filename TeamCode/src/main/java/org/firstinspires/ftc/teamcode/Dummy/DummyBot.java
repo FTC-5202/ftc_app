@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
 @TeleOp(name = "DummyBotTele", group = "DummyBot")
-//@Disabled
+@Disabled
 public class DummyBot extends LinearOpMode {
 
     /* Declare OpMode members. */
