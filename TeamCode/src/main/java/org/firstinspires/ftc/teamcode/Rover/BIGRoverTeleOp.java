@@ -29,7 +29,9 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
     double POS = 0;
     boolean lb_pressed;
     boolean rb_pressed;
-    boolean isForward =     true;   //True means that the the claw side of the robot is currently forward for driving.
+    boolean isForward =     true;//True means that the the claw side of the robot is currently forward for driving.
+    boolean ArmsForward = true;
+    boolean rb2pressed = false;
 
 
     boolean rb1Pressed =    false;  //Program toggles this between false and true after gamepad1's right button has been pressed.
@@ -71,6 +73,14 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
             rb1Pressed = false;
         }
 
+        if (gamepad2.right_bumper && !rb2pressed) {
+            rb2pressed = true;
+        }
+        if (!gamepad2.right_bumper && rb2pressed) {
+            ArmsForward = !ArmsForward;
+            rb2pressed = false;
+        }
+
 //The code within the if (!isForward) section below (before the else statement) sets up the behaviors we want when the robot has the hanging side as forward.
         if (!isForward) {
 
@@ -79,15 +89,26 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
             FL = gamepad1.right_stick_y;
             FR = gamepad1.left_stick_y;
 
-//The left trigger on gamepad2 will only cause action if it is pressed more than halfway.
-            if (gamepad2.left_trigger >= 0.5) {
+        }
+        else {
+            BL = -gamepad1.left_stick_y;
+            BR = -gamepad1.right_stick_y;
+            FL = -gamepad1.left_stick_y;
+            FR = -gamepad1.right_stick_y;
+
+        }
+
+        if (!ArmsForward) {
+
+            //The left trigger on gamepad2 will only cause action if it is pressed more than halfway.
+          /*  if (gamepad2.left_trigger >= 0.5) {
                 left_trigger_pressed = true;
             }
-
+*/
 //If the left trigger was pressed and has not been pressed again past halfway, and if it's state is false, which is the IC,
 //set the claw arm servo to the desired position and turn its state to true.
 //Next 2 lines could be combined into one if statement.
-            if (left_trigger_pressed == true) { // good
+          /*  if (left_trigger_pressed == true) { // good
                 if (gamepad2.left_trigger < 0.5) {
                     if (left_trigger_state == false) {
                         r.RSLif.setPosition(0.0);
@@ -120,7 +141,9 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
                     }
                     right_trigger_pressed = false;
                 }
-            }
+            }*/
+          r.RSLif.setPosition(0.25);
+          r.LSLif.setPosition(0.5);
 
 
             if (gamepad2.a) { // good
@@ -232,12 +255,9 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
                 }
             }*/
 
+
         }
         else {
-            BL = -gamepad1.left_stick_y;
-            BR = -gamepad1.right_stick_y;
-            FL = -gamepad1.left_stick_y;
-            FR = -gamepad1.right_stick_y;
 
             r.RSrot.setPosition(0.6);//was 0.3
             r.LSrot.setPosition(0.65);
@@ -249,7 +269,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
             if (left_trigger_pressed == true) {
                 if (gamepad2.left_trigger < 0.5) {
                     if (left_trigger_state == false) {
-                        r.LSLif.setPosition(0.2);//was 0.4
+                        r.LSLif.setPosition(0.25);//was 0.4
                         left_trigger_state = true;
                     }
                     else if (left_trigger_state == true) {
@@ -271,7 +291,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
                         right_trigger_state = true;
                     }
                     else if (right_trigger_state == true) {
-                        r.RSLif.setPosition(0.5);//was 0.4
+                        r.RSLif.setPosition(0.56);
                         right_trigger_state = false;
                     }
                     right_trigger_pressed = false;

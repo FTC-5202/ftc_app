@@ -38,9 +38,9 @@ public class BIGRoverTeleOpMethods extends OpMode {
     }
 
     public void setupServos() {
-        r.moveServo(r.LSrot, 0.7);
+        r.moveServo(r.LSrot, 0.65);
         r.moveServo(r.LSgrab, 0.65); //was 0.2
-        r.moveServo(r.RSrot, 0.5); //was 0.3
+        r.moveServo(r.RSrot, 0.6); //was 0.3
         r.moveServo(r.RSgrab, 0.2); //was 0.65
         r.moveServo(r.RSLif, 0.0);//was 0
         r.moveServo(r.LSLif, 1.0);//was 1.0

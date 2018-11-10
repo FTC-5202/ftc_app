@@ -41,9 +41,9 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
     }
 
     public void setupServos() {
-        r.moveServo(r.LSrot, 0.7);
+        r.moveServo(r.LSrot, 0.65);
         r.moveServo(r.LSgrab, 0.65);
-        r.moveServo(r.RSrot, 0.3); //was 0.15
+        r.moveServo(r.RSrot, 0.6); //was 0.15
         r.moveServo(r.RSgrab, 0.2); //was 7
         r.moveServo(r.RSLif, 0);
         r.moveServo(r.LSLif, 1.0);
@@ -83,7 +83,7 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
         int target = inches_to_ticks(distance);
         int startPos = r.BLMotor.getCurrentPosition();
         int currentPos = r.BLMotor.getCurrentPosition();
-        r.moveDrivetrain(power * direction, power * 1.0* direction);
+        r.moveDrivetrain(power * 0.8* direction, power * 1.0* direction);// was 0.6 || 1
 
         while (Math.abs(currentPos - startPos) < target) currentPos = r.BLMotor.getCurrentPosition();
 
