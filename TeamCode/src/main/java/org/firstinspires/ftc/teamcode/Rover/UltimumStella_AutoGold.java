@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous (name="UltimumStella Gold")
 public class UltimumStella_AutoGold extends UltimumStella_AutoMethods {
 
-
+    @Override
     public void runOpMode() {
 
         telemetry.addLine("Initializing...");

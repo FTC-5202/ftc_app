@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous (name="UltimumStella Silver")
 public class UltimumStella_AutoSilver extends UltimumStella_AutoMethods {
 
-
+    @Override
     public void runOpMode() {
 
         telemetry.addLine("Initializing...");
@@ -54,7 +54,7 @@ public class UltimumStella_AutoSilver extends UltimumStella_AutoMethods {
             r.Lift.setPower(-LiftPow);
             sleep(5000);
             LiftPow = 0.;
-            r.RSLif.setPosition(0.58);
+          //  r.RSLif.setPosition(0.58);
             r.LSLif.setPosition(0.21);
         }
 
