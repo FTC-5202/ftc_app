@@ -43,24 +43,31 @@ public class UltimumStella_AutoSilver extends UltimumStella_AutoMethods {
             //if (r.sensorTouch.getState() == true && (timeElapsed < 10000)) {
             while (r.sensorTouch.getState() == true && (timeElapsed < 20000) && !isStopRequested()) {
                 r.Lift.setPower(LiftPow);
-                timeElapsed = System.currentTimeMillis()- start;
+                timeElapsed = System.currentTimeMillis() - start;
             }
 
-            if (timeElapsed > 20000) {MotorPow = 0; LiftPow=0;}
+            if (timeElapsed > 20000) {
+                MotorPow = 0;
+                LiftPow = 0;
+            }
 
-            r.Lift.setPower(0);
-            moveBot(30, FORWARD, MotorPow, EndStatus.STOP);
-            MotorPow = 0;
-            r.Lift.setPower(-LiftPow);
-            sleep(5000);
-            LiftPow = 0.;
-          //  r.RSLif.setPosition(0.58);
-            r.LSLif.setPosition(0.21);
+            if (MotorPow > 0) {
+                r.Lift.setPower(0);
+                moveBot(30, FORWARD, MotorPow, EndStatus.STOP);
+                MotorPow = 0;
+            } else {
+
+                r.Lift.setPower(-LiftPow);
+                sleep(5000);
+                LiftPow = 0;
+                //  r.RSLif.setPosition(0.58);
+                r.LSLif.setPosition(0.21);
+            }
+
+
         }
 
-
     }
-
 }
 
     //correction = checkDirection();

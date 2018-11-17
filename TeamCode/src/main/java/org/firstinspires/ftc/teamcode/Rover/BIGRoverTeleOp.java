@@ -146,6 +146,8 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
           r.LSLif.setPosition(0.5);
 
 
+
+
             if (gamepad2.a) { // good
                 a_pressed = true;
             }
@@ -344,6 +346,8 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
         r.LarmLif.setPower(LarmLifPow/1.0);
         RarmLifPow = -gamepad2.left_stick_y;
         r.RarmLif.setPower(RarmLifPow/1.0);
+
+
 
 
 
