@@ -46,15 +46,21 @@ public class UltimumStella_AutoGold extends UltimumStella_AutoMethods {
                 timeElapsed = System.currentTimeMillis()- start;
             }
 
-            if (timeElapsed > 20000) {MotorPow = 0; LiftPow=0;}
+            if (timeElapsed > 20000) {
+                MotorPow = 0; LiftPow=0;
+            }
 
-            r.Lift.setPower(0);
-            moveBot(38, FORWARD, MotorPow, EndStatus.STOP);
-            MotorPow = 0.;
-            r.Lift.setPower(-LiftPow);
-            sleep(5500);
-            LiftPow = 0.;
-            r.RSLif.setPosition(0.4);
+            if (MotorPow > 0) {
+                r.Lift.setPower(0);
+                moveBot(38, FORWARD, MotorPow, EndStatus.STOP);
+                MotorPow = 0.;
+            }
+            else {
+                r.Lift.setPower(-LiftPow);
+                sleep(5500);
+                LiftPow = 0.;
+                r.RSLif.setPosition(0.4);
+            }
           //  r.LSLif.setPosition(0.21);
         }
 
