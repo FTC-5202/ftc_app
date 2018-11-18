@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.vuforia.CameraDevice;
 
 import static com.qualcomm.hardware.bosch.BNO055IMU.AngleUnit.RADIANS;
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
@@ -27,6 +28,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
+//import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.
 
 @Autonomous(name="RoverAuto", group ="Rover")
 @Disabled
