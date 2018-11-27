@@ -27,6 +27,7 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
     public static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     public static final String LABEL_SILVER_MINERAL = "Silver Mineral";
     public int position = 0;
+    public boolean minCheck = false;
 
 
     private static final String VUFORIA_KEY = "AXLb9ZD/////AAAAGc+ylHTIf0+aorS8rw6aoBRMAiybD7XCkifjVKb1gFrWJ+pZOL6huLnful+ArD+R2XN3/ZGcwQl6+4jsRj2e3Y82Sm/yTgANmCQEqhIqLjfWNePdOqmT0apncNRVE8YfklK+VRNs976s0xR2rEPIl4tNaYoGOHqaJl8JfIrZ5CjIIxKV55C5PUdzzgAxR3NS8hR7wGu5H0rX1of4shVf1Nncn3WNKTrsOU//PPBjgE79RIN3G5aUC54lMNkzMfaJ2FwAfTXoMbSUygQiGu1Sh0UizQpgjqzPH8gIt6v8qt542i4Pk5T+gbrculkfzvFhzMQu81EyP2v4TfCNmCsSrFQdRl2Z7pTbWddtn5//e6Px\"";
@@ -87,6 +88,7 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
         r.moveServo(r.RSgrab, 0.2); //was 7
         r.moveServo(r.RSLif, 0);
         r.moveServo(r.LSLif, 1.0);
+        //r.moveServo(r.MinFlap, 0.2);
     }
 
     public void setupSensors() {
@@ -125,7 +127,7 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
         int currentPos = r.BLMotor.getCurrentPosition();
         r.moveDrivetrain(power * 0.8 * direction, power * 1.0 * direction);// was 0.6 || 1
 
-        while (Math.abs(currentPos - startPos) < target)
+        while (Math.abs(currentPos - startPos) < target && !isStopRequested())
             currentPos = r.BLMotor.getCurrentPosition();
 
         if (status == EndStatus.STOP) {
@@ -155,7 +157,7 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
         double dToR = (Math.PI / 180.0);
         double rad = degrees * dToR;
         //"HALFWHEELBASE" is one half the width of our robot
-        final double HALFWHEELBASE = 8.5; //inches -change
+        final double HALFWHEELBASE = 8.125; //inches -change
         //If one side is not powered, the other side must travel twice as far to complete the turn
         int coeff = (lPow == 0.0 || rPow == 0.0) ? 2 : 1;
         //Calculate length of turn and convert to encoder ticks

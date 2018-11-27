@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Rover.LitttleRover.RoverAutoMethods;
 import java.util.List;
 
 @Autonomous (name="UltimumStella ImageRecGold")
-public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
+public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods {
 
     @Override
     public void runOpMode() {
@@ -109,7 +109,7 @@ public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
                         //r.MinFlap.setPosition(0.2);
                         eTurnBot(60, Direction.RIGHT, MotorPow, MotorPow, EndStatus.STOP);
                         sleep(500);
-                        moveStraight(20, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP);
+                        moveStraight(2, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP);
                         sleep(500);
                     }
                     minCheck = true;
@@ -123,7 +123,7 @@ public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
                         moveStraight(24, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP); //was 38
                         //r.MinFlap.setPosition(0.2);
                         sleep(1500);
-                        moveStraight(14, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP);
+                        moveStraight(2, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP);
                         sleep(500);
 
                     }
@@ -143,21 +143,24 @@ public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
                         //r.MinFlap.setPosition(0.2);
                         eTurnBot(60, Direction.LEFT, MotorPow, MotorPow, EndStatus.STOP);
                         sleep(500);
-                        moveStraight(20, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP);
+                        moveStraight(2, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP);
                         sleep(500);
                     }
                     minCheck = true;
                 }
-                    r.Lift.setPower(-LiftPow);
-                    sleep(5500);
-                    LiftPow = 0.;
-                    r.RSLif.setPosition(0.4);
+                r.Lift.setPower(-LiftPow);
+                sleep(5500);
+                LiftPow = 0.;
+                r.RSLif.setPosition(0.21);
             }
         }
         if (tfod != null) tfod.shutdown();
     }
 }
+//correction = checkDirection();
 
-
-
+//telemetry.addData("1 imu heading", lastAngles.firstAngle);
+//telemetry.addData("2 global heading", globalAngle);
+//telemetry.addData("3 correction", correction);
+//telemetry.update();
 
