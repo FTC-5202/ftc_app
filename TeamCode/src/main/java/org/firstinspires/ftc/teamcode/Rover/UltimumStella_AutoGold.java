@@ -2,9 +2,11 @@ package org.firstinspires.ftc.teamcode.Rover;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous (name="UltimumStella Gold")
+@Disabled
 public class UltimumStella_AutoGold extends UltimumStella_AutoMethods {
 
     @Override

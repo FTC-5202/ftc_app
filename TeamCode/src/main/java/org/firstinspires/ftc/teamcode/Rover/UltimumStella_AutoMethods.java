@@ -51,15 +51,17 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
 
-        initVuforia();
+        /*initVuforia();
         CameraDevice.getInstance().setFlashTorchMode(true);
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-        }
+        } */
+
     }
+
 
     public void setupMotors() {
         //This section sets up the brake behavior so when the power is off, motors hold current position
@@ -101,6 +103,14 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
         setupMotors();
         setupServos();
         setupSensors();
+        initVuforia();
+        CameraDevice.getInstance().setFlashTorchMode(true);
+
+        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+            initTfod();
+        } else {
+            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+        }
     }
 
     /* Ticks per rotation / inches (circumference) per rotation = ticks per inch
