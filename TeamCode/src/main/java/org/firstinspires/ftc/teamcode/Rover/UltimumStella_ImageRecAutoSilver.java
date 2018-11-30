@@ -9,6 +9,9 @@ import org.firstinspires.ftc.teamcode.Rover.LitttleRover.RoverAutoMethods;
 
 import java.util.List;
 
+import static org.firstinspires.ftc.teamcode.Rover.UltimumStella_AutoMethods.Direction.LEFT;
+import static org.firstinspires.ftc.teamcode.Rover.UltimumStella_AutoMethods.Direction.RIGHT;
+
 @Autonomous (name="UltimumStella ImageRecSilver")
 public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods {
 
@@ -48,6 +51,8 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
             start = System.currentTimeMillis();
 
             while (opModeIsActive()) {
+                r.LSLif.setPosition(0.25);
+                r.RSLif.setPosition(0.56);
 
                 // if the digital channel returns true it's HIGH and the button is unpressed.
                 //if (r.sensorTouch.getState() == true && (timeElapsed < 10000)) {
@@ -63,6 +68,7 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                 }
 
                 if (tfod != null) {
+                    //if (tfod !=null && timeElapsed >= ?) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
@@ -108,17 +114,17 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                 if (position == 1 && !minCheck) {
                     if (MotorPow > 0) {
                         //move left
-                        moveBot(6, FORWARD, MotorPow, EndStatus.STOP);
+                        moveBot(6, FORWARD, MotorPow);
                         sleep(500);
-                        eTurnBot(30, Direction.LEFT, MotorPow, MotorPow, EndStatus.STOP);
+                        eTurnBot(30, RIGHT, MotorPow, MotorPow); //was LEFT
                         sleep(500);
                         //r.MinFlap.setPosition(0.6);
-                        moveStraight(16, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP);
+                        moveStraight(16, FORWARD, MotorPow);
                         sleep(1000);
                         //r.MinFlap.setPosition(0.2);
-                        eTurnBot(60, Direction.RIGHT, MotorPow, MotorPow, EndStatus.STOP);
+                        eTurnBot(60, LEFT, MotorPow, MotorPow); //was RIGHT
                         sleep(500);
-                        moveStraight(2, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP);
+                        moveStraight(2, FORWARD, MotorPow);
                         sleep(500);
                     }
                     minCheck = true;
@@ -129,10 +135,10 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                         //move center
                         sleep(1000);
                         //r.MinFlap.setPosition(0.6);
-                        moveStraight(24, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP); //was 38
+                        moveStraight(24, FORWARD, MotorPow); //was 38
                         //r.MinFlap.setPosition(0.2);
                         sleep(1500);
-                        moveStraight(2, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP);
+                        moveStraight(2, FORWARD, MotorPow);
                         sleep(500);
 
                     }
@@ -142,17 +148,17 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                 if (position == 3 && !minCheck) {
                     if (MotorPow > 0) {
                         //move right
-                        moveBot(6, FORWARD, MotorPow, EndStatus.STOP);
+                        moveBot(6, FORWARD, MotorPow);
                         sleep(500);
-                        eTurnBot(30, Direction.RIGHT, MotorPow, MotorPow, EndStatus.STOP);
+                        eTurnBot(30, LEFT, MotorPow, MotorPow); //was RIGHT
                         sleep(500);
                         //r.MinFlap.setPosition(0.6);
-                        moveStraight(16, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP);
+                        moveStraight(16, FORWARD, MotorPow);
                         sleep(1000);
                         //r.MinFlap.setPosition(0.2);
-                        eTurnBot(60, Direction.LEFT, MotorPow, MotorPow, EndStatus.STOP);
+                        eTurnBot(60, RIGHT, MotorPow, MotorPow); //was LEFT
                         sleep(500);
-                        moveStraight(2, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP);
+                        moveStraight(2, FORWARD, MotorPow);
                         sleep(500);
                     }
                     minCheck = true;

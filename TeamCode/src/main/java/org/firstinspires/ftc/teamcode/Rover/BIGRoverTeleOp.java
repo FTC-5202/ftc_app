@@ -3,12 +3,20 @@ package org.firstinspires.ftc.teamcode.Rover;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Created by Hannah on 11/16/2017.
  */
 @TeleOp (name = "BIGRoverTele")
 //@Disabled
 public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
+    static final double INCREMENT = 0.01;     // amount to slew servo each CYCLE_MS cycle
+    static final long CYCLE_MS = 50;     // period of each cycle
+    static final double MAX_POS = 1.0;     // Maximum rotational position
+    static final double MIN_POS = 0.0;     // Minimum rotational position
+    double position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
+    boolean rampUp = true;
 
     //
 
@@ -29,29 +37,28 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
     double POS = 0;
     boolean lb_pressed;
     boolean rb_pressed;
-    boolean isForward =     true;//True means that the the claw side of the robot is currently forward for driving.
+    boolean isForward = true;//True means that the the claw side of the robot is currently forward for driving.
     boolean ArmsForward = true;
     boolean rb2pressed = false;
 
 
-    boolean rb1Pressed =    false;  //Program toggles this between false and true after gamepad1's right button has been pressed.
-                                    //Used in conjunction with the button being pressed to make the button toggle between two actions.
+    boolean rb1Pressed = false;  //Program toggles this between false and true after gamepad1's right button has been pressed.
+    //Used in conjunction with the button being pressed to make the button toggle between two actions.
     boolean a_pressed = false;      //Similar to rb1 pressed for gamepad2, button a
     boolean b_pressed = false;      //Similar to rb1 pressed for gamepad2, button b
     boolean x_pressed = false;      //Similar to rb1 pressed for gamepad2, button x
     boolean y_pressed = false;      //Similar to rb1 pressed for gamepad2, button y
-    boolean dpad_right_pressed =    false;  //Similar to rb1 pressed for gamepad2, dpad right
-    boolean dpad_up_pressed =       false;  //Similar to rb1 pressed for gamepad2, dpad up
-    boolean dpad_left_pressed =     false;  //Similar to rb1 pressed for gamepad2, dpad left
-    boolean dpad_down_pressed =     false;  //Similar to rb1 pressed for gamepad2, dpad down
-    boolean left_trigger_pressed =  false;  //Similar to rb1 pressed for gamepad2, dpad down
+    boolean dpad_right_pressed = false;  //Similar to rb1 pressed for gamepad2, dpad right
+    boolean dpad_up_pressed = false;  //Similar to rb1 pressed for gamepad2, dpad up
+    boolean dpad_left_pressed = false;  //Similar to rb1 pressed for gamepad2, dpad left
+    boolean dpad_down_pressed = false;  //Similar to rb1 pressed for gamepad2, dpad down
+    boolean left_trigger_pressed = false;  //Similar to rb1 pressed for gamepad2, dpad down
     boolean right_trigger_pressed = false;  //Similar to rb1 pressed for gamepad2, dpad down
-    boolean right_trigger_state =   false;  //Similar to rb1 pressed for gamepad2, dpad down
+    boolean right_trigger_state = false;  //Similar to rb1 pressed for gamepad2, dpad down
 
-    boolean LSgrab_state =          false;  //State of the left claw
-    boolean RSgrab_state =          false;  //State of the right claw
-    boolean left_trigger_state =    false;  //State of the left trigger
-
+    boolean LSgrab_state = false;  //State of the left claw
+    boolean RSgrab_state = false;  //State of the right claw
+    boolean left_trigger_state = false;  //State of the left trigger
 
 
     public void loop() {
@@ -89,8 +96,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
             FL = gamepad1.right_stick_y;
             FR = gamepad1.left_stick_y;
 
-        }
-        else {
+        } else {
             BL = -gamepad1.left_stick_y;
             BR = -gamepad1.right_stick_y;
             FL = -gamepad1.left_stick_y;
@@ -142,10 +148,8 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
                     right_trigger_pressed = false;
                 }
             }*/
-          r.RSLif.setPosition(0.25);
-          r.LSLif.setPosition(0.5);
-
-
+            r.RSLif.setPosition(0.25);
+            r.LSLif.setPosition(0.5);
 
 
             if (gamepad2.a) { // good
@@ -157,8 +161,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
                     if (LSgrab_state == false) {
                         r.LSgrab.setPosition(0.7);
                         LSgrab_state = true;
-                    }
-                    else if (LSgrab_state == true) {
+                    } else if (LSgrab_state == true) {
                         r.LSgrab.setPosition(0.3);
                         LSgrab_state = false;
                     }
@@ -174,8 +177,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
                     if (RSgrab_state == false) {
                         r.RSgrab.setPosition(0.2);
                         RSgrab_state = true;
-                    }
-                    else if (RSgrab_state == true) {
+                    } else if (RSgrab_state == true) {
                         r.RSgrab.setPosition(0.65);
                         RSgrab_state = false;
                     }
@@ -258,8 +260,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
             }*/
 
 
-        }
-        else {
+        } else {
 
             r.RSrot.setPosition(0.6);//was 0.3
             r.LSrot.setPosition(0.65);
@@ -273,8 +274,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
                     if (left_trigger_state == false) {
                         r.LSLif.setPosition(0.25);//was 0.4
                         left_trigger_state = true;
-                    }
-                    else if (left_trigger_state == true) {
+                    } else if (left_trigger_state == true) {
                         r.LSLif.setPosition(1.0);
                         left_trigger_state = false;
                     }
@@ -291,8 +291,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
                     if (right_trigger_state == false) {
                         r.RSLif.setPosition(0);
                         right_trigger_state = true;
-                    }
-                    else if (right_trigger_state == true) {
+                    } else if (right_trigger_state == true) {
                         r.RSLif.setPosition(0.56);
                         right_trigger_state = false;
                     }
@@ -309,8 +308,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
                     if (LSgrab_state == false) {
                         r.LSgrab.setPosition(0.7);//was 0.6
                         LSgrab_state = true;
-                    }
-                    else if (LSgrab_state == true) {
+                    } else if (LSgrab_state == true) {
                         r.LSgrab.setPosition(0.3);//was 0.2
                         LSgrab_state = false;
                     }
@@ -326,8 +324,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
                     if (RSgrab_state == false) {
                         r.RSgrab.setPosition(0.2);//was 0.3
                         RSgrab_state = true;
-                    }
-                    else if (RSgrab_state == true) {
+                    } else if (RSgrab_state == true) {
                         r.RSgrab.setPosition(0.65);
                         RSgrab_state = false;
                     }
@@ -337,25 +334,41 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
 
         }
 
-        r.BLMotor.setPower(BL); //good
-        r.BRMotor.setPower(BR);
-        r.FLMotor.setPower(FL);
-        r.FRMotor.setPower(FR);
+        // slew the servo, according to the rampUp (direction) variable.
+        if (gamepad2.b) {
+            if (rampUp) {
+                // Keep stepping up until we hit the max value.
+                position += INCREMENT;
+                if (position >= MAX_POS) {
+                    position = MAX_POS;
+                    rampUp = !rampUp;
+                }
+            }
+            if (gamepad2.x) {
+                if (!rampUp) {
+                }
+                // Keep stepping down until we hit the min value.
+                position -= INCREMENT;
+                if (position <= MIN_POS) {
+                    position = MIN_POS;
+                    rampUp = !rampUp;
+                }
+            }
 
-        LarmLifPow = gamepad2.right_stick_y; //good
-        r.LarmLif.setPower(LarmLifPow/1.0);
-        RarmLifPow = -gamepad2.left_stick_y;
-        r.RarmLif.setPower(RarmLifPow/1.0);
+            r.RSrot.setPosition(position);
+            
+            r.BLMotor.setPower(BL); //good
+            r.BRMotor.setPower(BR);
+            r.FLMotor.setPower(FL);
+            r.FRMotor.setPower(FR);
+
+            LarmLifPow = gamepad2.right_stick_y; //good
+            r.LarmLif.setPower(LarmLifPow / 1.0);
+            RarmLifPow = -gamepad2.left_stick_y;
+            r.RarmLif.setPower(RarmLifPow / 1.0);
 
 
-
-
-
-
-
-
-
-
+        }
 
     }
 

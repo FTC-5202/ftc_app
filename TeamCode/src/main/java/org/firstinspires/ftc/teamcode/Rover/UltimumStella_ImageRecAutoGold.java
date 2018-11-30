@@ -37,6 +37,9 @@ public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
         //targetsRoverRuckus.activate();
 
         if (opModeIsActive()) {
+            telemetry.addLine("Op Mode is Active");
+            telemetry.update();
+            sleep(1000);
             /** Activate Tensor Flow Object Detection. */
             if (tfod != null) {
                 tfod.activate();
@@ -48,10 +51,11 @@ public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
 
                 // if the digital channel returns true it's HIGH and the button is unpressed.
                 //if (r.sensorTouch.getState() == true && (timeElapsed < 10000)) {
-                while (r.sensorTouch.getState() == true && (timeElapsed < 20000) && !isStopRequested()) {
+                /*while (r.sensorTouch.getState() == true && (timeElapsed < 20000) && !isStopRequested()) {
                     r.Lift.setPower(LiftPow);
                     timeElapsed = System.currentTimeMillis() - start;
                 }
+                */
 
                 if (timeElapsed > 20000) {
                     MotorPow = 0;
@@ -88,13 +92,18 @@ public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
                                     position = 2;
                                     telemetry.addData("Gold Mineral Position", "Center");
                                 }
+                                tfod = null;
                             }
                         }
 
                         telemetry.update();
                     }
-                    tfod = null;
+
                 }
+
+                telemetry.addLine("TFOD Complete");
+                telemetry.update();
+                sleep(1000);
 
                 if (position == 1 && !minCheck) {
                     if (MotorPow > 0) {
@@ -148,15 +157,36 @@ public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
                     }
                     minCheck = true;
                 }
-                    r.Lift.setPower(-LiftPow);
-                    sleep(5500);
-                    LiftPow = 0.;
-                    r.RSLif.setPosition(0.4);
+
+                /*if (position == 0 && !minCheck) {
+                    if (MotorPow > 0) {
+                        //move center
+                        sleep(1000);
+                        //r.MinFlap.setPosition(0.6);
+                        moveStraight(24, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP); //was 38
+                        //r.MinFlap.setPosition(0.2);
+                        sleep(1500);
+                        moveStraight(2, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP);
+                        sleep(500);
+
+                    }
+                }
+                */
+                //r.Lift.setPower(-LiftPow);
+                sleep(5500);
+                LiftPow = 0.;
+                r.RSLif.setPosition(0.4);
             }
         }
         if (tfod != null) tfod.shutdown();
     }
 }
+//correction = checkDirection();
+
+//telemetry.addData("1 imu heading", lastAngles.firstAngle);
+//telemetry.addData("2 global heading", globalAngle);
+//telemetry.addData("3 correction", correction);
+//telemetry.update();
 
 
 
