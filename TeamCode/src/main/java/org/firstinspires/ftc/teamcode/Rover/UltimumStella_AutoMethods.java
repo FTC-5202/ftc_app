@@ -90,7 +90,7 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
         r.moveServo(r.RSgrab, 0.2); //was 7
         r.moveServo(r.RSLif, 0);
         r.moveServo(r.LSLif, 1.0);
-        //r.moveServo(r.MinFlap, 0.2);
+        r.moveServo(r.MinFlap, 0.4);
     }
 
     public void setupSensors() {

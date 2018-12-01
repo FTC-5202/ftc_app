@@ -11,12 +11,12 @@ import static java.lang.Thread.sleep;
 @TeleOp (name = "BIGRoverTele")
 //@Disabled
 public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
-    static final double INCREMENT = 0.01;     // amount to slew servo each CYCLE_MS cycle
-    static final long CYCLE_MS = 50;     // period of each cycle
-    static final double MAX_POS = 1.0;     // Maximum rotational position
-    static final double MIN_POS = 0.0;     // Minimum rotational position
-    double position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
-    boolean rampUp = true;
+    //static final double INCREMENT = 0.01;     // amount to slew servo each CYCLE_MS cycle
+    //static final long CYCLE_MS = 50;     // period of each cycle
+    //static final double MAX_POS = 1.0;     // Maximum rotational position
+    //static final double MIN_POS = 0.0;     // Minimum rotational position
+    //double position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
+    //boolean rampUp = true;
 
     //
 
@@ -41,7 +41,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
     boolean ArmsForward = true;
     boolean rb2pressed = false;
 
-
+    boolean lb1Pressed = false;
     boolean rb1Pressed = false;  //Program toggles this between false and true after gamepad1's right button has been pressed.
     //Used in conjunction with the button being pressed to make the button toggle between two actions.
     boolean a_pressed = false;      //Similar to rb1 pressed for gamepad2, button a
@@ -59,6 +59,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
     boolean LSgrab_state = false;  //State of the left claw
     boolean RSgrab_state = false;  //State of the right claw
     boolean left_trigger_state = false;  //State of the left trigger
+    boolean left_bumper_state = false;
 
 
     public void loop() {
@@ -69,6 +70,23 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
 
         Lift = gamepad1.right_trigger;
         r.Lift.setPower(-Lift / 1.0); //changed from 1.5
+
+        if (gamepad1.left_bumper) { // good
+            lb1Pressed = true;
+        }
+
+        if (lb1Pressed == true) { // good
+            if (gamepad1.left_bumper == false) {
+                if (left_bumper_state == false) {
+                    r.MinFlap.setPosition(0.4);
+                    left_bumper_state = true;
+                } else if (left_bumper_state == true) {
+                    r.MinFlap.setPosition(1.0);
+                    left_bumper_state = false;
+                }
+                lb1Pressed = false;
+            }
+        }
 
 //The first time gamepad1's right bumper is pressed and release, the hanging lift side of the robot will become the "front" side for driving purposes.
 //After the first time, each press/release of the right bumper will toggle which end of the robot is the "front".
@@ -185,6 +203,8 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
                 }
             }
 
+            /*
+
             if (gamepad2.b) { // good
                 b_pressed = true;
 
@@ -196,13 +216,15 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
                 }
             }
 
+            */
+
             if (gamepad2.x) { // good
                 x_pressed = true;
             }
 
             if (x_pressed == true) { // good
                 if (gamepad2.x == false) {
-                    r.LSrot.setPosition(0.3);//was 1.0
+                    r.LSrot.setPosition(0.15);//was 1.0
                     x_pressed = false;
                 }
             }
@@ -224,7 +246,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
 
             if (dpad_right_pressed == true) { // good
                 if (gamepad2.dpad_right == false) {
-                    r.RSrot.setPosition(0.77);//was 0.7
+                    r.RSrot.setPosition(0.9);//was 0.7
 
                     dpad_right_pressed = false;
                 }
@@ -236,28 +258,27 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
 
             if (dpad_up_pressed == true) { // good - positions need work
                 if (gamepad2.dpad_up == false) {
-                    r.RSrot.setPosition(0.45);
-                   /* if (RSgrab_state == false) {
-                        r.RSrot.setPosition(0.3);
-                        RSgrab_state = true;
-                    } else if (RSgrab_state == true) {
-                        r.RSgrab.setPosition(0.0);
-                        RSgrab_state = false;
-                    }*/
+                    r.RSrot.setPosition(0.61);
                     dpad_up_pressed = false;
                 }
             }
 
-            /*if (gamepad2.dpad_left) { // good
+            /*
+
+            if (gamepad2.dpad_left) { // good
                 dpad_left_pressed = true;
             }
 
             if (dpad_left_pressed == true) { // good
                 if (gamepad2.dpad_left == false) {
-                    r.RSrot.setPosition(1.0);
+                    r.RSrot.setPosition(0.45);
                     dpad_left_pressed = false;
                 }
-            }*/
+            }
+
+            */
+
+
 
 
         } else {
@@ -335,6 +356,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
         }
 
         // slew the servo, according to the rampUp (direction) variable.
+        /*
         if (gamepad2.b) {
             if (rampUp) {
                 // Keep stepping up until we hit the max value.
@@ -344,6 +366,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
                     rampUp = !rampUp;
                 }
             }
+        }
             if (gamepad2.x) {
                 if (!rampUp) {
                 }
@@ -355,8 +378,10 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
                 }
             }
 
-            r.RSrot.setPosition(position);
-            
+            */
+
+            //r.RSrot.setPosition(position);
+
             r.BLMotor.setPower(BL); //good
             r.BRMotor.setPower(BR);
             r.FLMotor.setPower(FL);
@@ -371,6 +396,4 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
         }
 
     }
-
-}
 

@@ -75,7 +75,7 @@ public class BIGRoverElectrical {
     public Servo RSgrab = null;
     public Servo RSLif = null;
     public Servo LSLif = null;
-    //public Servo MinFlap = null;
+    public Servo MinFlap = null;
     public Rev2mDistanceSensor sensorRange;
     public DigitalChannel sensorTouch;
     //    public void runOpMode() throws InterruptedException {    }
@@ -159,7 +159,7 @@ public class BIGRoverElectrical {
                 LSgrab = hwMap.servo.get("ls grab");
                 RSLif = hwMap.servo.get("rs lift");
                 LSLif = hwMap.servo.get("ls lift");
-                //MinFlap = hwMap.servo.get("min flap");
+                MinFlap = hwMap.servo.get("min flap");
 
                 // get a reference to our digitalTouch object.
                 sensorTouch = hwMap.get(DigitalChannel.class, "sensor_touch");
