@@ -51,8 +51,8 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
             start = System.currentTimeMillis();
 
             while (opModeIsActive()) {
-                r.LSLif.setPosition(0.25);
-                r.RSLif.setPosition(0.56);
+                //r.LSLif.setPosition(0.25);
+               // r.RSLif.setPosition(0.56);
 
                 // if the digital channel returns true it's HIGH and the button is unpressed.
                 //if (r.sensorTouch.getState() == true && (timeElapsed < 10000)) {
@@ -74,7 +74,7 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
-                        if (updatedRecognitions.size() == 3) {
+                        if (updatedRecognitions.size() == 2) {
                             int goldMineralX = -1;
                             int silverMineral1X = -1;
                             int silverMineral2X = -1;
@@ -87,19 +87,26 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                                     silverMineral2X = (int) recognition.getLeft();
                                 }
                             }
+
                             if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
-                                if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+                                if (goldMineralX == -1) {
                                     position = 1;
                                     telemetry.addData("Gold Mineral Position", "Left");
-                                } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-                                    position = 3;
-                                    telemetry.addData("Gold Mineral Position", "Right");
-                                } else {
-                                    position = 2;
-                                    telemetry.addData("Gold Mineral Position", "Center");
+                                    tfod = null;
                                 }
-                                tfod = null;
                             }
+                                if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+                                    if (goldMineralX < silverMineral1X) {
+                                        position = 2;
+                                        telemetry.addData("Gold Mineral Position", "Center");
+                                    } else {
+                                        position = 3;
+                                        telemetry.addData("Gold Mineral Position", "Right");
+                                    }
+                                    tfod = null;
+                                }
+
+                            tfod = null;
                         }
 
                         telemetry.update();
@@ -111,15 +118,18 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                 telemetry.update();
                 sleep(1000);
 
+
+
                 if (position == 1 && !minCheck) {
                     if (MotorPow > 0) {
+                       // r.moveServo(r.LSLif, 1.0);
                         //move left
                         moveBot(6, FORWARD, MotorPow);
                         sleep(500);
-                        eTurnBot(30, RIGHT, MotorPow, MotorPow); //was LEFT
+                        eTurnBot(37, RIGHT, MotorPow, MotorPow); //was LEFT
                         sleep(500);
                         //r.MinFlap.setPosition(0.6);
-                        moveStraight(16, FORWARD, MotorPow);
+                        moveStraight(20, FORWARD, MotorPow);
                         sleep(1000);
                         //r.MinFlap.setPosition(0.2);
                         eTurnBot(60, LEFT, MotorPow, MotorPow); //was RIGHT
@@ -128,25 +138,33 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                         sleep(500);
                     }
                     minCheck = true;
+                    telemetry.addLine("Position: Left");
+                    sleep(2000);
+                    telemetry.update();
                 }
 
                 if (position == 2 && !minCheck) {
                     if (MotorPow > 0) {
+                       // r.moveServo(r.LSLif, 1.0);
                         //move center
                         sleep(1000);
                         //r.MinFlap.setPosition(0.6);
                         moveStraight(24, FORWARD, MotorPow); //was 38
                         //r.MinFlap.setPosition(0.2);
                         sleep(1500);
-                        moveStraight(2, FORWARD, MotorPow);
+                        moveStraight(6, FORWARD, MotorPow);
                         sleep(500);
 
                     }
                     minCheck = true;
+                    telemetry.addLine("Position: Center");
+                    sleep(2000);
+                    telemetry.update();
                 }
 
                 if (position == 3 && !minCheck) {
                     if (MotorPow > 0) {
+                     //   r.moveServo(r.LSLif, 1.0);
                         //move right
                         moveBot(6, FORWARD, MotorPow);
                         sleep(500);
@@ -162,6 +180,9 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                         sleep(500);
                     }
                     minCheck = true;
+                    telemetry.addLine("Position: Right");
+                    sleep(2000);
+                    telemetry.update();
                 }
 
                 /*if (position == 0 && !minCheck) {
@@ -179,9 +200,10 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                 }
                 */
                 //r.Lift.setPower(-LiftPow);
+
                 sleep(5500);
                 LiftPow = 0.;
-                r.RSLif.setPosition(0.21);
+                //r.RSLif.setPosition(0.21);
             }
         }
         if (tfod != null) tfod.shutdown();
