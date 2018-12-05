@@ -9,6 +9,9 @@ import org.firstinspires.ftc.teamcode.Rover.LitttleRover.RoverAutoMethods;
 
 import java.util.List;
 
+import static org.firstinspires.ftc.teamcode.Rover.UltimumStella_AutoMethods.Direction.LEFT;
+import static org.firstinspires.ftc.teamcode.Rover.UltimumStella_AutoMethods.Direction.RIGHT;
+
 @Autonomous (name="UltimumStella ImageRecGold")
 public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
 
@@ -24,7 +27,7 @@ public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
         long current = System.currentTimeMillis();
         long timeElapsed = 0;
 
-        double MotorPow = 0.5;
+        double MotorPow = 1.0;
         double LiftPow = 1.0;
 
         setupAll();
@@ -48,134 +51,190 @@ public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
             start = System.currentTimeMillis();
 
             while (opModeIsActive()) {
+                //r.LSLif.setPosition(0.25);
+                // r.RSLif.setPosition(0.56);
 
-                // if the digital channel returns true it's HIGH and the button is unpressed.
-                //if (r.sensorTouch.getState() == true && (timeElapsed < 10000)) {
-                /*while (r.sensorTouch.getState() == true && (timeElapsed < 20000) && !isStopRequested()) {
+                /** if the digital channel returns true it's HIGH and the button is unpressed.
+                 */
+                while (r.sensorTouch.getState() == true && (timeElapsed < 20000) && !isStopRequested()) {
                     r.Lift.setPower(LiftPow);
                     timeElapsed = System.currentTimeMillis() - start;
+
+                    if (tfod != null) { //we have not yet activated TFOD
+                        //if (tfod !=null && timeElapsed >= ?) {
+                        // getUpdatedRecognitions() will return null if no new information is available since
+                        // the last time that call was made.
+
+                        /**The following is basically the TFOD sample program code
+                         *  it determines where the gold mineral and the silver minerals are located
+                         */
+                        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                        if (updatedRecognitions != null) {
+                            telemetry.addData("# Object Detected", updatedRecognitions.size());
+                            telemetry.update();
+                            sleep(1000);
+                            if (updatedRecognitions.size() == 2) {
+                                int goldMineralX = -1;
+                                int silverMineral1X = -1;
+                                int silverMineral2X = -1;
+                                //telemetry.addData("Update Recognitions", updatedRecognitions);
+                                //telemetry.update();
+                                //sleep(2000);
+                                for (Recognition recognition : updatedRecognitions) {
+                                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                                        goldMineralX = (int) recognition.getLeft();
+                                    } else if (silverMineral1X == -1) {
+                                        silverMineral1X = (int) recognition.getLeft();
+                                    } else {
+                                        silverMineral2X = (int) recognition.getLeft();
+                                    }
+                                }
+
+                                //telemetry.addData("gold", goldMineralX);
+                                //telemetry.addData("silver 1", silverMineral1X);
+                                //telemetry.addData("silver 2", silverMineral2X);
+                                //telemetry.update();
+                                //sleep(1000);
+
+                                /**
+                                 * If all the min values are being registered then we move on
+                                 * if the gold min val hasn't changed from above
+                                 * Gold Mineral Position will register as left
+                                 * tfod = null shows we have gone through this and don't want to go through all of these again
+                                 *
+                                 * if the gold min val is less than silver min val 1
+                                 * Gold Mineral Position will register as center
+                                 *
+                                 * if gold min val is greater than silver min val 1
+                                 * Gold Mineral Position will register as right
+                                 */
+
+                                if (goldMineralX != -1 || silverMineral1X != -1) {
+                                    if (goldMineralX == -1) { //needs FIX
+                                        position = 3; //was 1
+                                        telemetry.addData("Gold Mineral Position", "Right"); //GOOD
+                                    } else if (goldMineralX < silverMineral1X) {
+                                        //if (goldMineralX != -1 || silverMineral1X != -1) {
+                                        //(goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+                                        position = 1;
+                                        telemetry.addData("Gold Mineral Position", "Left");
+
+                                    } else {
+                                        position = 2;
+                                        telemetry.addData("Gold Mineral Position", "Center");
+                                    }
+                                    tfod = null;
+                                }
+
+                            }
+
+                            telemetry.update();
+                        }
+
+                    }
+
                 }
-                */
+
 
                 if (timeElapsed > 20000) {
                     MotorPow = 0;
                     LiftPow = 0;
                 }
 
-                if (tfod != null) {
-                    // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null) {
-                        telemetry.addData("# Object Detected", updatedRecognitions.size());
-                        if (updatedRecognitions.size() == 3) {
-                            int goldMineralX = -1;
-                            int silverMineral1X = -1;
-                            int silverMineral2X = -1;
-                            for (Recognition recognition : updatedRecognitions) {
-                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                    goldMineralX = (int) recognition.getLeft();
-                                } else if (silverMineral1X == -1) {
-                                    silverMineral1X = (int) recognition.getLeft();
-                                } else {
-                                    silverMineral2X = (int) recognition.getLeft();
-                                }
-                            }
-                            if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
-                                if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-                                    position = 1;
-                                    telemetry.addData("Gold Mineral Position", "Left");
-                                } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-                                    position = 3;
-                                    telemetry.addData("Gold Mineral Position", "Right");
-                                } else {
-                                    position = 2;
-                                    telemetry.addData("Gold Mineral Position", "Center");
-                                }
-                                tfod = null;
-                            }
-                        }
-
-                        telemetry.update();
-                    }
-
-                }
-
                 telemetry.addLine("TFOD Complete");
                 telemetry.update();
                 sleep(1000);
 
+                /**
+                 * The following is the different branches that will run through only if their position val = true
+                 *
+                 */
+
                 if (position == 1 && !minCheck) {
                     if (MotorPow > 0) {
+                        // r.moveServo(r.LSLif, 1.0);
                         //move left
-                        moveBot(6, FORWARD, MotorPow, EndStatus.STOP);
+                        moveBot(6, FORWARD, MotorPow);
                         sleep(500);
-                        eTurnBot(30, Direction.LEFT, MotorPow, MotorPow, EndStatus.STOP);
+                        eTurnBot(37, RIGHT, MotorPow, MotorPow); //was LEFT
                         sleep(500);
-                        //r.MinFlap.setPosition(0.6);
-                        moveStraight(16, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP);
+                        r.MinFlap.setPosition(0.4);
+                        moveBot(27, FORWARD, MotorPow);
                         sleep(1000);
-                        //r.MinFlap.setPosition(0.2);
-                        eTurnBot(60, Direction.RIGHT, MotorPow, MotorPow, EndStatus.STOP);
-                        sleep(500);
-                        moveStraight(20, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP);
+                        eTurnBot(37, LEFT, MotorPow, MotorPow);
+                        r.MinFlap.setPosition(1.0);
+                        //moveBot(2, FORWARD, MotorPow);
                         sleep(500);
                     }
                     minCheck = true;
+                    telemetry.addLine("Position: Left");
+                    sleep(2000);
+                    telemetry.update();
                 }
 
                 if (position == 2 && !minCheck) {
                     if (MotorPow > 0) {
+                        // r.moveServo(r.LSLif, 1.0);
                         //move center
                         sleep(1000);
-                        //r.MinFlap.setPosition(0.6);
-                        moveStraight(24, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP); //was 38
-                        //r.MinFlap.setPosition(0.2);
+                        r.MinFlap.setPosition(0.4);
+                        moveBot(24, FORWARD, MotorPow); //was 38
+                        r.MinFlap.setPosition(1.0);
                         sleep(1500);
-                        moveStraight(14, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP);
+                        moveBot(14, FORWARD, MotorPow);
                         sleep(500);
 
                     }
                     minCheck = true;
+                    telemetry.addLine("Position: Center");
+                    sleep(2000);
+                    telemetry.update();
                 }
 
                 if (position == 3 && !minCheck) {
                     if (MotorPow > 0) {
+                        //   r.moveServo(r.LSLif, 1.0);
                         //move right
-                        moveBot(6, FORWARD, MotorPow, EndStatus.STOP);
+                        moveBot(6, FORWARD, MotorPow);
                         sleep(500);
-                        eTurnBot(30, Direction.RIGHT, MotorPow, MotorPow, EndStatus.STOP);
+                        eTurnBot(37, LEFT, MotorPow, MotorPow); //was RIGHT
                         sleep(500);
-                        //r.MinFlap.setPosition(0.6);
-                        moveStraight(16, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP);
+                        r.MinFlap.setPosition(0.4);
+                        moveBot(19, FORWARD, MotorPow);
                         sleep(1000);
-                        //r.MinFlap.setPosition(0.2);
-                        eTurnBot(60, Direction.LEFT, MotorPow, MotorPow, EndStatus.STOP);
-                        sleep(500);
-                        moveStraight(20, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP);
+                        eTurnBot(37, RIGHT, MotorPow, MotorPow);
+                        r.MinFlap.setPosition(1.0);
+                        //moveBot(2, FORWARD, MotorPow);
                         sleep(500);
                     }
                     minCheck = true;
+                    telemetry.addLine("Position: Right");
+                    sleep(2000);
+                    telemetry.update();
                 }
 
-                /*if (position == 0 && !minCheck) {
+                if (position == 0 && !minCheck) {
                     if (MotorPow > 0) {
+                        // r.moveServo(r.LSLif, 1.0);
                         //move center
                         sleep(1000);
-                        //r.MinFlap.setPosition(0.6);
-                        moveStraight(24, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP); //was 38
-                        //r.MinFlap.setPosition(0.2);
+                        r.MinFlap.setPosition(0.6);
+                        moveBot(24, FORWARD, MotorPow); //was 38
+                        r.MinFlap.setPosition(0.2);
                         sleep(1500);
-                        moveStraight(2, FORWARD, MotorPow, RoverAutoMethods.EndStatus.STOP);
+                        moveBot(14, FORWARD, MotorPow);
                         sleep(500);
 
                     }
                 }
-                */
-                //r.Lift.setPower(-LiftPow);
-                sleep(5500);
+
+                r.RSLif.setPosition(0.45);
+                r.LSLif.setPosition(0.45);
+
+                r.Lift.setPower(-LiftPow);
+                sleep(6000);
                 LiftPow = 0.;
-                r.RSLif.setPosition(0.4);
+                r.MinFlap.setPosition(1.0);
             }
         }
         if (tfod != null) tfod.shutdown();
@@ -187,7 +246,5 @@ public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
 //telemetry.addData("2 global heading", globalAngle);
 //telemetry.addData("3 correction", correction);
 //telemetry.update();
-
-
 
 
