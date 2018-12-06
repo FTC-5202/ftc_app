@@ -29,6 +29,8 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
 
         double MotorPow = 1.0;
         double LiftPow = 1.0;
+        double LifPos = 0.45;
+
 
         setupAll();
 
@@ -134,11 +136,10 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                     }
 
                 }
-
+                r.Lift.setPower(0);
 
                 if (timeElapsed > 20000) {
                     MotorPow = 0;
-                    LiftPow = 0;
                 }
 
                 telemetry.addLine("TFOD Complete");
@@ -177,10 +178,8 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                         //move center
                         sleep(1000);
                         r.MinFlap.setPosition(0.4);
-                        moveBot(24, FORWARD, MotorPow); //was 38
+                        moveBot(25, FORWARD, MotorPow); //was 38
                         r.MinFlap.setPosition(1.0);
-                        sleep(1500);
-                        moveBot(3, FORWARD, MotorPow);
                         sleep(500);
 
                     }
@@ -218,10 +217,8 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                         //move center
                         sleep(1000);
                         r.MinFlap.setPosition(0.6);
-                        moveBot(24, FORWARD, MotorPow); //was 38
+                        moveBot(25, FORWARD, MotorPow); //was 38
                         r.MinFlap.setPosition(0.2);
-                        sleep(1500);
-                        moveBot(3, FORWARD, MotorPow);
                         sleep(500);
 
                     }
