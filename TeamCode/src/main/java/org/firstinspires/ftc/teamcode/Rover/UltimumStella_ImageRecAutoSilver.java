@@ -53,13 +53,8 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
             start = System.currentTimeMillis();
 
             while (opModeIsActive()) {
-                //r.LSLif.setPosition(0.25);
-               // r.RSLif.setPosition(0.56);
 
-                /** if the digital channel returns true it's HIGH and the button is unpressed.
-                 */
-                while (r.sensorTouch.getState() == true && (timeElapsed < 20000) && !isStopRequested()) {
-                    r.Lift.setPower(LiftPow);
+                while (timeElapsed < 2000 && !isStopRequested()) {
                     timeElapsed = System.currentTimeMillis() - start;
 
                     if (tfod != null) { //we have not yet activated TFOD
@@ -74,14 +69,14 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                         if (updatedRecognitions != null) {
                             telemetry.addData("# Object Detected", updatedRecognitions.size());
                             telemetry.update();
-                            sleep(1000);
+                            sleep(250);
                             if (updatedRecognitions.size() == 2) {
                                 int goldMineralX = -1;
                                 int silverMineral1X = -1;
                                 int silverMineral2X = -1;
                                 //telemetry.addData("Update Recognitions", updatedRecognitions);
                                 //telemetry.update();
-                                //sleep(2000);
+                                //sleep(250);
                                 for (Recognition recognition : updatedRecognitions) {
                                     if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                                         goldMineralX = (int) recognition.getLeft();
@@ -96,7 +91,7 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                                 //telemetry.addData("silver 1", silverMineral1X);
                                 //telemetry.addData("silver 2", silverMineral2X);
                                 //telemetry.update();
-                                //sleep(1000);
+                                //sleep(250);
 
                                 /**
                                  * If all the min values are being registered then we move on
@@ -136,15 +131,22 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                     }
 
                 }
+                //r.LSLif.setPosition(0.25);
+                // r.RSLif.setPosition(0.56);
+
+                /** if the digital channel returns true it's HIGH and the button is unpressed.
+                 */
+                while (r.sensorTouch.getState() == true && (timeElapsed < 18000) && !isStopRequested()) {
+                    r.Lift.setPower(LiftPow);
+                    timeElapsed = System.currentTimeMillis() - start;
+
+                }
                 r.Lift.setPower(0);
 
                 if (timeElapsed > 20000) {
                     MotorPow = 0;
                 }
 
-                telemetry.addLine("TFOD Complete");
-                telemetry.update();
-                sleep(1000);
 
                 /**
                  * The following is the different branches that will run through only if their position val = true
@@ -178,7 +180,7 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                         //move center
                         sleep(1000);
                         r.MinFlap.setPosition(0.4);
-                        moveBot(25, FORWARD, MotorPow); //was 38
+                        moveBot(22, FORWARD, MotorPow); //was 38
                         r.MinFlap.setPosition(1.0);
                         sleep(500);
 
@@ -195,10 +197,10 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                         //move right
                         moveBot(6, FORWARD, MotorPow);
                         sleep(500);
-                        eTurnBot(37, LEFT, MotorPow, MotorPow); //was RIGHT
+                        eTurnBot(42, LEFT, MotorPow, MotorPow); //was RIGHT
                         sleep(500);
                         r.MinFlap.setPosition(0.4);
-                        moveBot(19, FORWARD, MotorPow);
+                        moveBot(24, FORWARD, MotorPow);
                         sleep(1000);
                         r.MinFlap.setPosition(1.0);
                         //moveBot(2, FORWARD, MotorPow);
@@ -217,7 +219,7 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                         //move center
                         sleep(1000);
                         r.MinFlap.setPosition(0.6);
-                        moveBot(25, FORWARD, MotorPow); //was 38
+                        moveBot(22, FORWARD, MotorPow); //was 38
                         r.MinFlap.setPosition(0.2);
                         sleep(500);
 
@@ -231,11 +233,13 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                 sleep(6000);
                 LiftPow = 0.;
                 r.MinFlap.setPosition(1.0);
+                }
             }
+
+                if (tfod != null) tfod.shutdown();
         }
-        if (tfod != null) tfod.shutdown();
     }
-}
+
 //correction = checkDirection();
 
 //telemetry.addData("1 imu heading", lastAngles.firstAngle);

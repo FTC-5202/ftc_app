@@ -52,13 +52,8 @@ public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
             start = System.currentTimeMillis();
 
             while (opModeIsActive()) {
-                //r.LSLif.setPosition(0.25);
-                // r.RSLif.setPosition(0.56);
 
-                /** if the digital channel returns true it's HIGH and the button is unpressed.
-                 */
-                while (r.sensorTouch.getState() == true && (timeElapsed < 20000) && !isStopRequested()) {
-                    r.Lift.setPower(LiftPow);
+                while (timeElapsed < 2000 && !isStopRequested()) {
                     timeElapsed = System.currentTimeMillis() - start;
 
                     if (tfod != null) { //we have not yet activated TFOD
@@ -135,6 +130,17 @@ public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
                     }
 
                 }
+
+                //r.LSLif.setPosition(0.25);
+                // r.RSLif.setPosition(0.56);
+
+                /** if the digital channel returns true it's HIGH and the button is unpressed.
+                 */
+                while (r.sensorTouch.getState() == true && (timeElapsed < 18000) && !isStopRequested()) {
+                    r.Lift.setPower(LiftPow);
+                    timeElapsed = System.currentTimeMillis() - start;
+
+                }
                 r.Lift.setPower(0);
 
                 if (timeElapsed > 20000) {
@@ -159,11 +165,14 @@ public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
                         eTurnBot(37, RIGHT, MotorPow, MotorPow); //was LEFT
                         sleep(250);
                         r.MinFlap.setPosition(0.4);
-                        moveBot(27, FORWARD, MotorPow);
+                        moveBot(32, FORWARD, MotorPow);
+                        sleep(250);
+                        moveBot(5, BACKWARD, MotorPow);
                         sleep(250);
                         eTurnBot(45, LEFT, MotorPow, MotorPow);
                         r.MinFlap.setPosition(1.0);
                         sleep(250);
+
                         moveBot(20, FORWARD, MotorPow);
                         sleep(250);
                     }
@@ -198,59 +207,65 @@ public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
                         //move right
                         moveBot(6, FORWARD, MotorPow);
                         sleep(250);
-                        eTurnBot(37, LEFT, MotorPow, MotorPow); //was RIGHT
+                        eTurnBot(33, LEFT, MotorPow, MotorPow); //was RIGHT
                         sleep(250);
                         r.MinFlap.setPosition(0.4);
-                        moveBot(19, FORWARD, MotorPow);
+                        moveBot(31, FORWARD, MotorPow);
                         sleep(250);
-                        eTurnBot(65, RIGHT, MotorPow, MotorPow);
+                        moveBot(2, BACKWARD, MotorPow);
+                        sleep(250);
+                        eTurnBot(85, RIGHT, MotorPow, MotorPow);
                         r.MinFlap.setPosition(1.0);
                         sleep(250);
                         moveBot(20, FORWARD, MotorPow);
                         sleep(250);
                     }
-                        minCheck = true;
-                        telemetry.addLine("Position: Right");
-                        sleep(250);
-                        telemetry.update();
-                    }
-
-                    if (position == 0 && !minCheck) {
-                        if (MotorPow > 0) {
-                            // r.moveServo(r.LSLif, 1.0);
-                            //move center
-                            sleep(250);
-                            r.MinFlap.setPosition(0.4);
-                            moveBot(24, FORWARD, MotorPow); //was 38
-                            r.MinFlap.setPosition(1.0);
-                            sleep(250);
-                            moveBot(14, FORWARD, MotorPow);
-                            sleep(250);
-
-                        }
-                    }
-
-                    /** This is the section of code we use at the end of our auto to deliver the team marker
-                     * used to reset the lift back down
-                     * lift the arm side lifts back to init positions
-                     *
-                     */
-
-                    r.RSLif.setPosition(LifPos);
-                    r.LSLif.setPosition(LifPos);
+                    minCheck = true;
+                    telemetry.addLine("Position: Right");
                     sleep(250);
-                    r.RSLif.setPosition(0.0);
-                    r.LSLif.setPosition(1.0);
-                    sleep(250);
-                    r.Lift.setPower(-LiftPow);
-                    sleep(6000);
-                    LiftPow = 0.;
-                    r.MinFlap.setPosition(1.0);
+                    telemetry.update();
                 }
-            }
-            if (tfod != null) tfod.shutdown();
-        }
-    }
+
+                if (position == 0 && !minCheck) {
+                    if (MotorPow > 0) {
+                        // r.moveServo(r.LSLif, 1.0);
+                        //move center
+                        sleep(250);
+                        r.MinFlap.setPosition(0.4);
+                        moveBot(24, FORWARD, MotorPow); //was 38
+                        r.MinFlap.setPosition(1.0);
+                        sleep(250);
+                        moveBot(14, FORWARD, MotorPow);
+                        sleep(250);
+
+                    }
+                }
+
+                /** This is the section of code we use at the end of our auto to deliver the team marker
+                 * used to reset the lift back down
+                 * lift the arm side lifts back to init positions
+                 *
+                 */
+
+                r.RSLif.setPosition(LifPos);
+                r.LSLif.setPosition(LifPos);
+                sleep(250);
+                r.RSLif.setPosition(0.0);
+                r.LSLif.setPosition(1.0);
+                sleep(250);
+                r.Lift.setPower(-LiftPow);
+                sleep(6000);
+                LiftPow = 0.;
+                r.MinFlap.setPosition(1.0);
+                    }
+
+                }
+
+                if (tfod != null) tfod.shutdown();
+            } //runOpMode
+
+
+        } //extends AutoMethods
 //correction = checkDirection();
 
 //telemetry.addData("1 imu heading", lastAngles.firstAngle);
