@@ -158,7 +158,7 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                         //move left
                         moveBot(6, FORWARD, MotorPow);
                         sleep(500);
-                        eTurnBot(37, RIGHT, MotorPow, MotorPow); //was LEFT
+                        eTurnBot(42, RIGHT, MotorPow, MotorPow); //was LEFT-37
                         sleep(500);
                         r.MinFlap.setPosition(0.4);
                         moveBot(27, FORWARD, MotorPow);
@@ -197,7 +197,7 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                         //move right
                         moveBot(6, FORWARD, MotorPow);
                         sleep(500);
-                        eTurnBot(42, LEFT, MotorPow, MotorPow); //was RIGHT
+                        eTurnBot(35, LEFT, MotorPow, MotorPow); //was RIGHT-42
                         sleep(500);
                         r.MinFlap.setPosition(0.4);
                         moveBot(24, FORWARD, MotorPow);
@@ -226,8 +226,8 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                     }
                 }
 
-                r.RSLif.setPosition(0.45);
-                r.LSLif.setPosition(0.45);
+                r.RSLif.setPosition(0.65);
+                r.LSLif.setPosition(0.65);
 
                 r.Lift.setPower(-LiftPow);
                 sleep(6000);

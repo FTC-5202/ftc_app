@@ -167,7 +167,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
                 }
             }*/
             r.RSLif.setPosition(0.25);
-            r.LSLif.setPosition(0.5);
+            r.LSLif.setPosition(0.7);
 
 
             if (gamepad2.a) { // good
@@ -293,7 +293,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
             if (left_trigger_pressed == true) {
                 if (gamepad2.left_trigger < 0.5) {
                     if (left_trigger_state == false) {
-                        r.LSLif.setPosition(0.25);//was 0.4
+                        r.LSLif.setPosition(0.42);//was 0.4
                         left_trigger_state = true;
                     } else if (left_trigger_state == true) {
                         r.LSLif.setPosition(1.0);
