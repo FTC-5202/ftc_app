@@ -39,7 +39,7 @@ public class RoverAutoMethods extends LinearOpMode {
         r.FLBLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //r.RarmLif.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //r.LarmLif.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        r.FLBLMotor.setDirection(DcMotor.Direction.REVERSE);
+       // r.FLBLMotor.setDirection(DcMotor.Direction.REVERSE);
         //r.BLMotor.setDirection(DcMotor.Direction.REVERSE);
 
 

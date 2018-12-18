@@ -28,10 +28,13 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
+import static org.firstinspires.ftc.teamcode.Rover.LitttleRover.RoverAutoMethods.Direction.LEFT;
+import static org.firstinspires.ftc.teamcode.Rover.LitttleRover.RoverAutoMethods.Direction.RIGHT;
+
 //import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.
 
 @Autonomous(name="RoverAuto", group ="Rover")
-@Disabled
+//@Disabled
 public class RoverAuto extends RoverAutoMethods {
     //    VuforiaLocalizer vuforia;
 //    boolean Target1;
@@ -330,7 +333,7 @@ public class RoverAuto extends RoverAutoMethods {
                     robotHeading = Math.toRadians(rotation.thirdAngle);
                     robotX = translation.get(0) / mmPerInch;
                     robotY = translation.get(1) / mmPerInch;
-                    robotToWall = (72 - robotY - 6); //was -12
+                    robotToWall = (72 - robotY - 10); //was -12/-6
                     distanceToTravel = robotToWall / Math.abs(Math.cos(robotHeading - Math.PI / 2));
                     telemetry.addData("distance", distanceToTravel);
                     telemetry.addData("robotToWall", robotToWall);
@@ -364,6 +367,8 @@ public class RoverAuto extends RoverAutoMethods {
                     //r.moveDrivetrain(0.5, 0.5);
                     sleep(1000);
                     distanceTraveled = distanceToTravel;
+                    eTurnBot(38, RIGHT, 0.3, -0.3);
+                    sleep(200);
                     telemetry.addData("DistanceTraveled", distanceTraveled);
                     telemetry.addData("Correction", r.correction);
                     telemetry.update();
@@ -372,7 +377,25 @@ public class RoverAuto extends RoverAutoMethods {
                 //telemetry.addData("rangeR", String.format("%.01f in", sensorRangeR.getDistance(DistanceUnit.INCH)));
                 telemetry.update();
 
-                if (!turnL) {
+
+                //this stuff needs to be inside a distance loop so the robot stops when it gets to the depot
+                //turn left
+                //eTurnBot(30, RIGHT, 0.3, -0.3);//change to turn using IMU when working
+                //sleep(250);
+                if (r.sensorRange.getDistance(DistanceUnit.INCH) > 3) {
+                    r.FLBLMotor.setPower(0.5 + (r.sensorRange.getDistance(DistanceUnit.INCH)/90)); //no idea if this will work
+                    r.FRBRMotor.setPower(0.5 - (r.sensorRange.getDistance(DistanceUnit.INCH)/90));
+                }
+                else if (r.sensorRange.getDistance(DistanceUnit.INCH) < 3) {
+                    r.FLBLMotor.setPower(0.5 - (r.sensorRange.getDistance(DistanceUnit.INCH)/90));
+                    r.FRBRMotor.setPower(0.5 + (r.sensorRange.getDistance(DistanceUnit.INCH)/90));
+                }
+                else {//don't know if this is needed
+                    r.FLBLMotor.setPower(0.5);
+                    r.FRBRMotor.setPower(0.5);
+                }
+
+             /*   if (!turnL) { //*
                     r.FLBLMotor.setPower(-0.25);
                     r.FRBRMotor.setPower(0.25);
                     turnL = true;
@@ -396,7 +419,7 @@ public class RoverAuto extends RoverAutoMethods {
                         else {
                             r.FLBLMotor.setPower(0.4);
                             r.FRBRMotor.setPower(0.5);
-                        }
+                        }*/
 
 
                     }
@@ -582,6 +605,6 @@ public class RoverAuto extends RoverAutoMethods {
         resetAngle();
     }  //end rotate
 */
-    } //end LinearOpMode
+  //  } //end LinearOpMode
 
-}
+//}

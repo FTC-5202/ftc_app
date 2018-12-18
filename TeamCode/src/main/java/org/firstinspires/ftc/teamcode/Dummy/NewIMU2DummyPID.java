@@ -28,7 +28,7 @@ public class NewIMU2DummyPID extends LinearOpMode {
     BNO055IMU imu;
     Orientation
             lastAngles = new Orientation();
-    double globalAngle, power = .30, correction, errorDegrees = 90 - getAngle(), targetAngle = 90; //(was .15)
+    double globalAngle, power = .45/*was .3*/, correction, errorDegrees = 90 - getAngle(), targetAngle = 90; //(was .15)
     boolean                 aButton, bButton;
 
     // called when init button is  pressed.
