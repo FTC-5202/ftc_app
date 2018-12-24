@@ -34,6 +34,7 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
@@ -58,10 +59,13 @@ import java.util.Locale;
 //@Disabled                            // Comment this out to add to the opmode list
 public class SensorBNO055IMUDummy extends LinearOpMode {
     //HardwareDummyMecanumIMU robot = new HardwareDummyMecanumIMU();
-    public DcMotor BLMotor     = null;
+   /* public DcMotor BLMotor     = null;
     public DcMotor BRMotor     = null;
     public DcMotor FLMotor     = null;
-    public DcMotor FRMotor     = null;
+    public DcMotor FRMotor     = null;*/
+
+    DcMotor left_side;
+    DcMotor right_side;
 
     double CurrentHeading;
     double NewHeading;
@@ -101,12 +105,20 @@ public class SensorBNO055IMUDummy extends LinearOpMode {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
-        BLMotor = hardwareMap.get(DcMotor.class, "BL");
+       /* BLMotor = hardwareMap.get(DcMotor.class, "BL");
         BRMotor = hardwareMap.get(DcMotor.class, "BR");
         FLMotor = hardwareMap.get(DcMotor.class, "FL");
-        FRMotor = hardwareMap.get(DcMotor.class, "FR");
+        FRMotor = hardwareMap.get(DcMotor.class, "FR");*/
 
-        FLMotor.setDirection(DcMotor.Direction.REVERSE);
+        left_side = hardwareMap.dcMotor.get("FLBL");
+        right_side = hardwareMap.dcMotor.get("FRBR");
+
+       // left_side.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+       // right_side.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        left_side.setDirection(DcMotorSimple.Direction.REVERSE);
+
+       // FLMotor.setDirection(DcMotor.Direction.REVERSE);
 
         // Set up our telemetry dashboard
         composeTelemetry();
@@ -115,34 +127,50 @@ public class SensorBNO055IMUDummy extends LinearOpMode {
 
         waitForStart();
 
+
+
         // Start the logging of measured acceleration
         //imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
         // Loop and update the dashboard
         //while (opModeIsActive()) {
 
-            FRMotor.setPower(0.5);
-            FLMotor.setPower(0.5);
-            BRMotor.setPower(0.5);
-            BLMotor.setPower(0.5);
+          //  FRMotor.setPower(0.5);
+           // FLMotor.setPower(0.5);
+          //  BRMotor.setPower(0.5);
+           // BLMotor.setPower(0.5);
+
+            left_side.setPower(0.0);
+            right_side.setPower(0.0);
+
             telemetry.update();
             sleep(1000);
+            angles = imu.getAngularOrientation();
             CurrentHeading = angles.firstAngle; //angles.firstAngle = heading value
             NewHeading = CurrentHeading;
-            FRMotor.setPower(0.25);
-            FLMotor.setPower(0.0);
-            BRMotor.setPower(0.25);
-            BLMotor.setPower(0.0);
+          //  FRMotor.setPower(0.25);
+          //  FLMotor.setPower(0.0);
+          //  BRMotor.setPower(0.25);
+          //  BLMotor.setPower(0.0);
 
-            while (NewHeading < CurrentHeading + 90) {
-            NewHeading   = angles.firstAngle;
-//                telemetry.update();
+            left_side.setPower(0.25);
+            right_side.setPower(0.25);
+
+            while (NewHeading < CurrentHeading + 180) {
+                angles = imu.getAngularOrientation();
+                NewHeading   = angles.firstAngle;
+                telemetry.addLine("heading = " + NewHeading);
+                telemetry.update();
+
             }
-        FRMotor.setPower(0.0);
-        BRMotor.setPower(0.0);
+       // FRMotor.setPower(0.0);
+       // BRMotor.setPower(0.0);
+        left_side.setPower(0);
+        right_side.setPower(0);
         telemetry.update();
         sleep(2000);
         }
+
 //    }
 
     //----------------------------------------------------------------------------------------------
