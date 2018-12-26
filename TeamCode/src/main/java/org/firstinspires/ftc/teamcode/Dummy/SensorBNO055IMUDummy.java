@@ -103,7 +103,14 @@ public class SensorBNO055IMUDummy extends LinearOpMode {
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
         // and named "imu".
         imu = hardwareMap.get(BNO055IMU.class, "imu");
+        long startTime = System.currentTimeMillis();
+
         imu.initialize(parameters);
+        long currentTime = System.currentTimeMillis();
+        telemetry.addLine("Time taken to initialize: " + (currentTime - startTime));
+        telemetry.update();
+
+        sleep(2000);
 
        /* BLMotor = hardwareMap.get(DcMotor.class, "BL");
         BRMotor = hardwareMap.get(DcMotor.class, "BR");
@@ -112,6 +119,9 @@ public class SensorBNO055IMUDummy extends LinearOpMode {
 
         left_side = hardwareMap.dcMotor.get("FLBL");
         right_side = hardwareMap.dcMotor.get("FRBR");
+
+        left_side.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        right_side.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
        // left_side.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
        // right_side.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -145,31 +155,88 @@ public class SensorBNO055IMUDummy extends LinearOpMode {
 
             telemetry.update();
             sleep(1000);
-            angles = imu.getAngularOrientation();
-            CurrentHeading = angles.firstAngle; //angles.firstAngle = heading value
-            NewHeading = CurrentHeading;
-          //  FRMotor.setPower(0.25);
-          //  FLMotor.setPower(0.0);
-          //  BRMotor.setPower(0.25);
-          //  BLMotor.setPower(0.0);
 
-            left_side.setPower(0.25);
-            right_side.setPower(0.25);
-
-            while (NewHeading < CurrentHeading + 180) {
-                angles = imu.getAngularOrientation();
-                NewHeading   = angles.firstAngle;
-                telemetry.addLine("heading = " + NewHeading);
+            clockwiseTurn(45);
+            while (opModeIsActive()) {
+                telemetry.addLine(""+CurrentHeading);
+                CurrentHeading = angles.firstAngle;
                 telemetry.update();
+                sleep(200);
 
-            }
-       // FRMotor.setPower(0.0);
-       // BRMotor.setPower(0.0);
+        }
+
+    }
+    //TODO: try <= 60 has 15 percent reduction and > 60 does not
+
+    private void clockwiseTurn (int degrees) {
+        angles = imu.getAngularOrientation();
+        CurrentHeading = angles.firstAngle; //angles.firstAngle = heading value
+        NewHeading = CurrentHeading;
+        //  FRMotor.setPower(0.25);
+        //  FLMotor.setPower(0.0);
+        //  BRMotor.setPower(0.25);
+        //  BLMotor.setPower(0.0);
+
+        if (degrees <= 60) {
+            left_side.setPower(-0.2);
+            right_side.setPower(-0.2);
+        } else {
+            left_side.setPower(-0.35);
+            right_side.setPower(-0.35);
+        }
+
+        while (NewHeading > CurrentHeading - (0.5 * degrees)) {
+            angles = imu.getAngularOrientation();
+            NewHeading   = angles.firstAngle;
+            telemetry.addLine("heading = " + NewHeading);
+            telemetry.update();
+
+        }
+        left_side.setPower(-0.12);
+        right_side.setPower(-0.12);
+
+        while (NewHeading > CurrentHeading - (1 * degrees)) {
+            angles = imu.getAngularOrientation();
+            NewHeading   = angles.firstAngle;
+            telemetry.addLine("heading = " + NewHeading);
+            telemetry.update();
+
+        }
+
+        // FRMotor.setPower(0.0);
+        // BRMotor.setPower(0.0);
         left_side.setPower(0);
         right_side.setPower(0);
         telemetry.update();
-        sleep(2000);
+
+    }
+
+    private void counterclockwiseTurn(int degrees) {
+        angles = imu.getAngularOrientation();
+        CurrentHeading = angles.firstAngle; //angles.firstAngle = heading value
+        NewHeading = CurrentHeading;
+        //  FRMotor.setPower(0.25);
+        //  FLMotor.setPower(0.0);
+        //  BRMotor.setPower(0.25);
+        //  BLMotor.setPower(0.0);
+
+        left_side.setPower(0.35);
+        right_side.setPower(0.35);
+
+        while (NewHeading < CurrentHeading + degrees) {
+            angles = imu.getAngularOrientation();
+            NewHeading   = angles.firstAngle;
+            telemetry.addLine("heading = " + NewHeading);
+            telemetry.update();
+
         }
+        // FRMotor.setPower(0.0);
+        // BRMotor.setPower(0.0);
+        left_side.setPower(0);
+        right_side.setPower(0);
+        telemetry.update();
+    }
+
 
 //    }
 
