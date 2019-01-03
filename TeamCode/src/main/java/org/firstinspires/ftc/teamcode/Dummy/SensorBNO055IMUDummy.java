@@ -42,8 +42,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 import java.util.Locale;
 
@@ -67,8 +65,8 @@ public class SensorBNO055IMUDummy extends LinearOpMode {
     DcMotor left_side;
     DcMotor right_side;
 
-    double CurrentHeading;
-    double NewHeading;
+    double currentHeading;
+    double startHeading;
 
     //----------------------------------------------------------------------------------------------
     // State
@@ -155,28 +153,58 @@ public class SensorBNO055IMUDummy extends LinearOpMode {
 
             telemetry.update();
             sleep(1000);
-
-            clockwiseTurn(45);
+            clockwiseTurn(90, 0.4);
             while (opModeIsActive()) {
-                telemetry.addLine(""+CurrentHeading);
-                CurrentHeading = angles.firstAngle;
+                telemetry.addLine("currentHeading = "+ currentHeading);
+                telemetry.addLine("powerFunct = " + (Math.signum(-90 - currentHeading)*powerFuct(0.4, -90, currentHeading)));
+                currentHeading = angles.firstAngle;
                 telemetry.update();
-                sleep(200);
-
+                sleep(100);
         }
 
     }
     //TODO: try <= 60 has 15 percent reduction and > 60 does not
 
-    private void clockwiseTurn (int degrees) {
-        angles = imu.getAngularOrientation();
-        CurrentHeading = angles.firstAngle; //angles.firstAngle = heading value
-        NewHeading = CurrentHeading;
-        //  FRMotor.setPower(0.25);
-        //  FLMotor.setPower(0.0);
-        //  BRMotor.setPower(0.25);
-        //  BLMotor.setPower(0.0);
+    private void clockwiseTurn (double degrees, double iPowerScalar) {
 
+        angles = imu.getAngularOrientation();
+        currentHeading = angles.firstAngle;
+        startHeading = angles.firstAngle;
+        left_side.setPower(-iPowerScalar);
+        right_side.setPower(-iPowerScalar);
+        final double GOAL_HEADING = startHeading - degrees;
+        while(currentHeading > GOAL_HEADING){
+            left_side.setPower(-powerFuct(iPowerScalar, GOAL_HEADING, currentHeading));
+            right_side.setPower(-powerFuct(iPowerScalar, GOAL_HEADING, currentHeading));
+            angles = imu.getAngularOrientation();
+            currentHeading = angles.firstAngle;
+        }
+        left_side.setPower(0);
+        right_side.setPower(0);
+        sleep(300);
+        angles = imu.getAngularOrientation();
+        currentHeading = angles.firstAngle;
+        if(currentHeading < GOAL_HEADING - 5){
+            telemetry.addLine("GOING YAYA");
+            telemetry.update();
+            sleep(1000);
+            left_side.setPower(0.14);
+            right_side.setPower(0.14);
+            while(currentHeading < (GOAL_HEADING - 3)){
+                angles = imu.getAngularOrientation();
+                currentHeading = angles.firstAngle;
+            }
+            left_side.setPower(0);
+            right_side.setPower(0);
+            telemetry.addLine("DONE");
+            telemetry.update();
+            sleep(1000);
+        }
+        /*
+        angles = imu.getAngularOrientation();
+        currentHeading = angles.firstAngle; //angles.firstAngle = heading value
+        final double PERCENT_FULL_POWER = 0.5, PERCENT_LOW_POWER = 0.4, PERCENT_REDUCTION = 0.1;
+        startHeading = currentHeading;
         if (degrees <= 60) {
             left_side.setPower(-0.2);
             right_side.setPower(-0.2);
@@ -185,36 +213,43 @@ public class SensorBNO055IMUDummy extends LinearOpMode {
             right_side.setPower(-0.35);
         }
 
-        while (NewHeading > CurrentHeading - (0.5 * degrees)) {
+        while (startHeading > currentHeading - (0.5 * degrees)) {
             angles = imu.getAngularOrientation();
-            NewHeading   = angles.firstAngle;
-            telemetry.addLine("heading = " + NewHeading);
+            startHeading   = angles.firstAngle;
+            telemetry.addLine("heading = " + startHeading);
             telemetry.update();
 
         }
         left_side.setPower(-0.12);
         right_side.setPower(-0.12);
 
-        while (NewHeading > CurrentHeading - (1 * degrees)) {
+        while (startHeading > currentHeading - (1 * degrees)) {
             angles = imu.getAngularOrientation();
-            NewHeading   = angles.firstAngle;
-            telemetry.addLine("heading = " + NewHeading);
+            startHeading   = angles.firstAngle;
+            telemetry.addLine("heading = " + startHeading);
             telemetry.update();
 
         }
-
-        // FRMotor.setPower(0.0);
-        // BRMotor.setPower(0.0);
         left_side.setPower(0);
         right_side.setPower(0);
         telemetry.update();
+*/
+    }
 
+    private double powerFuct(double initialPower, double goalAngle, double currentAngle){
+        final double FLIPPING_POINT = 1.0/3.0;
+        final double C = 1.0/(60.0); // note -- old = 1 / (FLIPPING_POINT * (goalAngle - startAngle))
+        final double EXP = 3;
+        final double MIN_POWER = 0.13;
+        final double DIFFERENCE = Math.abs(goalAngle - currentAngle);
+        double y = MIN_POWER + (initialPower - MIN_POWER)*Math.pow((C*(DIFFERENCE)), EXP);
+        return (y <= initialPower) ? y : initialPower;
     }
 
     private void counterclockwiseTurn(int degrees) {
         angles = imu.getAngularOrientation();
-        CurrentHeading = angles.firstAngle; //angles.firstAngle = heading value
-        NewHeading = CurrentHeading;
+        currentHeading = angles.firstAngle; //angles.firstAngle = heading value
+        startHeading = currentHeading;
         //  FRMotor.setPower(0.25);
         //  FLMotor.setPower(0.0);
         //  BRMotor.setPower(0.25);
@@ -223,10 +258,10 @@ public class SensorBNO055IMUDummy extends LinearOpMode {
         left_side.setPower(0.35);
         right_side.setPower(0.35);
 
-        while (NewHeading < CurrentHeading + degrees) {
+        while (startHeading < currentHeading + degrees) {
             angles = imu.getAngularOrientation();
-            NewHeading   = angles.firstAngle;
-            telemetry.addLine("heading = " + NewHeading);
+            startHeading = angles.firstAngle;
+            telemetry.addLine("heading = " + startHeading);
             telemetry.update();
 
         }
