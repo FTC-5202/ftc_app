@@ -11,7 +11,7 @@ public class Th3OTeleOpMethods extends OpMode {
 
 
     //Creates version of hardware class called "r" for robot
-    Th3OElectrical r = new Th3OElectrical();
+    public Th3OElectrical r = new Th3OElectrical();
 
     public Th3OTeleOpMethods() {
 
