@@ -33,8 +33,8 @@ public class BIGRoverTeleOpMethods extends OpMode {
         r.BRMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         r.FLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         r.BLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        r.RarmLif.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        r.LarmLif.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        r.Arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        r.Sweeper.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         r.FLMotor.setDirection(DcMotor.Direction.REVERSE);
         r.BLMotor.setDirection(DcMotor.Direction.REVERSE);
     }
@@ -55,7 +55,7 @@ public class BIGRoverTeleOpMethods extends OpMode {
     public void setupAll(){
         r.init(hardwareMap);
         setupMotors();
-        setupServos();
+        //setupServos();
         //setupSensors();
     }
 

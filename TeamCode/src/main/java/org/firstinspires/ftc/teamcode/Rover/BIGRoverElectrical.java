@@ -69,6 +69,8 @@ public class BIGRoverElectrical {
     public DcMotor RarmLif = null;
     public DcMotor LarmLif = null;
     public DcMotor Lift = null;
+    public DcMotor Sweeper = null;
+    public DcMotor Arm = null;
     public Servo LSrot = null;
     public Servo RSrot = null;
     public Servo LSgrab = null;
@@ -145,13 +147,15 @@ public class BIGRoverElectrical {
                 hwMap = ahwMap;
 
 
-                FLMotor = hwMap.dcMotor.get("fl motor");
-                FRMotor = hwMap.dcMotor.get("fr motor");
-                BLMotor = hwMap.dcMotor.get("bl motor");
-                BRMotor = hwMap.dcMotor.get("br motor");
-                Lift = hwMap.dcMotor.get("mlift");
+                FLMotor = hwMap.dcMotor.get("FL");
+                FRMotor = hwMap.dcMotor.get("FR");
+                BLMotor = hwMap.dcMotor.get("BL");
+                BRMotor = hwMap.dcMotor.get("BR");
+                Lift = hwMap.dcMotor.get("Lift");
+                Sweeper = hwMap.dcMotor.get("sweep");
+                Arm = hwMap.dcMotor.get("arm");
 
-                LarmLif = hwMap.dcMotor.get("larm lift");
+                /*LarmLif = hwMap.dcMotor.get("larm lift");
                 RarmLif = hwMap.dcMotor.get("rarm lift");
                 RSrot = hwMap.servo.get("rs rot");
                 LSrot = hwMap.servo.get("ls rot");
@@ -160,12 +164,12 @@ public class BIGRoverElectrical {
                 RSLif = hwMap.servo.get("rs lift");
                 LSLif = hwMap.servo.get("ls lift");
                 MinFlap = hwMap.servo.get("min flap");
-
+                */
                 // get a reference to our digitalTouch object.
-                sensorTouch = hwMap.get(DigitalChannel.class, "sensor_touch");
+                //sensorTouch = hwMap.get(DigitalChannel.class, "sensor_touch");
 
                 // set the digital channel to input.
-                sensorTouch.setMode(DigitalChannel.Mode.INPUT);
+                //sensorTouch.setMode(DigitalChannel.Mode.INPUT);
 
 
                 //sensorColor = hwMap.get(ColorSensor.class, "sensor_color");
@@ -177,14 +181,14 @@ public class BIGRoverElectrical {
                 FRMotor.setPower(0);
                 BLMotor.setPower(0);
                 BRMotor.setPower(0);
-                RarmLif.setPower(0);
-                LarmLif.setPower(0);
+                //RarmLif.setPower(0);
+                //LarmLif.setPower(0);
                 FLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 FRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 BLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 BRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                LarmLif.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                RarmLif.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                //LarmLif.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                //RarmLif.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
                 //FLBLMotor.setDirection(DcMotorSimple.Direction.REVERSE);

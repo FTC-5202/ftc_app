@@ -153,7 +153,7 @@ public class SensorBNO055IMUDummy extends LinearOpMode {
 
             telemetry.update();
             sleep(1000);
-            clockwiseTurn(90, 0.4); //correcting turn - "head turn"
+            imuTurn(90, 0.4); //correcting turn - "head turn"
             while (opModeIsActive()) {
                 telemetry.addLine("currentHeading = "+ currentHeading); //displays currentHeading
                 telemetry.addLine("powerFunct = " + (Math.signum(-90 - currentHeading)*powerFuct(0.4, -90, currentHeading))); //displays powerFunct
@@ -165,13 +165,13 @@ public class SensorBNO055IMUDummy extends LinearOpMode {
     }
     //TODO: try <= 60 has 15 percent reduction and > 60 does not
 
-    private void clockwiseTurn (double degrees, double iPowerScalar) { //METHOD using degrees, iPowerScalar to make a clockwiseTurn
+    private void imuTurn (double degrees, double iPowerScalar) { //METHOD using degrees, iPowerScalar to make a clockwiseTurn
 
         angles = imu.getAngularOrientation(); //define angles as imu.getAngularOrientation
         currentHeading = angles.firstAngle; //define currentHeading as angles.firstAngle
         startHeading = angles.firstAngle; //define startHeading as angles.firstAngle
-        left_side.setPower(-iPowerScalar); //set left_side Power to the inverse val of iPowerScalar
-        right_side.setPower(-iPowerScalar); //set right_side Power to the inverse val of iPowerScalar
+        left_side.setPower(-iPowerScalar); //set left_side Power to the opposite val of iPowerScalar
+        right_side.setPower(-iPowerScalar); //set right_side Power to the opposite val of iPowerScalar
         final double GOAL_HEADING = startHeading - degrees; //define Goal_Heading
         while(currentHeading > GOAL_HEADING){ //condition: currentHeading must be greater than Goal_Heading for this loop to execute
             left_side.setPower(-powerFuct(iPowerScalar, GOAL_HEADING, currentHeading)); //set left_side Power to inverse of powerFunct using iPowerScalar, Goal_Heading, and currentHeading
