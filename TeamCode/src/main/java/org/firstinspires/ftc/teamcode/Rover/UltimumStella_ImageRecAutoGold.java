@@ -164,7 +164,7 @@ public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
                         sleep(250);
                         eTurnBot(37, RIGHT, MotorPow, MotorPow); //was LEFT
                         sleep(250);
-                        r.MinFlap.setPosition(0.4);
+                      /*  r.MinFlap.setPosition(0.4);
                         moveBot(27, FORWARD, MotorPow);//was 32-23
                         sleep(250);
                         moveBot(5, BACKWARD, MotorPow);//was 5
@@ -248,7 +248,7 @@ public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
                  *
                  */
 
-                r.RSLif.setPosition(0.65);
+              /*  r.RSLif.setPosition(0.65);
                 r.LSLif.setPosition(0.65);
                 sleep(250);
                 r.RSLif.setPosition(0.0);
@@ -257,7 +257,7 @@ public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
                 r.Lift.setPower(-LiftPow);
                 sleep(6000);
                 LiftPow = 0.;
-                r.MinFlap.setPosition(1.0);
+                r.MinFlap.setPosition(1.0);*/
                     }
 
                 }
@@ -266,7 +266,9 @@ public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
             }
 
 
-        } //extends AutoMethods
+        }
+    }
+}//extends AutoMethods
 //correction = checkDirection();
 
 //telemetry.addData("1 imu heading", lastAngles.firstAngle);

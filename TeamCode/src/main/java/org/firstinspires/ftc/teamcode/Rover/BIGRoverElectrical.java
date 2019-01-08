@@ -66,18 +66,16 @@ public class BIGRoverElectrical {
     public DcMotor FRMotor = null;
     public DcMotor BLMotor = null;
     public DcMotor BRMotor = null;
-    public DcMotor RarmLif = null;
-    public DcMotor LarmLif = null;
+
     public DcMotor Lift = null;
     public DcMotor Sweeper = null;
     public DcMotor Arm = null;
-    public Servo LSrot = null;
-    public Servo RSrot = null;
-    public Servo LSgrab = null;
-    public Servo RSgrab = null;
-    public Servo RSLif = null;
-    public Servo LSLif = null;
-    public Servo MinFlap = null;
+    public DcMotor Hang = null;
+
+    Servo tfd;
+    Servo pin;
+    Servo flap;
+
     public Rev2mDistanceSensor sensorRange;
     public DigitalChannel sensorTouch;
     //    public void runOpMode() throws InterruptedException {    }
@@ -146,7 +144,6 @@ public class BIGRoverElectrical {
 
                 hwMap = ahwMap;
 
-
                 FLMotor = hwMap.dcMotor.get("FL");
                 FRMotor = hwMap.dcMotor.get("FR");
                 BLMotor = hwMap.dcMotor.get("BL");
@@ -154,6 +151,11 @@ public class BIGRoverElectrical {
                 Lift = hwMap.dcMotor.get("Lift");
                 Sweeper = hwMap.dcMotor.get("sweep");
                 Arm = hwMap.dcMotor.get("arm");
+                Hang = hwMap.dcMotor.get("Lift");
+
+                tfd = hwMap.servo.get("tfd");
+                pin = hwMap.servo.get("pin");
+                flap = hwMap.servo.get("flap");
 
                 /*LarmLif = hwMap.dcMotor.get("larm lift");
                 RarmLif = hwMap.dcMotor.get("rarm lift");
@@ -227,6 +229,7 @@ public class BIGRoverElectrical {
                     servo.setPosition(pos);
                 }
             }
+            // TODO: make more moveLeftSide and moveRightSide for crabbing method
 
             public void moveLeftSide ( double lPow){
                 lPow = (lPow >= 1.0) ? 1.0 : lPow;

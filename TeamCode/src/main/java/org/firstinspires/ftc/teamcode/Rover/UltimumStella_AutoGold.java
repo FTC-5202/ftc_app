@@ -61,7 +61,7 @@ public class UltimumStella_AutoGold extends UltimumStella_AutoMethods {
                 r.Lift.setPower(-LiftPow);
                 sleep(5500);
                 LiftPow = 0.;
-                r.RSLif.setPosition(0.4);
+             //  r.RSLif.setPosition(0.4);
             }
           //  r.LSLif.setPosition(0.21);
         }

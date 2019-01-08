@@ -63,7 +63,7 @@ public class UltimumStella_AutoSilver extends UltimumStella_AutoMethods {
                 sleep(5000);
                 LiftPow = 0;
                 //  r.RSLif.setPosition(0.58);
-                r.LSLif.setPosition(0.21);
+               // r.LSLif.setPosition(0.21);
             }
 
 

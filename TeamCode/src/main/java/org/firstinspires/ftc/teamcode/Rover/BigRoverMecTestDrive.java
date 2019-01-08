@@ -12,9 +12,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 //@Disabled
 public class BigRoverMecTestDrive extends BIGRoverTeleOpMethods {
 
-
-
-
     double FR;
     double BR;
     double FL;
@@ -27,25 +24,19 @@ public class BigRoverMecTestDrive extends BIGRoverTeleOpMethods {
     boolean isForward = true;
     boolean rb1Pressed = false;
     double Tank = 0.0;
-    double HangPow = 0.5;
+    double HangPow = 1.0;
     double zoneWidth = 0.5;//12/4/17 changed from 0.3 to 0.5
+    boolean a_pressed = false;
+    boolean pin_state = false;
 
-
-
-    UltimumStella_Electrical r  = new UltimumStella_Electrical();
-
-
-
+    //UltimumStella_Electrical r  = new UltimumStella_Electrical();
 
     @Override
     public void init() {
 
         setupAll();
 
-
     }
-
-
 
     public void runOpMode() throws InterruptedException {
     }
@@ -62,11 +53,39 @@ public class BigRoverMecTestDrive extends BIGRoverTeleOpMethods {
         RB = gamepad1.right_stick_y + gamepad1.right _stick_x;*/
         //RLEX = gamepad2.left_stick_y;
 
+
+
             L1 = gamepad2.left_stick_y;
             r.Arm.setPower(L1);
 
             L2 = gamepad2.right_stick_y;
             r.Sweeper.setPower(L2);
+
+           /* if (gamepad1.a) {
+                a_pressed = true;
+            }
+
+            if (a_pressed == true) {
+                if (gamepad1.a == false) {
+                    if (pin_state == false) {
+                        r.pin.setPosition(0.5);
+                        pin_state = true;
+                    }
+                    else if (pin_state == true) {
+                        r.pin.setPosition(1.0);
+                        pin_state = false;
+                    }
+                }
+                a_pressed = false;
+            }*/
+
+           if (gamepad1.a) {
+               r.pin.setPosition(1.0);
+           } else if (gamepad1.b) {
+               r.pin.setPosition(0.0);
+           } else {
+               r.pin.setPosition(0.5);
+           }
 
         if (gamepad1.right_bumper && !rb1Pressed) {
             rb1Pressed = true;
@@ -115,11 +134,15 @@ public class BigRoverMecTestDrive extends BIGRoverTeleOpMethods {
         r.FLMotor.setPower(FL);
         r.FRMotor.setPower(FR);
 
-        HangPow = gamepad1.left_trigger;
-        r.Hang.setPower(HangPow / 1.0);
+        if (gamepad1.left_trigger > 0.5) {
+            r.Hang.setPower(1.0);
+        } else if (gamepad1.right_trigger > 0.5) {
+            r.Hang.setPower(-1.0);
+        } else {
+            r.Hang.setPower(0);
+        }
 
-        HangPow = gamepad1.right_trigger;
-        r.Hang.setPower(HangPow / -1.0);
+
 
     }//end of loop
 } //end of extends BIGRoverTeleOpMethods

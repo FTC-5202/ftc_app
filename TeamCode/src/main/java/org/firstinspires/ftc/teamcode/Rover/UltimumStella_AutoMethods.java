@@ -77,20 +77,20 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
         r.BLMotor.setMode(RUN_USING_ENCODER);
         r.FRMotor.setMode(RUN_USING_ENCODER);
         r.BRMotor.setMode(RUN_USING_ENCODER);
-        r.RarmLif.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        r.LarmLif.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //r.RarmLif.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+       // r.LarmLif.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         r.FLMotor.setDirection(DcMotor.Direction.REVERSE);
         r.BLMotor.setDirection(DcMotor.Direction.REVERSE);
     }
 
     public void setupServos() {
-        r.moveServo(r.LSrot, 0.65);
+      /*  r.moveServo(r.LSrot, 0.65);
         r.moveServo(r.LSgrab, 0.65);
         r.moveServo(r.RSrot, 0.6); //was 0.15
         r.moveServo(r.RSgrab, 0.2); //was 7
         r.moveServo(r.RSLif, 0);
         r.moveServo(r.LSLif, 1.0);
-        r.moveServo(r.MinFlap, 0.4);
+        r.moveServo(r.MinFlap, 0.4);*/
     }
 
     public void setupSensors() {
@@ -123,6 +123,8 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
     //    double globalAngle, correction;
     final int FORWARD = 1; //was -1
     final int BACKWARD = -1; //was 1
+    final int RIGHT1 = 1;
+    final int LEFT1= -1;
 
     //inches_to_ticks receives a distance in inches and returns the number of ticks
     int inches_to_ticks(double target) {
@@ -146,12 +148,18 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
             r.BLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
-
+//TODO: make it work
     //The instance of moveBot below is the most commonly used method
     public void moveBot(double distance, int direction, double power) {
         moveBot(distance, direction, power, EndStatus.STOP);
     }
 
+    public void moveBotcrab(double distance, int direction, double power, EndStatus status) {
+        int target = inches_to_ticks(distance);
+        int startPos = r.BLMotor.getCurrentPosition();
+        int currentpos = r.BLMotor.getCurrentPosition();
+        r.moveDrivetrain()
+    }
     public enum Direction {LEFT, RIGHT}
 
     //eTurnBot is used by all of our auto programs; angle(degrees), direction, and power are passed in from our autonomous program

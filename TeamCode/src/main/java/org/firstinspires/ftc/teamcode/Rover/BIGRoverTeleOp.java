@@ -9,7 +9,7 @@ import static java.lang.Thread.sleep;
  * Created by Hannah on 11/16/2017.
  */
 @TeleOp (name = "BIGRoverTele")
-//@Disabled
+@Disabled
 public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
     //static final double INCREMENT = 0.01;     // amount to slew servo each CYCLE_MS cycle
     //static final long CYCLE_MS = 50;     // period of each cycle
@@ -78,10 +78,10 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
         if (lb1Pressed == true) { // good
             if (gamepad1.left_bumper == false) {
                 if (left_bumper_state == false) {
-                    r.MinFlap.setPosition(0.4);
+                   // r.MinFlap.setPosition(0.4);
                     left_bumper_state = true;
                 } else if (left_bumper_state == true) {
-                    r.MinFlap.setPosition(1.0);
+                    //r.MinFlap.setPosition(1.0);
                     left_bumper_state = false;
                 }
                 lb1Pressed = false;
@@ -166,8 +166,8 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
                     right_trigger_pressed = false;
                 }
             }*/
-            r.RSLif.setPosition(0.25);
-            r.LSLif.setPosition(0.7);
+          //  r.RSLif.setPosition(0.25);
+           // r.LSLif.setPosition(0.7);
 
 
             if (gamepad2.a) { // good
@@ -177,10 +177,10 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
             if (a_pressed == true) { // good
                 if (gamepad2.a == false) {
                     if (LSgrab_state == false) {
-                        r.LSgrab.setPosition(0.7);
+                     //   r.LSgrab.setPosition(0.7);
                         LSgrab_state = true;
                     } else if (LSgrab_state == true) {
-                        r.LSgrab.setPosition(0.3);
+                     //   r.LSgrab.setPosition(0.3);
                         LSgrab_state = false;
                     }
                     a_pressed = false;
@@ -193,10 +193,10 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
             if (dpad_down_pressed == true) { // good
                 if (gamepad2.dpad_down == false) {
                     if (RSgrab_state == false) {
-                        r.RSgrab.setPosition(0.2);
+                     //   r.RSgrab.setPosition(0.2);
                         RSgrab_state = true;
                     } else if (RSgrab_state == true) {
-                        r.RSgrab.setPosition(0.65);
+                       // r.RSgrab.setPosition(0.65);
                         RSgrab_state = false;
                     }
                     dpad_down_pressed = false;
@@ -224,7 +224,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
 
             if (x_pressed == true) { // good
                 if (gamepad2.x == false) {
-                    r.LSrot.setPosition(0.15);//was 1.0
+                  //  r.LSrot.setPosition(0.15);//was 1.0
                     x_pressed = false;
                 }
             }
@@ -235,7 +235,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
 
             if (y_pressed == true) { //good
                 if (gamepad2.y == false) {
-                    r.LSrot.setPosition(0.7);
+                  //  r.LSrot.setPosition(0.7);
                     y_pressed = false;
                 }
             }
@@ -246,7 +246,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
 
             if (dpad_right_pressed == true) { // good
                 if (gamepad2.dpad_right == false) {
-                    r.RSrot.setPosition(0.9);//was 0.7
+                   // r.RSrot.setPosition(0.9);//was 0.7
 
                     dpad_right_pressed = false;
                 }
@@ -258,7 +258,7 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
 
             if (dpad_up_pressed == true) { // good - positions need work
                 if (gamepad2.dpad_up == false) {
-                    r.RSrot.setPosition(0.61);
+                  //  r.RSrot.setPosition(0.61);
                     dpad_up_pressed = false;
                 }
             }
@@ -283,8 +283,8 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
 
         } else {
 
-            r.RSrot.setPosition(0.6);//was 0.3
-            r.LSrot.setPosition(0.65);
+         //   r.RSrot.setPosition(0.6);//was 0.3
+         //   r.LSrot.setPosition(0.65);
 
             if (gamepad2.left_trigger >= 0.5) {
                 left_trigger_pressed = true;
@@ -293,10 +293,10 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
             if (left_trigger_pressed == true) {
                 if (gamepad2.left_trigger < 0.5) {
                     if (left_trigger_state == false) {
-                        r.LSLif.setPosition(0.42);//was 0.4
+                    //    r.LSLif.setPosition(0.42);//was 0.4
                         left_trigger_state = true;
                     } else if (left_trigger_state == true) {
-                        r.LSLif.setPosition(1.0);
+                       // r.LSLif.setPosition(1.0);
                         left_trigger_state = false;
                     }
                     left_trigger_pressed = false;
@@ -310,10 +310,10 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
             if (right_trigger_pressed == true) {
                 if (gamepad2.right_trigger < 0.5) {
                     if (right_trigger_state == false) {
-                        r.RSLif.setPosition(0);
+                      //  r.RSLif.setPosition(0);
                         right_trigger_state = true;
                     } else if (right_trigger_state == true) {
-                        r.RSLif.setPosition(0.56);
+                      //  r.RSLif.setPosition(0.56);
                         right_trigger_state = false;
                     }
                     right_trigger_pressed = false;
@@ -327,10 +327,10 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
             if (dpad_down_pressed == true) {
                 if (gamepad2.dpad_down == false) {
                     if (LSgrab_state == false) {
-                        r.LSgrab.setPosition(0.7);//was 0.6
+                     //   r.LSgrab.setPosition(0.7);//was 0.6
                         LSgrab_state = true;
                     } else if (LSgrab_state == true) {
-                        r.LSgrab.setPosition(0.3);//was 0.2
+                      //  r.LSgrab.setPosition(0.3);//was 0.2
                         LSgrab_state = false;
                     }
                     dpad_down_pressed = false;
@@ -343,10 +343,10 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
             if (a_pressed == true) {
                 if (gamepad2.a == false) {
                     if (RSgrab_state == false) {
-                        r.RSgrab.setPosition(0.2);//was 0.3
+                     //   r.RSgrab.setPosition(0.2);//was 0.3
                         RSgrab_state = true;
                     } else if (RSgrab_state == true) {
-                        r.RSgrab.setPosition(0.65);
+                      //  r.RSgrab.setPosition(0.65);
                         RSgrab_state = false;
                     }
                     a_pressed = false;
@@ -388,9 +388,9 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
             r.FRMotor.setPower(FR);
 
             LarmLifPow = gamepad2.right_stick_y; //good
-            r.LarmLif.setPower(LarmLifPow / 1.0);
+           // r.LarmLif.setPower(LarmLifPow / 1.0);
             RarmLifPow = -gamepad2.left_stick_y;
-            r.RarmLif.setPower(RarmLifPow / 1.0);
+            //r.RarmLif.setPower(RarmLifPow / 1.0);
 
 
         }

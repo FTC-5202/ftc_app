@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Rover;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class UltimumStella_Electrical {
@@ -14,6 +15,10 @@ public class UltimumStella_Electrical {
     DcMotor Arm     = null;
     DcMotor Sweeper = null;
     DcMotor Hang = null;
+
+    Servo tfd;
+    Servo pin;
+    Servo flap;
 
     HardwareMap hardwareMap = null;
     private ElapsedTime period = new ElapsedTime();
@@ -32,6 +37,9 @@ public class UltimumStella_Electrical {
         Arm     = hardwareMap.dcMotor.get("arm");
         Sweeper = hardwareMap.dcMotor.get("sweep");
         Hang = hardwareMap.dcMotor.get("Lift");
+        tfd = hardwareMap.servo.get("tfd");
+        pin = hardwareMap.servo.get("pin");
+        flap = hardwareMap.servo.get("flap");
 
 
         BLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
