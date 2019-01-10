@@ -44,7 +44,7 @@ public class UltimumStella_AutoGold extends UltimumStella_AutoMethods {
             // if the digital channel returns true it's HIGH and the button is unpressed.
             //if (r.sensorTouch.getState() == true && (timeElapsed < 10000)) {
             while (r.sensorTouch.getState() == true && (timeElapsed < 20000) && !isStopRequested()) {
-                r.Lift.setPower(LiftPow);
+               // r.Lift.setPower(LiftPow);
                 timeElapsed = System.currentTimeMillis()- start;
             }
 
@@ -53,12 +53,12 @@ public class UltimumStella_AutoGold extends UltimumStella_AutoMethods {
             }
 
             if (MotorPow > 0) {
-                r.Lift.setPower(0);
+             //   r.Lift.setPower(0);
                 moveBot(38, FORWARD, MotorPow, EndStatus.STOP);
                 MotorPow = 0.;
             }
             else {
-                r.Lift.setPower(-LiftPow);
+              //  r.Lift.setPower(-LiftPow);
                 sleep(5500);
                 LiftPow = 0.;
              //  r.RSLif.setPosition(0.4);

@@ -42,7 +42,7 @@ public class BIGRoverTeleOpMethods extends OpMode {
     public void setupServos() {
       // r.tfd.setPosition();
        r.pin.setPosition(1.0);
-      // r.flap.setPosition();
+       r.flap.setPosition(0.5);
     }
 
         //public void setupSensors() {

@@ -28,6 +28,8 @@ public class BigRoverMecTestDrive extends BIGRoverTeleOpMethods {
     double zoneWidth = 0.5;//12/4/17 changed from 0.3 to 0.5
     boolean a_pressed = false;
     boolean pin_state = false;
+    boolean rb2Pressed = false;
+    boolean flap_state = false;
 
     //UltimumStella_Electrical r  = new UltimumStella_Electrical();
 
@@ -75,8 +77,9 @@ public class BigRoverMecTestDrive extends BIGRoverTeleOpMethods {
                         r.pin.setPosition(1.0);
                         pin_state = false;
                     }
+                    a_pressed = false;
                 }
-                a_pressed = false;
+
             }*/
 
            if (gamepad1.a) {
@@ -85,6 +88,23 @@ public class BigRoverMecTestDrive extends BIGRoverTeleOpMethods {
                r.pin.setPosition(0.0);
            } else {
                r.pin.setPosition(0.5);
+           }
+
+           if (gamepad2.right_bumper) {
+               rb2Pressed = true;
+           }
+           if (rb2Pressed == true) {
+               if (!gamepad2.right_bumper) {
+                   if (flap_state == false) {
+                       r.flap.setPosition(0.2);
+                       flap_state = true;
+                   } else if (flap_state == true) {
+                       r.flap.setPosition(0.5);
+                       flap_state = false;
+                   }
+                   rb2Pressed = false;
+               }
+
            }
 
         if (gamepad1.right_bumper && !rb1Pressed) {

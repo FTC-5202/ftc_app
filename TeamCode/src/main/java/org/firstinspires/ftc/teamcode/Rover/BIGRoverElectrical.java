@@ -62,15 +62,15 @@ public class BIGRoverElectrical {
 
     //Orientation lastAngles = new Orientation();
     //public double globalAngle;
-    public DcMotor FLMotor = null;
-    public DcMotor FRMotor = null;
-    public DcMotor BLMotor = null;
-    public DcMotor BRMotor = null;
+    public DcMotor FLMotor;
+    public DcMotor FRMotor;
+    public DcMotor BLMotor;
+    public DcMotor BRMotor;
 
-    public DcMotor Lift = null;
-    public DcMotor Sweeper = null;
-    public DcMotor Arm = null;
-    public DcMotor Hang = null;
+   // public DcMotor Lift = null;
+    public DcMotor Sweeper;
+    public DcMotor Arm;
+    public DcMotor Hang;
 
     Servo tfd;
     Servo pin;
@@ -78,6 +78,7 @@ public class BIGRoverElectrical {
 
     public Rev2mDistanceSensor sensorRange;
     public DigitalChannel sensorTouch;
+
     //    public void runOpMode() throws InterruptedException {    }
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -148,7 +149,7 @@ public class BIGRoverElectrical {
                 FRMotor = hwMap.dcMotor.get("FR");
                 BLMotor = hwMap.dcMotor.get("BL");
                 BRMotor = hwMap.dcMotor.get("BR");
-                Lift = hwMap.dcMotor.get("Lift");
+               // Lift = hwMap.dcMotor.get("Lift");
                 Sweeper = hwMap.dcMotor.get("sweep");
                 Arm = hwMap.dcMotor.get("arm");
                 Hang = hwMap.dcMotor.get("Lift");
@@ -156,6 +157,7 @@ public class BIGRoverElectrical {
                 tfd = hwMap.servo.get("tfd");
                 pin = hwMap.servo.get("pin");
                 flap = hwMap.servo.get("flap");
+
 
                 /*LarmLif = hwMap.dcMotor.get("larm lift");
                 RarmLif = hwMap.dcMotor.get("rarm lift");
@@ -250,8 +252,36 @@ public class BIGRoverElectrical {
                 moveRightSide(rPow);
             }
 
+            public void moveLeftSideC ( double lPowF, double lPowB) {
+                lPowF = (lPowF >= 1.0) ? 1.0 : lPowF;
+                lPowB = (lPowB >= 1.0) ? 1.0 : lPowB;
+                lPowF = (lPowF <= -1.0) ? -1.0 : lPowF;
+                lPowB = (lPowB <= -1.0) ? -1.0 : lPowB;
+                FLMotor.setPower(lPowF);
+                BLMotor.setPower(lPowB);
+
+            }
+
+            public void moveRightSideC ( double rPowF, double rPowB) {
+                rPowF = (rPowF >= 1.0) ? 1.0 : rPowF;
+                rPowB = (rPowB >= 1.0) ? 1.0 : rPowB;
+                rPowF = (rPowF <= -1.0) ? -1.0 : rPowF;
+                rPowB = (rPowB <= -1.0) ? -1.0 : rPowB;
+                FRMotor.setPower(rPowF);
+                BRMotor.setPower(rPowB);
+            }
+
+            public void moveDriveTrainC ( double lPowF, double lPowB, double rPowF, double rPowB) {
+                moveLeftSideC(lPowF, lPowB);
+                moveRightSideC(rPowF, rPowB);
+            }
+
             public void stopDrivetrain () {
                 moveDrivetrain(0, 0);
+            }
+
+            public void stopDrivetrainC () {
+                moveDriveTrainC(0,0,0,0);
             }
 
 

@@ -60,7 +60,7 @@ public class BigRoverDriveStraightTEST extends UltimumStella_AutoMethods {
 
         if(count==3) {
 
-             moveStraight(40, FORWARD, 0.5);
+            // moveStraight(40, FORWARD, 0.5);
              sleep(1000);
              count = count + 1;
         }

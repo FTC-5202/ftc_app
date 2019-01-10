@@ -1,22 +1,43 @@
 package org.firstinspires.ftc.teamcode.Rover;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.Rover.LitttleRover.RoverAutoMethods;
 
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.Rover.UltimumStella_AutoMethods.Direction.LEFT;
-import static org.firstinspires.ftc.teamcode.Rover.UltimumStella_AutoMethods.Direction.RIGHT;
-
-@Autonomous (name="UltimumStella ImageRecSilver")
-public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods {
+@Autonomous (name="Auto Gold")
+public class Auto_Gold extends UltimumStella_AutoMethods {
 
     @Override
     public void runOpMode() {
+
+        // Set up the parameters with which we will use our IMU. Note that integration
+        // algorithm here just reports accelerations to the logcat log; it doesn't actually
+        // provide positional information.
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+        // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
+        // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
+        // and named "imu".
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        long startTime = System.currentTimeMillis();
+
+        imu.initialize(parameters);
+        long currentTime = System.currentTimeMillis();
+        telemetry.addLine("Time taken to initialize: " + (currentTime - startTime));
+        telemetry.update();
+
+        sleep(2000);
 
         telemetry.addLine("Initializing...");
         telemetry.update();
@@ -31,20 +52,18 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
         double LiftPow = 1.0;
         double LifPos = 0.45;
 
-
         setupAll();
 
         telemetry.addData(">", "Press Play to start tracking");
         telemetry.update();
         waitForStart();
 
-        /** Start tracking the data sets we care about. */
-        //targetsRoverRuckus.activate();
 
-        if (opModeIsActive()) {
+        while (opModeIsActive()) {
+
             telemetry.addLine("Op Mode is Active");
             telemetry.update();
-            sleep(1000);
+            sleep(250);
             /** Activate Tensor Flow Object Detection. */
             if (tfod != null) {
                 tfod.activate();
@@ -131,125 +150,69 @@ public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods 
                     }
 
                 }
-                //r.LSLif.setPosition(0.25);
-                // r.RSLif.setPosition(0.56);
-
-                /** if the digital channel returns true it's HIGH and the button is unpressed.
-                 */
-                while (r.sensorTouch.getState() == true && (timeElapsed < 18000) && !isStopRequested()) {
-                  //  r.Lift.setPower(LiftPow);
-                    timeElapsed = System.currentTimeMillis() - start;
-
-                }
-               // r.Lift.setPower(0);
-
-                if (timeElapsed > 20000) {
-                    MotorPow = 0;
-                }
 
 
-                /**
-                 * The following is the different branches that will run through only if their position val = true
-                 *
-                 */
-                if (position == 1 && !minCheck) {
-                    if (MotorPow > 0) {
-                        // r.moveServo(r.LSLif, 1.0);
-                        //move left
-                        moveBot(6, FORWARD, MotorPow);
-                        sleep(500);
-                        eTurnBot(42, RIGHT, MotorPow, MotorPow); //was LEFT-37
-                        sleep(500);
-                      /*  r.MinFlap.setPosition(0.4);
-                        moveBot(27, FORWARD, MotorPow);
-                        sleep(1000);
-                        r.MinFlap.setPosition(1.0);
-                        //moveBot(2, FORWARD, MotorPow);
-                        // eTurnBot(37, LEFT, MotorPow, MotorPow); //was RIGHT
-                        sleep(500);
-                    }
+                r.pin.setPosition(0.5);
+                sleep(1500);
+                moveBot(2, FORWARD, 0.4);
+                moveBotcrab(7, RIGHT1, 0.5);
+
+                if (position == 1 && !minCheck) { //left -need to test
+
+                    moveBot(8, FORWARD, 0.5);
+                    sleep(100);
+                    moveBotcrab(12, RIGHT1, 0.5);
+                    sleep(100);
+                    moveBotcrab(5, LEFT1, 0.5);
+                    sleep(100);
+                    imuTurn(90, 0.4);
+                    sleep(100);
+                    moveBot(8, FORWARD, 0.5);
+                    r.Arm.setPower(0.5);
+                    sleep(1000);
+                    r.Arm.setPower(0);
                     minCheck = true;
-                    telemetry.addLine("Position: Left");
-                    sleep(2000);
-                    telemetry.update();
+
                 }
 
-                if (position == 2 && !minCheck) {
-                    if (MotorPow > 0) {
-                        // r.moveServo(r.LSLif, 1.0);
-                        //move center
-                        sleep(1000);
-                        r.MinFlap.setPosition(0.4);
-                        moveBot(22, FORWARD, MotorPow); //was 38
-                        r.MinFlap.setPosition(1.0);
-                        sleep(500);
+                if ((position == 2 || position == 0) && !minCheck) { //center -need to test
 
-                    }
+                    moveBotcrab(12, RIGHT1, 0.5);
+                    sleep(100);
+                    moveBotcrab(5, LEFT1, 0.5);
+                    sleep(100);
+                    imuTurn(90,0.4);
+                    sleep(100);
+                    moveBot(8, FORWARD, 0.5);
+                    //lower arm
+                    r.Arm.setPower(0.5);
+                    sleep(1000);
+                    r.Arm.setPower(0);
                     minCheck = true;
-                    telemetry.addLine("Position: Center");
-                    sleep(2000);
-                    telemetry.update();
+
                 }
 
-                if (position == 3 && !minCheck) {
-                    if (MotorPow > 0) {
-                        //   r.moveServo(r.LSLif, 1.0);
-                        //move right
-                        moveBot(6, FORWARD, MotorPow);
-                        sleep(500);
-                        eTurnBot(35, LEFT, MotorPow, MotorPow); //was RIGHT-42
-                        sleep(500);
-                        r.MinFlap.setPosition(0.4);
-                        moveBot(24, FORWARD, MotorPow);
-                        sleep(1000);
-                        r.MinFlap.setPosition(1.0);
-                        //moveBot(2, FORWARD, MotorPow);
-                        //eTurnBot(30, RIGHT, MotorPow, MotorPow); //was LEFT
-                        sleep(500);
-                    }
+                if (position == 3 && !minCheck) { //right -need to test
+
+                    moveBot(6, BACKWARD, 0.5);
+                    sleep(100);
+                    moveBotcrab(12, RIGHT1, 0.5);
+                    sleep(100);
+                    moveBotcrab(6, LEFT1, 0.5);
+                    sleep(100);
+                    imuTurn(90, 0.4);
+                    sleep(100);
+                    moveBot(8, FORWARD, 0.5);
+                    r.Arm.setPower(0.5);
+                    sleep(1000);
+                    r.Arm.setPower(0);
                     minCheck = true;
-                    telemetry.addLine("Position: Right");
-                    sleep(2000);
-                    telemetry.update();
+
+
                 }
 
-                if (position == 0 && !minCheck) {
-                    if (MotorPow > 0) {
-                        // r.moveServo(r.LSLif, 1.0);
-                        //move center
-                        sleep(1000);
-                        r.MinFlap.setPosition(0.6);
-                        moveBot(22, FORWARD, MotorPow); //was 38
-                        r.MinFlap.setPosition(0.2);
-                        sleep(500);
 
-                    }
-                }
-
-                r.RSLif.setPosition(0.65);
-                r.LSLif.setPosition(0.65);
-
-                r.Lift.setPower(-LiftPow);
-                sleep(6000);
-                LiftPow = 0.;
-                r.MinFlap.setPosition(1.0);
-                }
-            }*/
-
-                        if (tfod != null) tfod.shutdown();
-                    }
-                }
             }
         }
     }
 }
-
-
-//correction = checkDirection();
-
-//telemetry.addData("1 imu heading", lastAngles.firstAngle);
-//telemetry.addData("2 global heading", globalAngle);
-//telemetry.addData("3 correction", correction);
-//telemetry.update();
-
-

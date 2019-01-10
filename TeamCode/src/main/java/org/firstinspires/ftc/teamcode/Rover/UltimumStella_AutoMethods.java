@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Rover;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -7,6 +8,7 @@ import com.vuforia.CameraDevice;
 
 import java.util.List;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
@@ -73,10 +75,10 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
         r.BRMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         r.FLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         r.BLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        r.FLMotor.setMode(RUN_USING_ENCODER);
-        r.BLMotor.setMode(RUN_USING_ENCODER);
-        r.FRMotor.setMode(RUN_USING_ENCODER);
-        r.BRMotor.setMode(RUN_USING_ENCODER);
+       // r.FLMotor.setMode(RUN_USING_ENCODER);
+       // r.BLMotor.setMode(RUN_USING_ENCODER);
+       // r.FRMotor.setMode(RUN_USING_ENCODER);
+       // r.BRMotor.setMode(RUN_USING_ENCODER);
         //r.RarmLif.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
        // r.LarmLif.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         r.FLMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -148,7 +150,7 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
             r.BLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
-//TODO: make it work
+
     //The instance of moveBot below is the most commonly used method
     public void moveBot(double distance, int direction, double power) {
         moveBot(distance, direction, power, EndStatus.STOP);
@@ -156,10 +158,25 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
 
     public void moveBotcrab(double distance, int direction, double power, EndStatus status) {
         int target = inches_to_ticks(distance);
-        int startPos = r.BLMotor.getCurrentPosition();
-        int currentpos = r.BLMotor.getCurrentPosition();
-        r.moveDrivetrain()
+        int startPos = r.FLMotor.getCurrentPosition();
+        int currentpos = r.FLMotor.getCurrentPosition();
+        r.moveDriveTrainC(power * direction, power * -direction, power * -direction, power * direction);
+
+        while (Math.abs(currentpos - startPos) < target && !isStopRequested())
+            currentpos = r.FLMotor.getCurrentPosition();
+
+        if (status == EndStatus.STOP) {
+            r.stopDrivetrainC();
+            r.FLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            r.FLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+
     }
+
+    public void moveBotcrab(double distance, int direction, double power) {
+        moveBotcrab(distance, direction, power, EndStatus.STOP);
+    }
+
     public enum Direction {LEFT, RIGHT}
 
     //eTurnBot is used by all of our auto programs; angle(degrees), direction, and power are passed in from our autonomous program
@@ -235,7 +252,7 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
         eTurnBot(degrees, dir, lPow, rPow, EndStatus.STOP);
     }
 
-    public void moveStraight(double distance, int direction, double power, RoverAutoMethods.EndStatus status) {
+    /*public void moveStraight(double distance, int direction, double power, RoverAutoMethods.EndStatus status) {
         r.FLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         r.FRMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         r.BLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -279,13 +296,80 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
             //r.FRBRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
         //return target/TICKS_PER_INCH;
+    }*/
+
+    double currentHeading;
+    double startHeading;
+
+    Orientation angles;
+    Acceleration gravity;
+
+    BNO055IMU imu;
+
+
+
+    public void imuTurn (double degrees, double iPowerScalar) { //METHOD using degrees, iPowerScalar to make a clockwiseTurn
+
+        angles = imu.getAngularOrientation(); //define angles as imu.getAngularOrientation
+        currentHeading = angles.firstAngle; //define currentHeading as angles.firstAngle
+        startHeading = angles.firstAngle; //define startHeading as angles.firstAngle
+        r.BLMotor.setPower(-iPowerScalar);
+        r.FLMotor.setPower(-iPowerScalar);//set left_side Power to the opposite val of iPowerScalar
+        r.BRMotor.setPower(-iPowerScalar);//set right_side Power to the opposite val of iPowerScalar
+        r.FRMotor.setPower(-iPowerScalar);
+        final double GOAL_HEADING = startHeading - degrees; //define Goal_Heading
+        while (currentHeading > GOAL_HEADING) { //condition: currentHeading must be greater than Goal_Heading for this loop to execute
+            r.BLMotor.setPower(-powerFuct(iPowerScalar, GOAL_HEADING, currentHeading)); //set left_side Power to inverse of powerFunct using iPowerScalar, Goal_Heading, and currentHeading
+            r.FLMotor.setPower(-powerFuct(iPowerScalar, GOAL_HEADING, currentHeading));
+            r.BRMotor.setPower(-powerFuct(iPowerScalar, GOAL_HEADING, currentHeading)); //set right_side Power to inverse of powerFunct using iPowerScalar, Goal_Heading, and currentHeading
+            r.FRMotor.setPower(-powerFuct(iPowerScalar, GOAL_HEADING, currentHeading));
+            angles = imu.getAngularOrientation(); //define angles as imu.getAngularOrientation
+            currentHeading = angles.firstAngle; //define currentHeading as angles.firstAngle
+        }
+        r.BLMotor.setPower(0); //set left_side Power to null
+        r.FLMotor.setPower(0);
+        r.BRMotor.setPower(0); //set right_side Power to null
+        r.FRMotor.setPower(0);
+        sleep(300); //stop for 0.3 seconds
+        angles = imu.getAngularOrientation(); //define angles as imu.getAngularOrientation
+        currentHeading = angles.firstAngle; //define currentHeading as angles.firstAngle
+        if (currentHeading < GOAL_HEADING - 5) { //condition: currentHeading must be less than the val of Goal_Heading - 5 in order for this loop to execute
+            telemetry.addLine("GOING YAYA"); //display that loop is being executed on driver station
+            telemetry.update(); //update the line
+            sleep(1000); //the increments in which this line will continually be updated
+            r.BLMotor.setPower(0.14); //sets left_side Power to 0.14
+            r.FLMotor.setPower(0.14);
+            r.BRMotor.setPower(0.14); //sets right_side Power to 0.14
+            r.FRMotor.setPower(0.14);
+            while (currentHeading < (GOAL_HEADING - 3)) { //condition: currentHeading must be less than the val of Goal_Heading -3 in order for this loop to execute
+                angles = imu.getAngularOrientation(); //defines angles as imu.getAngularOrientation
+                currentHeading = angles.firstAngle; //defines currentHeading as angles.firstAngle
+            }
+            r.BLMotor.setPower(0); //sets left_side Power to null
+            r.FLMotor.setPower(0);
+            r.BRMotor.setPower(0); //sets right_side Power to null
+            r.FRMotor.setPower(0);
+            telemetry.addLine("DONE"); //displays on driver station that the loop is finished
+            telemetry.update(); //update the line displayed
+            sleep(1000); //the increments in which this line will continually be updated
+        }
+    }
+
+    private double powerFuct(double initialPower, double goalAngle, double currentAngle){ //METHOD using initialPower, goalAngle, currentAngle
+        final double FLIPPING_POINT = 1.0/3.0; //sets the val of flipping point as the quotient of 1/3
+        final double C = 1.0/(60.0); // note -- old = 1 / (FLIPPING_POINT * (goalAngle - startAngle))
+        final double EXP = 3; //sets the val of EXP as 3
+        final double MIN_POWER = 0.13; //sets the val of Min_Power as 0.13
+        final double DIFFERENCE = Math.abs(goalAngle - currentAngle); //sets the val of Difference as the abs val of goalAngle - currentAngle
+        double y = MIN_POWER + (initialPower - MIN_POWER)*Math.pow((C*(DIFFERENCE)), EXP); //sets the val of y to Min_Power + the total of initialPower - Min_Power, multiplied by Math.pow((C*(DIFFERENCE)), EXP)
+        return (y <= initialPower) ? y : initialPower; //returns the val as y less than or equal to initial Power or y : initialPower
     }
 
 
     //The instance of moveBot below is the most commonly used method
-    public void moveStraight(double distance, int direction, double power) {
+    /*public void moveStraight(double distance, int direction, double power) {
         moveStraight(distance, direction, power, RoverAutoMethods.EndStatus.STOP);
-    }
+    }*/
 
     public double checkDirection() {
         // The gain value determines how sensitive the correction is to direction changes.

@@ -137,11 +137,11 @@ public class UltimumStella_ImageRecAutoGold extends UltimumStella_AutoMethods {
                 /** if the digital channel returns true it's HIGH and the button is unpressed.
                  */
                 while (r.sensorTouch.getState() == true && (timeElapsed < 18000) && !isStopRequested()) {
-                    r.Lift.setPower(LiftPow);
+                  //  r.Lift.setPower(LiftPow);
                     timeElapsed = System.currentTimeMillis() - start;
 
                 }
-                r.Lift.setPower(0);
+               // r.Lift.setPower(0);
 
                 if (timeElapsed > 20000) {
                     MotorPow = 0;

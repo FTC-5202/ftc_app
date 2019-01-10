@@ -66,10 +66,10 @@ public class BIGRoverTeleOp extends BIGRoverTeleOpMethods {
 
         //Lift is the power for the motor that will be used to hang.
         Lift = gamepad1.left_trigger;
-        r.Lift.setPower(Lift / 1.0);//changed from 1.5
+       // r.Lift.setPower(Lift / 1.0);//changed from 1.5
 
         Lift = gamepad1.right_trigger;
-        r.Lift.setPower(-Lift / 1.0); //changed from 1.5
+       // r.Lift.setPower(-Lift / 1.0); //changed from 1.5
 
         if (gamepad1.left_bumper) { // good
             lb1Pressed = true;
