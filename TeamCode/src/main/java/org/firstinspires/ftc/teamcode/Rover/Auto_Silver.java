@@ -153,7 +153,25 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
 
 
                 r.pin.setPosition(0.5);
-                sleep(1500);
+                sleep(1000);
+
+//JDK note:  The Hang motor currently does not have an encoder plugged in.  Do you want the builders to add it?
+
+                int startPos;
+                int currentPos;
+                startPos = r.Hang.getCurrentPosition();
+                currentPos = r.Hang.getCurrentPosition();
+
+//Don't you have to look at absolute value of the difference instead of just the difference?
+                while ((currentPos - startPos) < 1120) {
+                    r.Hang.setPower(0.5);
+                    //don't you want currentPos =  r.Hang.getCurrentPosition():?
+                    r.Hang.getCurrentPosition();
+
+                }
+                r.Hang.setPower(0);
+//probably need something here so you don't repeat trying to get down to the ground.
+
                 moveBot(2, FORWARD, 0.4);
                 moveBotcrab(7, RIGHT1, 0.5);
 
@@ -173,7 +191,7 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
 
                 }
 
-                if ((position == 2 || position == 0) && !minCheck) { //center -need to test
+                if ((position == 2 || position == 0) && !minCheck) { //center -testing
 
                     moveBotcrab(12, RIGHT1, 0.5);
                     sleep(100);
