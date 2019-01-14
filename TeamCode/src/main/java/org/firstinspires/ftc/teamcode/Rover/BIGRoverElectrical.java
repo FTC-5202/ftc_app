@@ -158,6 +158,10 @@ public class BIGRoverElectrical {
                 pin = hwMap.servo.get("pin");
                 flap = hwMap.servo.get("flap");
 
+                imu = hwMap.get(BNO055IMU.class, "imu");
+
+
+
 
                 /*LarmLif = hwMap.dcMotor.get("larm lift");
                 RarmLif = hwMap.dcMotor.get("rarm lift");
@@ -182,6 +186,8 @@ public class BIGRoverElectrical {
                // sensorRangeR = hwMap.get(DistanceSensor.class, "sensor_range_R");
 
                 FLMotor.setPower(0);
+
+
                 FRMotor.setPower(0);
                 BLMotor.setPower(0);
                 BRMotor.setPower(0);
@@ -197,7 +203,7 @@ public class BIGRoverElectrical {
 
                 //FLBLMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-                imu = hwMap.get(BNO055IMU.class, "imu");
+
 
                 BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 

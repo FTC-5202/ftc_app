@@ -29,10 +29,10 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
         // and named "imu".
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        r.imu = hardwareMap.get(BNO055IMU.class, "imu");
         long startTime = System.currentTimeMillis();
 
-        imu.initialize(parameters);
+        r.imu.initialize(parameters);
         long currentTime = System.currentTimeMillis();
         telemetry.addLine("Time taken to initialize: " + (currentTime - startTime));
         telemetry.update();

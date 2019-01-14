@@ -18,6 +18,8 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
         // provide positional information.
+        setupAll();
+
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
@@ -29,10 +31,10 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
         // and named "imu".
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
+       // r.imu = hardwareMap.get(BNO055IMU.class, "imu");
         long startTime = System.currentTimeMillis();
 
-        imu.initialize(parameters);
+        r.imu.initialize(parameters);
         long currentTime = System.currentTimeMillis();
         telemetry.addLine("Time taken to initialize: " + (currentTime - startTime));
         telemetry.update();
@@ -52,7 +54,11 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
         double LiftPow = 1.0;
         double LifPos = 0.45;
 
-        setupAll();
+        int startPos;
+        int currentPos;
+
+        boolean landed = false;
+
 
         telemetry.addData(">", "Press Play to start tracking");
         telemetry.update();
@@ -155,25 +161,26 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
                 r.pin.setPosition(0.5);
                 sleep(1000);
 
-//JDK note:  The Hang motor currently does not have an encoder plugged in.  Do you want the builders to add it?
 
-                int startPos;
-                int currentPos;
+
+
                 startPos = r.Hang.getCurrentPosition();
                 currentPos = r.Hang.getCurrentPosition();
 
-//Don't you have to look at absolute value of the difference instead of just the difference?
-                while ((currentPos - startPos) < 1120) {
-                    r.Hang.setPower(0.5);
-                    //don't you want currentPos =  r.Hang.getCurrentPosition():?
-                    r.Hang.getCurrentPosition();
 
-                }
+                while (Math.abs(currentPos - startPos) < 530 && !landed) {
+                    r.Hang.setPower(0.5);
+                    currentPos = r.Hang.getCurrentPosition();
+
+
+                    }
                 r.Hang.setPower(0);
-//probably need something here so you don't repeat trying to get down to the ground.
+                landed = true;
+
 
                 moveBot(2, FORWARD, 0.4);
-                moveBotcrab(7, RIGHT1, 0.5);
+                sleep(100);
+                //moveBotcrab(7, RIGHT1, 0.5);
 
                 if (position == 1 && !minCheck) { //left -need to test
 
@@ -186,21 +193,23 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
                     imuTurn(90, 0.4);
                     sleep(100);
                     moveBot(8, FORWARD, 0.5);
-                    r.tfd.setPosition(0.5);
+                    r.Arm.setPower(0.5);
+                    sleep(1000);
+                    r.Arm.setPower(0);
                     minCheck = true;
 
                 }
 
                 if ((position == 2 || position == 0) && !minCheck) { //center -testing
 
-                    moveBotcrab(12, RIGHT1, 0.5);
-                    sleep(100);
+                   // moveBotcrab(12, RIGHT1, 0.5);
+                   // sleep(100);
                    // moveBotcrab(5, LEFT1, 0.5);
                    // sleep(100);
                    // imuTurn(90,0.4);
                    // sleep(100);
                    // moveBot(8, FORWARD, 0.5);
-                  //  r.tfd.setPosition(0.5);
+
                     minCheck = true;
 
                 }
@@ -216,7 +225,9 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
                     imuTurn(90, 0.4);
                     sleep(100);
                     moveBot(8, FORWARD, 0.5);
-                    r.tfd.setPosition(0.5);
+                    r.Arm.setPower(0.5);
+                    sleep(1000);
+                    r.Arm.setPower(0);
                     minCheck = true;
 
 
