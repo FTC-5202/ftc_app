@@ -27,6 +27,8 @@ public class BigRoverMecTestDrive extends BIGRoverTeleOpMethods {
     double HangPow = 1.0;
     double zoneWidth = 0.5;//12/4/17 changed from 0.3 to 0.5
     boolean a_pressed = false;
+    boolean a_pressed2 = false;
+    boolean tfd_state = false;
     boolean pin_state = false;
     boolean rb2Pressed = false;
     boolean flap_state = false;
@@ -106,6 +108,24 @@ public class BigRoverMecTestDrive extends BIGRoverTeleOpMethods {
                }
 
            }
+
+           if (gamepad2.a) {
+               a_pressed = true;
+           }
+
+           if (a_pressed == true) {
+               if (!gamepad2.a) {
+                   if (tfd_state == false) {
+                       r.tfd.setPosition(0.6);
+                       tfd_state = true;
+                   } else if (tfd_state == true) {
+                       r.tfd.setPosition(0.3);
+                       tfd_state = false;
+                   }
+                   a_pressed = false;
+               }
+           }
+
 
         if (gamepad1.right_bumper && !rb1Pressed) {
             rb1Pressed = true;

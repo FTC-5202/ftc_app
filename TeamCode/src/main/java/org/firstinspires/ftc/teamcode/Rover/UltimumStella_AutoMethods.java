@@ -339,8 +339,8 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
         sleep(1500); //stop for 0.3 seconds
         angles = r.imu.getAngularOrientation(); //define angles as imu.getAngularOrientation
         currentHeading = angles.firstAngle; //define currentHeading as angles.firstAngle
-        if (currentHeading < GOAL_HEADING - 5) { //condition: currentHeading must be less than the val of Goal_Heading - 5 in order for this loop to execute
-            telemetry.addLine("GOING YAYA"); //display that loop is being executed on driver station
+        /*if (currentHeading < GOAL_HEADING - 5) { //condition: currentHeading must be less than the val of Goal_Heading - 5 in order for this loop to execute
+            telemetry.addLine("CORRECTION"); //display that loop is being executed on driver station
             telemetry.update(); //update the line
             sleep(1000); //the increments in which this line will continually be updated
             r.BLMotor.setPower(-0.14); //sets left_side Power to 0.14
@@ -359,6 +359,7 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
             telemetry.update(); //update the line displayed
             sleep(1000); //the increments in which this line will continually be updated
         }
+        */
     }
 
     private double powerFuct(double initialPower, double goalAngle, double currentAngle){ //METHOD using initialPower, goalAngle, currentAngle

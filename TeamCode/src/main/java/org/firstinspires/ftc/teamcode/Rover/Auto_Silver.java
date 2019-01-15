@@ -58,6 +58,7 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
         int currentPos;
 
         boolean landed = false;
+        boolean minCheck = false;
 
 
         telemetry.addData(">", "Press Play to start tracking");
@@ -164,7 +165,7 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
 
 
 
-                startPos = r.Hang.getCurrentPosition();
+                /* startPos = r.Hang.getCurrentPosition();
                 currentPos = r.Hang.getCurrentPosition();
 
 
@@ -177,57 +178,62 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
                 r.Hang.setPower(0);
                 landed = true;
 
+                */
 
-                moveBot(2, FORWARD, 0.4);
-                sleep(100);
+                if (!minCheck) {
+                    moveBot(2, FORWARD, 0.4);
+                    sleep(100);
+                }
                 //moveBotcrab(7, RIGHT1, 0.5);
 
                 if (position == 1 && !minCheck) { //left -need to test
 
-                    moveBot(8, FORWARD, 0.5);
-                    sleep(100);
                     moveBotcrab(12, RIGHT1, 0.5);
                     sleep(100);
-                    moveBotcrab(5, LEFT1, 0.5);
+                    moveBot(14, FORWARD, 0.5);
+                    sleep(100);
+                    moveBotcrab(6, RIGHT1, 0.5);
                     sleep(100);
                     imuTurn(90, 0.4);
                     sleep(100);
                     moveBot(8, FORWARD, 0.5);
-                    r.Arm.setPower(0.5);
-                    sleep(1000);
-                    r.Arm.setPower(0);
+                    //r.Arm.setPower(0.5);
+                    //sleep(1000);
+                    //r.Arm.setPower(0);
                     minCheck = true;
 
                 }
 
                 if ((position == 2 || position == 0) && !minCheck) { //center -testing
 
-                   // moveBotcrab(12, RIGHT1, 0.5);
-                   // sleep(100);
-                   // moveBotcrab(5, LEFT1, 0.5);
-                   // sleep(100);
-                   // imuTurn(90,0.4);
-                   // sleep(100);
-                   // moveBot(8, FORWARD, 0.5);
+                    moveBotcrab(18, RIGHT1, 0.5);
+                    sleep(100);
+                    moveBotcrab(5, LEFT1, 0.5);
+                    sleep(100);
+                    imuTurn(90,0.4);
+                    sleep(100);
+                    moveBot(8, FORWARD, 0.5);
+                    //sleep(100);
+                    //r.Arm.setPower(-0.5);
+                    //sleep(1500);
 
                     minCheck = true;
+                    telemetry.addData("timeElapsed", timeElapsed);
+                    sleep(1000);
 
                 }
 
                 if (position == 3 && !minCheck) { //right -need to test
 
-                    moveBot(6, BACKWARD, 0.5);
-                    sleep(100);
                     moveBotcrab(12, RIGHT1, 0.5);
                     sleep(100);
-                    moveBotcrab(6, LEFT1, 0.5);
+                    moveBot(14, BACKWARD, 0.5);
+                    sleep(100);
+                    moveBotcrab(6, RIGHT1, 0.5);
                     sleep(100);
                     imuTurn(90, 0.4);
                     sleep(100);
                     moveBot(8, FORWARD, 0.5);
-                    r.Arm.setPower(0.5);
-                    sleep(1000);
-                    r.Arm.setPower(0);
                     minCheck = true;
 
 
