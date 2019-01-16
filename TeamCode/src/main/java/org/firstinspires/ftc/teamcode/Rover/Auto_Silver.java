@@ -14,6 +14,7 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
 
     @Override
     public void runOpMode() {
+        //DONE
 
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
@@ -58,8 +59,7 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
         int currentPos;
 
         boolean landed = false;
-        boolean minCheck = false;
-
+        boolean moveUP = false;
 
         telemetry.addData(">", "Press Play to start tracking");
         telemetry.update();
@@ -165,7 +165,7 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
 
 
 
-                /* startPos = r.Hang.getCurrentPosition();
+                 startPos = r.Hang.getCurrentPosition();
                 currentPos = r.Hang.getCurrentPosition();
 
 
@@ -178,7 +178,17 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
                 r.Hang.setPower(0);
                 landed = true;
 
-                */
+                startPos = r.Hang.getCurrentPosition();
+                currentPos = r.Hang.getCurrentPosition();
+
+                while (Math.abs(currentPos - startPos) < 30 && !moveUP) {
+                    r.Hang.setPower(-0.5);
+                    currentPos = r.Hang.getCurrentPosition();
+                }
+                moveUP = true;
+                r.Hang.setPower(0);
+
+
 
                 if (!minCheck) {
                     moveBot(2, FORWARD, 0.4);
@@ -190,7 +200,7 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
 
                     moveBotcrab(12, RIGHT1, 0.5);
                     sleep(100);
-                    moveBot(14, FORWARD, 0.5);
+                    moveBot(9, FORWARD, 0.5); //was 14
                     sleep(100);
                     moveBotcrab(6, RIGHT1, 0.5);
                     sleep(100);
@@ -227,13 +237,13 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
 
                     moveBotcrab(12, RIGHT1, 0.5);
                     sleep(100);
-                    moveBot(14, BACKWARD, 0.5);
+                    moveBot(10, BACKWARD, 0.5); //was 14
                     sleep(100);
                     moveBotcrab(6, RIGHT1, 0.5);
                     sleep(100);
                     imuTurn(90, 0.4);
                     sleep(100);
-                    moveBot(8, FORWARD, 0.5);
+                    moveBot(6, FORWARD, 0.5);
                     minCheck = true;
 
 

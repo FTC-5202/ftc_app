@@ -116,11 +116,10 @@ public class BigRoverMecTestDrive extends BIGRoverTeleOpMethods {
            if (a_pressed == true) {
                if (!gamepad2.a) {
                    if (tfd_state == false) {
-                       r.tfd.setPosition(0.6);
+                       r.tfd.setPosition(0.0);
                        tfd_state = true;
                    } else if (tfd_state == true) {
-                       r.tfd.setPosition(0.3);
-                       tfd_state = false;
+                       r.tfd.setPosition(0.6);
                    }
                    a_pressed = false;
                }
