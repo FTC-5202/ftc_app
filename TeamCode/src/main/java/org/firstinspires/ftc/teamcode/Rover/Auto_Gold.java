@@ -193,15 +193,15 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
                 }
                 //moveBotcrab(7, RIGHT1, 0.5);
 
-                if (position == 1 && !minCheck) { //left -need to test
+                if (position == 1 && !minCheck) { //left -good
 
                     moveBotcrab(12, RIGHT1, 0.5);
                     sleep(100);
-                    moveBot(6, FORWARD, 0.5); //was 14
+                    moveBot(7, FORWARD, 0.5); //was 6
                     sleep(100);
                     moveBotcrab(10, RIGHT1, 0.5);//was 6
                     sleep(100);
-                    imuTurn(120, 0.4);//was 90
+                    imuTurn(100, 0.4);//was 90
                     sleep(100);
                     moveBot(8, FORWARD, 0.5);
                     //r.Arm.setPower(0.5);
@@ -211,13 +211,13 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
 
                 }
 
-                if ((position == 2 || position == 0) && !minCheck) { //center -testing
+                if ((position == 2 || position == 0) && !minCheck) { //center -good
 
-                    moveBotcrab(12, RIGHT1, 0.5);
+                    moveBotcrab(18, RIGHT1, 0.5);//was 12
                     sleep(100);
-                    moveBot(1, BACKWARD, 0.5);
-                    sleep(100);
-                    moveBotcrab(6, RIGHT1, 0.5);
+                   // moveBot(1, BACKWARD, 0.5);
+                   // sleep(100);
+                   // moveBotcrab(6, RIGHT1, 0.5);
                     sleep(100);
                     moveBotcrab(5, LEFT1, 0.5);//was 6
                     sleep(100);
@@ -234,7 +234,7 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
 
                 }
 
-                if (position == 3 && !minCheck) { //right -need to test
+                if (position == 3 && !minCheck) { //right -good
 
                     moveBotcrab(12, RIGHT1, 0.5);
                     sleep(100);
@@ -242,7 +242,7 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
                     sleep(100);
                     moveBotcrab(10, RIGHT1, 0.5);//was 6
                     sleep(100);
-                    imuTurn(45, 0.4);//was 90
+                    imuTurn(55, 0.4);//was 90
                     sleep(100);
                     moveBot(8, FORWARD, 0.5);
                     minCheck = true;
