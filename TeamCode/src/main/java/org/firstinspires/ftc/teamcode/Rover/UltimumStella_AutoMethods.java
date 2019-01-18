@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Rover;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -30,6 +31,9 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
     public static final String LABEL_SILVER_MINERAL = "Silver Mineral";
     public int position = 0;
     public boolean minCheck = false;
+    double globalAngle, power = .15, correction, robotHeading, robotX, robotY, robotToWall, distanceToTravel;
+    double distanceTraveled = 0;
+    public Rev2mDistanceSensor sensorRange;
 
 
     private static final String VUFORIA_KEY = "AXLb9ZD/////AAAAGc+ylHTIf0+aorS8rw6aoBRMAiybD7XCkifjVKb1gFrWJ+pZOL6huLnful+ArD+R2XN3/ZGcwQl6+4jsRj2e3Y82Sm/yTgANmCQEqhIqLjfWNePdOqmT0apncNRVE8YfklK+VRNs976s0xR2rEPIl4tNaYoGOHqaJl8JfIrZ5CjIIxKV55C5PUdzzgAxR3NS8hR7wGu5H0rX1of4shVf1Nncn3WNKTrsOU//PPBjgE79RIN3G5aUC54lMNkzMfaJ2FwAfTXoMbSUygQiGu1Sh0UizQpgjqzPH8gIt6v8qt542i4Pk5T+gbrculkfzvFhzMQu81EyP2v4TfCNmCsSrFQdRl2Z7pTbWddtn5//e6Px\"";
@@ -52,6 +56,14 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
     }
 
     public void runOpMode() throws InterruptedException {
+        boolean Target1;
+        boolean targetSpotted = false;
+        boolean drivetrainStopped = false;
+        boolean turnL = false;
+        double globalAngle = 0, power = .15, correction, robotHeading, robotX, robotY, robotToWall;
+        double distanceTraveled = 0;
+        double distanceToTravel = 0;
+
 
         /*initVuforia();
         CameraDevice.getInstance().setFlashTorchMode(true);

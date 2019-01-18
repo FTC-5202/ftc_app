@@ -160,7 +160,7 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
 
 
                 r.pin.setPosition(0.5);
-                sleep(1000);
+                sleep(3000);
 
 
 
