@@ -9,18 +9,17 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 import java.util.List;
 
-@Autonomous (name="Auto Silver")
-public class Auto_Silver extends UltimumStella_AutoMethods {
+@Autonomous (name="AutoGoldNoHang")
+public class AutoGoldNoHang extends UltimumStella_AutoMethods {
 
     @Override
     public void runOpMode() {
-        //DONE
+
+        setupAll();
 
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
         // provide positional information.
-        setupAll();
-
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
@@ -32,7 +31,7 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
         // and named "imu".
-       // r.imu = hardwareMap.get(BNO055IMU.class, "imu");
+        //r.imu = hardwareMap.get(BNO055IMU.class, "imu");
         long startTime = System.currentTimeMillis();
 
         r.imu.initialize(parameters);
@@ -60,6 +59,8 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
 
         boolean landed = false;
         boolean moveUP = false;
+        boolean TFtrue = false;
+
 
         telemetry.addData(">", "Press Play to start tracking");
         telemetry.update();
@@ -160,80 +161,35 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
 
 
                 r.pin.setPosition(0.5);
-                sleep(3000);
 
-
-                if (!minCheck) {
-                    moveBotcrab(4, RIGHT1, 0.4);
-                    sleep(1000);
-                    moveBot(2, FORWARD, 0.4);
-                    sleep(100);
-                }
-
-
-
-/*
-                 startPos = r.Hang.getCurrentPosition();
-                currentPos = r.Hang.getCurrentPosition();
-
-
-                while (Math.abs(currentPos - startPos) < 530 && !landed) {
-                    r.Hang.setPower(0.5);
-                    currentPos = r.Hang.getCurrentPosition();
-
-
-                    }
-                r.Hang.setPower(0);
-                landed = true;
-
-                startPos = r.Hang.getCurrentPosition();
-                currentPos = r.Hang.getCurrentPosition();
-
-                while (Math.abs(currentPos - startPos) < 30 && !moveUP) {
-                    r.Hang.setPower(-0.5);
-                    currentPos = r.Hang.getCurrentPosition();
-                }
-                moveUP = true;
-                r.Hang.setPower(0);
-
-
-
-                if (!minCheck) {
-                    moveBot(2, FORWARD, 0.4);
-                    sleep(100);
-                }
-                //moveBotcrab(7, RIGHT1, 0.5);
-*/
-                if (position == 1 && !minCheck) { //left -need to test
+                if (position == 1 && !minCheck) { //left -good
 
                     moveBotcrab(12, RIGHT1, 0.5);
                     sleep(100);
-                    moveBot(8, FORWARD, 0.5); //was 14
+                    moveBot(7, FORWARD, 0.5); //was 6
                     sleep(100);
-                    moveBotcrab(6, RIGHT1, 0.5);
+                    moveBotcrab(10, RIGHT1, 0.5);//was 6
                     sleep(100);
-                    imuTurn(90, 0.4);
+                    imuTurn(100, 0.4);//was 90
                     sleep(100);
                     moveBot(8, FORWARD, 0.5);
-                    //r.Arm.setPower(0.5);
-                    //sleep(1000);
-                    //r.Arm.setPower(0);
                     minCheck = true;
 
                 }
 
-                if ((position == 2 || position == 0) && !minCheck) { //center -testing
+                if ((position == 2 || position == 0) && !minCheck) { //center -good
 
-                    moveBotcrab(18, RIGHT1, 0.5);
+                    moveBotcrab(5, RIGHT1, 0.5);//was 12
                     sleep(100);
-                    moveBotcrab(5, LEFT1, 0.5);
+                    imuTurn(-10,-0.4);
+                    sleep(100);
+                    moveBotcrab(13, RIGHT1, 0.5);//was 12
+                    sleep(100);
+                    moveBotcrab(5, LEFT1, 0.5);//was 6
                     sleep(100);
                     imuTurn(90,0.4);
                     sleep(100);
-                    moveBot(8, FORWARD, 0.5);
-                    //sleep(100);
-                    //r.Arm.setPower(-0.5);
-                    //sleep(1500);
+                    moveBot(14, FORWARD, 0.5);//was 8
 
                     minCheck = true;
                     telemetry.addData("timeElapsed", timeElapsed);
@@ -241,24 +197,34 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
 
                 }
 
-                if (position == 3 && !minCheck) { //right -need to test
+                if (position == 3 && !minCheck) { //right -good
 
                     moveBotcrab(12, RIGHT1, 0.5);
                     sleep(100);
                     moveBot(10, BACKWARD, 0.5); //was 14
                     sleep(100);
-                    moveBotcrab(6, RIGHT1, 0.5);
+                    moveBotcrab(10, RIGHT1, 0.5);//was 6
                     sleep(100);
-                    imuTurn(70, 0.4);
+                    imuTurn(55, 0.4);//was 90
                     sleep(100);
-                    moveBot(6, FORWARD, 0.5);
+                    moveBot(8, FORWARD, 0.5);
                     minCheck = true;
 
 
                 }
 
+                if (TFtrue == false) {
+                    moveBot(6, FORWARD, 0.5);
+                    sleep(100);
+                    r.tfd.setPosition(0.0);
+                    sleep(1000);
+                    r.tfd.setPosition(0.6);
+                    TFtrue = true;
+                    }
+
+
+                }
 
             }
         }
     }
-}

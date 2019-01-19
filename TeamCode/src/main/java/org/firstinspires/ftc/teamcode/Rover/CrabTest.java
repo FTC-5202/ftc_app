@@ -4,8 +4,8 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous (name="Crab IMU Test")
-public class CrabIMU_Test extends UltimumStella_AutoMethods {
+@Autonomous (name="CrabTest")
+public class CrabTest extends UltimumStella_AutoMethods {
 
     @Override
     public void runOpMode () {
@@ -30,12 +30,11 @@ public class CrabIMU_Test extends UltimumStella_AutoMethods {
 
         while (opModeIsActive()) {
 
-            if (stop == false) {
-                imuTurn(45, 0.4);
-                sleep(5000);
-                imuTurn(-45, -0.4);
-                stop = true;
-            }
+            moveBotcrab(24, RIGHT1, 0.5);
+            sleep (3000);
+
+            moveBotcrab(24, LEFT1, 0.5);
+            sleep (3000);
 
         }
     }

@@ -161,9 +161,9 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
 
 
                 r.pin.setPosition(0.5);
-                sleep(1000);
+                sleep(3000);
 
-                startPos = r.Hang.getCurrentPosition();
+               /* startPos = r.Hang.getCurrentPosition();
                 currentPos = r.Hang.getCurrentPosition();
 
 
@@ -184,10 +184,12 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
                     currentPos = r.Hang.getCurrentPosition();
                 }
                 moveUP = true;
-                r.Hang.setPower(0);
+                r.Hang.setPower(0);*/
 
 
                 if (!minCheck) {
+                    moveBotcrab(4, RIGHT1, 0.4);
+                    sleep(1000);
                     moveBot(2, FORWARD, 0.4);
                     sleep(100);
                 }
@@ -201,7 +203,7 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
                     sleep(100);
                     moveBotcrab(10, RIGHT1, 0.5);//was 6
                     sleep(100);
-                    imuTurn(100, 0.4);//was 90
+                    imuTurn(125, 0.4);//was 90
                     sleep(100);
                     moveBot(8, FORWARD, 0.5);
                     //r.Arm.setPower(0.5);
@@ -254,7 +256,7 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
                     moveBot(6, FORWARD, 0.5);
                     sleep(100);
                     r.tfd.setPosition(0.0);
-                    sleep(100);
+                    sleep(1000);
                     r.tfd.setPosition(0.6);
                     TFtrue = true;
                     }
