@@ -80,7 +80,7 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
 
             while (opModeIsActive()) {
 
-                while (timeElapsed < 2000 && !isStopRequested()) {
+                while (timeElapsed < 4000 && !isStopRequested()) {
                     timeElapsed = System.currentTimeMillis() - start;
 
                     if (tfod != null) { //we have not yet activated TFOD

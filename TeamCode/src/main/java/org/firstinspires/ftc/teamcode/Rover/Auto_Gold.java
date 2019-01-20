@@ -163,29 +163,6 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
                 r.pin.setPosition(0.5);
                 sleep(3000);
 
-               /* startPos = r.Hang.getCurrentPosition();
-                currentPos = r.Hang.getCurrentPosition();
-
-
-                while (Math.abs(currentPos - startPos) < 530 && !landed) {
-                    r.Hang.setPower(0.5);
-                    currentPos = r.Hang.getCurrentPosition();
-
-
-                }
-                landed = true;
-                r.Hang.setPower(0);
-
-                startPos = r.Hang.getCurrentPosition();
-                currentPos = r.Hang.getCurrentPosition();
-
-                while (Math.abs(currentPos - startPos) < 30 && !moveUP) {
-                    r.Hang.setPower(-0.5);
-                    currentPos = r.Hang.getCurrentPosition();
-                }
-                moveUP = true;
-                r.Hang.setPower(0);*/
-
 
                 if (!minCheck) {
                     moveBotcrab(4, RIGHT1, 0.4);
