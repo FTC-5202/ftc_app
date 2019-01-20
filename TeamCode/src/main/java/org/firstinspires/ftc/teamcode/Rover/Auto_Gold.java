@@ -199,11 +199,11 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
 
                     moveBotcrab(12, RIGHT1, 0.5);
                     sleep(100);
-                    moveBot(7, FORWARD, 0.5); //was 6
+                    moveBot(8.5, FORWARD, 0.5); //was 6
                     sleep(100);
                     moveBotcrab(10, RIGHT1, 0.5);//was 6
                     sleep(100);
-                    imuTurn(125, 0.4);//was 90
+                    imuTurn(115, 0.4);//was 90
                     sleep(100);
                     moveBot(8, FORWARD, 0.5);
                     //r.Arm.setPower(0.5);

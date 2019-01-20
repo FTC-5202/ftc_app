@@ -62,7 +62,7 @@ public class BigRoverMecTestDrive extends BIGRoverTeleOpMethods {
             L1 = gamepad2.left_stick_y;
             r.Arm.setPower(L1);
 
-            L2 = gamepad2.right_stick_y;
+            L2 = r.power(gamepad2.right_stick_y);
             r.Sweeper.setPower(L2);
 
            /* if (gamepad1.a) {
@@ -136,15 +136,15 @@ public class BigRoverMecTestDrive extends BIGRoverTeleOpMethods {
         if (Math.abs(gamepad1.left_stick_x) <= (zoneWidth) || (Math.abs(gamepad1.right_stick_x)) <= (zoneWidth)) {
             Tank = 1.0;
             if (!isForward) {
-                BL = -gamepad1.right_stick_y;
-                BR = -gamepad1.left_stick_y;
-                FL = -gamepad1.right_stick_y;
-                FR = -gamepad1.left_stick_y;
+                BL = (-gamepad1.right_stick_y);
+                BR = (-gamepad1.left_stick_y);
+                FL = (-gamepad1.right_stick_y);
+                FR = (-gamepad1.left_stick_y);
             } else {
-                BL = gamepad1.left_stick_y;
-                BR = gamepad1.right_stick_y;
-                FL = gamepad1.left_stick_y;
-                FR = gamepad1.right_stick_y;
+                BL = (gamepad1.left_stick_y);
+                BR = (gamepad1.right_stick_y);
+                FL = (gamepad1.left_stick_y);
+                FR = (gamepad1.right_stick_y);
             }
 
         }
@@ -154,15 +154,15 @@ public class BigRoverMecTestDrive extends BIGRoverTeleOpMethods {
             Tank = 2.0;
 
             if (!isForward) {
-                BL = -gamepad1.right_stick_x;
-                BR = gamepad1.left_stick_x;
-                FL = gamepad1.right_stick_x;
-                FR = -gamepad1.left_stick_x;
+                BL = (-gamepad1.right_stick_x);
+                BR = (gamepad1.left_stick_x);
+                FL = (gamepad1.right_stick_x);
+                FR = (-gamepad1.left_stick_x);
             } else {
-                BL = gamepad1.left_stick_x;
-                BR = -gamepad1.right_stick_x;
-                FL = -gamepad1.left_stick_x;
-                FR = gamepad1.right_stick_x;
+                BL = (gamepad1.left_stick_x);
+                BR = (-gamepad1.right_stick_x);
+                FL = (-gamepad1.left_stick_x);
+                FR = (gamepad1.right_stick_x);
             }
 
 
