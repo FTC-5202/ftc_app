@@ -165,7 +165,7 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
 
 
                 if (!minCheck) {
-                    moveBotcrab(4, RIGHT1, 0.4);
+                    moveBotcrab(5 RIGHT1, 0.4);
                     sleep(1000);
                     moveBot(2, FORWARD, 0.4);
                     sleep(100);
