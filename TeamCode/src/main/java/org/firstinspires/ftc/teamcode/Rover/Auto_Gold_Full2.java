@@ -5,15 +5,12 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 import java.util.List;
 
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
-
-@Autonomous (name="Auto Gold")
-public class Auto_Gold extends UltimumStella_AutoMethods {
+@Autonomous (name="Auto Gold Full 2")
+public class Auto_Gold_Full2 extends UltimumStella_AutoMethods {
 
     @Override
     public void runOpMode() {
@@ -240,7 +237,47 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
                     r.tfd.setPosition(0.0);
                     sleep(1000);
                     r.tfd.setPosition(0.6);
-                    TFtrue = true;
+
+
+                    if (position == 1) { // LEFT - testing
+                        imuTurn(-90, 0.4);
+
+                    }
+
+                    else if (position == 2 || position == 0) { // CENTER -  not tested
+
+                    }
+
+                    else  { //RIGHT - not tested
+
+                    }
+
+                /*while (r.FLMotor.getCurrentPosition() < 10000) { //probably wrong distance
+                    if (r.sensorRange1.getDistance(DistanceUnit.INCH) > 3) {
+                        r.FLMotor.setPower(0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90)); //no idea if this will work
+                        r.FRMotor.setPower(0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                        r.BLMotor.setPower(0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                        r.BRMotor.setPower(0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                    } else if (r.sensorRange1.getDistance(DistanceUnit.INCH) < 3) {
+                        r.FLMotor.setPower(0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                        r.FRMotor.setPower(0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                        r.BLMotor.setPower(0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                        r.BRMotor.setPower(0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                    } else {
+                        r.FLMotor.setPower(0.5);
+                        r.FRMotor.setPower(0.5);
+                        r.BLMotor.setPower(0.5);
+                        r.BRMotor.setPower(0.5);
+
+                    }
+                    r.FLMotor.getCurrentPosition();
+                }
+                r.stopDrivetrain();
+
+                    r.Arm.setPower(0.5);
+                    sleep(1500);*/
+
+                TFtrue = true;
                     }
 
 

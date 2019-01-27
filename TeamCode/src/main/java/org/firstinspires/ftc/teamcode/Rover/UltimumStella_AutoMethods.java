@@ -333,16 +333,31 @@ public class UltimumStella_AutoMethods extends LinearOpMode {
         r.FLMotor.setPower(-iPowerScalar);//set left_side Power to the opposite val of iPowerScalar
         r.BRMotor.setPower(iPowerScalar);//set right_side Power to the opposite val of iPowerScalar
         r.FRMotor.setPower(iPowerScalar);
-        final double GOAL_HEADING = startHeading - degrees; //define Goal_Heading
-        while (currentHeading > GOAL_HEADING) { //condition: currentHeading must be greater than Goal_Heading for this loop to execute
-            telemetry.addData("current heading: ", + currentHeading);
-            telemetry.update();
-            r.BLMotor.setPower(-powerFuct(iPowerScalar, GOAL_HEADING, currentHeading)); //set left_side Power to inverse of powerFunct using iPowerScalar, Goal_Heading, and currentHeading
-            r.FLMotor.setPower(-powerFuct(iPowerScalar, GOAL_HEADING, currentHeading));
-            r.BRMotor.setPower(powerFuct(iPowerScalar, GOAL_HEADING, currentHeading)); //set right_side Power to inverse of powerFunct using iPowerScalar, Goal_Heading, and currentHeading
-            r.FRMotor.setPower(powerFuct(iPowerScalar, GOAL_HEADING, currentHeading));
-            angles = r.imu.getAngularOrientation(); //define angles as imu.getAngularOrientation
-            currentHeading = angles.firstAngle; //define currentHeading as angles.firstAngle
+        if (iPowerScalar < 0) {
+            final double GOAL_HEADING = startHeading + degrees; //define Goal_Heading
+            while (currentHeading < GOAL_HEADING) { //condition: currentHeading must be greater than Goal_Heading for this loop to execute
+                telemetry.addData("current heading: ", +currentHeading);
+                telemetry.update();
+                r.BLMotor.setPower(-powerFuct(iPowerScalar, GOAL_HEADING, currentHeading)); //set left_side Power to inverse of powerFunct using iPowerScalar, Goal_Heading, and currentHeading
+                r.FLMotor.setPower(-powerFuct(iPowerScalar, GOAL_HEADING, currentHeading));
+                r.BRMotor.setPower(powerFuct(iPowerScalar, GOAL_HEADING, currentHeading)); //set right_side Power to inverse of powerFunct using iPowerScalar, Goal_Heading, and currentHeading
+                r.FRMotor.setPower(powerFuct(iPowerScalar, GOAL_HEADING, currentHeading));
+                angles = r.imu.getAngularOrientation(); //define angles as imu.getAngularOrientation
+                currentHeading = angles.firstAngle; //define currentHeading as angles.firstAngle
+            }
+        }
+        if (iPowerScalar > 0) {
+            final double GOAL_HEADING = startHeading - degrees;
+            while (currentHeading > GOAL_HEADING) {
+                telemetry.addData("current heading: ", +currentHeading);
+                telemetry.update();
+                r.BLMotor.setPower(-powerFuct(iPowerScalar, GOAL_HEADING, currentHeading));
+                r.FLMotor.setPower(-powerFuct(iPowerScalar, GOAL_HEADING, currentHeading));
+                r.BRMotor.setPower(powerFuct(iPowerScalar, GOAL_HEADING, currentHeading));
+                r.FRMotor.setPower(powerFuct(iPowerScalar, GOAL_HEADING, currentHeading));
+                angles = r.imu.getAngularOrientation();
+                currentHeading = angles.firstAngle;
+            }
         }
         r.BLMotor.setPower(0); //set left_side Power to null
         r.FLMotor.setPower(0);

@@ -78,7 +78,7 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
 
             start = System.currentTimeMillis();
 
-            while (opModeIsActive()) {
+          //  while (opModeIsActive()) {
 
                 while (timeElapsed < 4000 && !isStopRequested()) {
                     timeElapsed = System.currentTimeMillis() - start;
@@ -261,4 +261,4 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
             }
         }
     }
-}
+//}

@@ -33,7 +33,7 @@ public class CrabIMU_Test extends UltimumStella_AutoMethods {
             if (stop == false) {
                 imuTurn(45, 0.4);
                 sleep(5000);
-                imuTurn(-45, -0.4);
+                imuTurn(45, -0.4);
                 stop = true;
             }
 

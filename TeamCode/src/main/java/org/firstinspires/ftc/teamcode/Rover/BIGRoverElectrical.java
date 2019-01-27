@@ -76,8 +76,9 @@ public class BIGRoverElectrical {
     Servo pin;
     Servo flap;
 
-    public Rev2mDistanceSensor sensorRange;
-    public DigitalChannel sensorTouch;
+    public Rev2mDistanceSensor sensorRange1;
+    public Rev2mDistanceSensor sensorRange2;
+   // public DigitalChannel sensorTouch;
 
     //    public void runOpMode() throws InterruptedException {    }
     /*
@@ -159,6 +160,9 @@ public class BIGRoverElectrical {
                 flap = hwMap.servo.get("flap");
 
                 imu = hwMap.get(BNO055IMU.class, "imu");
+                sensorRange1 = hwMap.get(Rev2mDistanceSensor.class, "dsr");
+                Rev2mDistanceSensor sensorTimeOfFlight = sensorRange1;
+                sensorRange2 = hwMap.get(Rev2mDistanceSensor.class, "dsl");
 
 
 

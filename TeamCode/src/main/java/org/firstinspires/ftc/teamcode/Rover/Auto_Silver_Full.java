@@ -5,26 +5,23 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 import java.util.List;
 
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
-
-@Autonomous (name="Auto Gold")
-public class Auto_Gold extends UltimumStella_AutoMethods {
+@Autonomous (name="Silver-Full")
+public class Auto_Silver_Full extends UltimumStella_AutoMethods  {
 
     @Override
     public void runOpMode() {
-
-        setupAll();
-
-
+        //DONE
 
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
         // provide positional information.
+        setupAll();
+
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
@@ -36,7 +33,7 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
         // and named "imu".
-        //r.imu = hardwareMap.get(BNO055IMU.class, "imu");
+        // r.imu = hardwareMap.get(BNO055IMU.class, "imu");
         long startTime = System.currentTimeMillis();
 
         r.imu.initialize(parameters);
@@ -64,8 +61,7 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
 
         boolean landed = false;
         boolean moveUP = false;
-        boolean TFtrue = false;
-
+        boolean part2 = false;
 
         telemetry.addData(">", "Press Play to start tracking");
         telemetry.update();
@@ -84,9 +80,9 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
 
             start = System.currentTimeMillis();
 
-            while (opModeIsActive()) {
+          //  while (opModeIsActive()) {
 
-                while (timeElapsed < 2000 && !isStopRequested()) {
+                while (timeElapsed < 4000 && !isStopRequested()) {
                     timeElapsed = System.currentTimeMillis() - start;
 
                     if (tfod != null) { //we have not yet activated TFOD
@@ -175,17 +171,50 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
                     moveBot(2, FORWARD, 0.4);
                     sleep(100);
                 }
-                //moveBotcrab(7, RIGHT1, 0.5);
 
+
+
+/*
+                 startPos = r.Hang.getCurrentPosition();
+                currentPos = r.Hang.getCurrentPosition();
+
+
+                while (Math.abs(currentPos - startPos) < 530 && !landed) {
+                    r.Hang.setPower(0.5);
+                    currentPos = r.Hang.getCurrentPosition();
+
+
+                    }
+                r.Hang.setPower(0);
+                landed = true;
+
+                startPos = r.Hang.getCurrentPosition();
+                currentPos = r.Hang.getCurrentPosition();
+
+                while (Math.abs(currentPos - startPos) < 30 && !moveUP) {
+                    r.Hang.setPower(-0.5);
+                    currentPos = r.Hang.getCurrentPosition();
+                }
+                moveUP = true;
+                r.Hang.setPower(0);
+
+
+
+                if (!minCheck) {
+                    moveBot(2, FORWARD, 0.4);
+                    sleep(100);
+                }
+                //moveBotcrab(7, RIGHT1, 0.5);
+*/
                 if (position == 1 && !minCheck) { //left -good
 
                     moveBotcrab(12, RIGHT1, 0.5);
                     sleep(100);
-                    moveBot(8.5, FORWARD, 0.5); //was 6
+                    moveBot(8, FORWARD, 0.5); //was 14
                     sleep(100);
-                    moveBotcrab(10, RIGHT1, 0.5);//was 6
+                    moveBotcrab(6, RIGHT1, 0.5);
                     sleep(100);
-                    imuTurn(115, 0.4);//was 90
+                    imuTurn(90, 0.4);
                     sleep(100);
                     moveBot(8, FORWARD, 0.5);
                     //r.Arm.setPower(0.5);
@@ -197,17 +226,13 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
 
                 if ((position == 2 || position == 0) && !minCheck) { //center -good
 
-                    moveBotcrab(18, RIGHT1, 0.5);//was 12
+                    moveBotcrab(18, RIGHT1, 0.5);
                     sleep(100);
-                   // moveBot(1, BACKWARD, 0.5);
-                   // sleep(100);
-                   // moveBotcrab(6, RIGHT1, 0.5);
-                    sleep(100);
-                    moveBotcrab(5, LEFT1, 0.5);//was 6
+                    moveBotcrab(5, LEFT1, 0.5);
                     sleep(100);
                     imuTurn(90,0.4);
                     sleep(100);
-                    moveBot(14, FORWARD, 0.5);//was 8
+                    moveBot(8, FORWARD, 0.5);
                     //sleep(100);
                     //r.Arm.setPower(-0.5);
                     //sleep(1500);
@@ -224,28 +249,84 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
                     sleep(100);
                     moveBot(10, BACKWARD, 0.5); //was 14
                     sleep(100);
-                    moveBotcrab(10, RIGHT1, 0.5);//was 6
+                    moveBotcrab(6, RIGHT1, 0.5);
                     sleep(100);
-                    imuTurn(55, 0.4);//was 90
+                    imuTurn(70, 0.4);
                     sleep(100);
-                    moveBot(8, FORWARD, 0.5);
+                    moveBot(6, FORWARD, 0.5);
                     minCheck = true;
 
 
                 }
 
-                if (TFtrue == false) {
-                    moveBot(6, FORWARD, 0.5);
-                    sleep(100);
+                if (part2 == false) {
+
+                    if (position == 1) { //left - not tested
+
+                    }
+
+                    else if (position == 2) { //center - not tested
+
+                    } else { //right - not tested
+
+                    }
+
+                    while (r.FLMotor.getCurrentPosition() < 20000/*probably wrong distance - change*/) {
+                        if (r.sensorRange1.getDistance(DistanceUnit.INCH) > 3) {
+                            r.FLMotor.setPower(0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90)); //no idea if this will work
+                            r.FRMotor.setPower(0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                            r.BLMotor.setPower(0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                            r.BRMotor.setPower(0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                        } else if (r.sensorRange1.getDistance(DistanceUnit.INCH) < 3) {
+                            r.FLMotor.setPower(0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                            r.FRMotor.setPower(0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                            r.BLMotor.setPower(0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                            r.BRMotor.setPower(0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                        } else {
+                            r.FLMotor.setPower(0.5);
+                            r.FRMotor.setPower(0.5);
+                            r.BLMotor.setPower(0.5);
+                            r.BRMotor.setPower(0.5);
+
+                        }
+                        r.FLMotor.getCurrentPosition();
+                    }
+                    r.stopDrivetrain();
+                    sleep(400);
+
                     r.tfd.setPosition(0.0);
                     sleep(1000);
                     r.tfd.setPosition(0.6);
-                    TFtrue = true;
-                    }
+                    sleep(200);
 
+                    while (r.FLMotor.getCurrentPosition() < 20000/*probably wrong distance - change*/) { //needs to be backwards-think this will work, power is opposite and +- is switched
+                        if (r.sensorRange1.getDistance(DistanceUnit.INCH) > 3) {
+                            r.FLMotor.setPower(-0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90)); //no idea if this will work
+                            r.FRMotor.setPower(-0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                            r.BLMotor.setPower(-0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                            r.BRMotor.setPower(-0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                        } else if (r.sensorRange1.getDistance(DistanceUnit.INCH) < 3) {
+                            r.FLMotor.setPower(-0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                            r.FRMotor.setPower(-0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                            r.BLMotor.setPower(-0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                            r.BRMotor.setPower(-0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                        } else {
+                            r.FLMotor.setPower(-0.5);
+                            r.FRMotor.setPower(-0.5);
+                            r.BLMotor.setPower(-0.5);
+                            r.BRMotor.setPower(-0.5);
+
+                        }
+                        r.FLMotor.getCurrentPosition();
+                    }
+                    r.stopDrivetrain();
+
+                    part2 = true;
 
                 }
+
 
             }
         }
     }
+//}

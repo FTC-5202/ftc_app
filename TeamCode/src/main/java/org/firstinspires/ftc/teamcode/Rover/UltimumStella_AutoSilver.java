@@ -43,10 +43,10 @@ public class UltimumStella_AutoSilver extends UltimumStella_AutoMethods {
 
             // if the digital channel returns true it's HIGH and the button is unpressed.
             //if (r.sensorTouch.getState() == true && (timeElapsed < 10000)) {
-            while (r.sensorTouch.getState() == true && (timeElapsed < 20000) && !isStopRequested()) {
+           /* while (r.sensorTouch.getState() == true && (timeElapsed < 20000) && !isStopRequested()) {
              //   r.Lift.setPower(LiftPow);
                 timeElapsed = System.currentTimeMillis() - start;
-            }
+            }*/
 
             if (timeElapsed > 20000) {
                 MotorPow = 0;

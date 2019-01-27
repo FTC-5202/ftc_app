@@ -13,13 +13,13 @@ public class UltimumStella_PostMatch extends BIGRoverTeleOpMethods {
 
         public void loop(){
 
-            if (r.sensorTouch.getState() == false) {
+          /*  if (r.sensorTouch.getState() == false) {
                // r.Lift.setPower(-1.0);
-            }
+            }*/
 
-            else {
+            //else {
               //  r.Lift.setPower(0);
-            }
+           // }
         }
 
     }
