@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode.Rover;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 import java.util.List;
@@ -176,7 +178,7 @@ public class Auto_Gold_Full2 extends UltimumStella_AutoMethods {
 
                 if (position == 1 && !minCheck) { //left -good
 
-                    moveBotcrab(12, RIGHT1, 0.5);
+                    moveBotcrab(13, RIGHT1, 0.5);
                     sleep(100);
                     moveBot(8.5, FORWARD, 0.5); //was 6
                     sleep(100);
@@ -240,7 +242,11 @@ public class Auto_Gold_Full2 extends UltimumStella_AutoMethods {
 
 
                     if (position == 1) { // LEFT - testing
-                        imuTurn(-90, 0.4);
+                        imuTurn(35, 0.4);
+                        moveBotcrab(5, LEFT1, 0.35);
+                        sleep(100);
+                        moveBot(72, BACKWARD, 0.35);
+                        sleep(100);
 
                     }
 
@@ -252,30 +258,42 @@ public class Auto_Gold_Full2 extends UltimumStella_AutoMethods {
 
                     }
 
-                /*while (r.FLMotor.getCurrentPosition() < 10000) { //probably wrong distance
+                    /*r.FLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    r.FRMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    r.BLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    r.BRMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                    r.FLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    r.FRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    r.BLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    r.BRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                    //checkpoint
+                while (r.FLMotor.getCurrentPosition() < 2000) { //probably wrong distance
                     if (r.sensorRange1.getDistance(DistanceUnit.INCH) > 3) {
-                        r.FLMotor.setPower(0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90)); //no idea if this will work
-                        r.FRMotor.setPower(0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                        r.BLMotor.setPower(0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                        r.BRMotor.setPower(0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                        r.FLMotor.setPower(-0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90)); //no idea if this will work
+                        r.FRMotor.setPower(-0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                        r.BLMotor.setPower(-0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                        r.BRMotor.setPower(-0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
                     } else if (r.sensorRange1.getDistance(DistanceUnit.INCH) < 3) {
-                        r.FLMotor.setPower(0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                        r.FRMotor.setPower(0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                        r.BLMotor.setPower(0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                        r.BRMotor.setPower(0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                        r.FLMotor.setPower(-0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                        r.FRMotor.setPower(-0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                        r.BLMotor.setPower(-0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                        r.BRMotor.setPower(-0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
                     } else {
-                        r.FLMotor.setPower(0.5);
-                        r.FRMotor.setPower(0.5);
-                        r.BLMotor.setPower(0.5);
-                        r.BRMotor.setPower(0.5);
+                        r.FLMotor.setPower(-0.5);
+                        r.FRMotor.setPower(-0.5);
+                        r.BLMotor.setPower(-0.5);
+                        r.BRMotor.setPower(-0.5);
 
                     }
+                    */
                     r.FLMotor.getCurrentPosition();
                 }
                 r.stopDrivetrain();
 
-                    r.Arm.setPower(0.5);
-                    sleep(1500);*/
+                    //r.Arm.setPower(0.5);
+                    sleep(1500);
 
                 TFtrue = true;
                     }
@@ -285,4 +303,3 @@ public class Auto_Gold_Full2 extends UltimumStella_AutoMethods {
 
             }
         }
-    }
