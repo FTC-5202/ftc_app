@@ -66,7 +66,7 @@ public class Rover_Wall_Follow extends UltimumStella_AutoMethods {
         boolean encoderSET = false;
 
         telemetry.addData(">", "Press Play to start tracking");
-        telemetry.addData("DistanceToWall", (r.sensorRange2.getDistance(DistanceUnit.INCH)));
+        telemetry.addData("DistanceToWall", (r.FRDistance.getDistance(DistanceUnit.INCH)));
         telemetry.update();
 
 
@@ -86,23 +86,23 @@ public class Rover_Wall_Follow extends UltimumStella_AutoMethods {
 
                 //attempting to follow wall while robot is moving backwards
                 //sensor is on the FL corner, which is on the wall-side currently
-                /*while (r.FLMotor.getCurrentPosition() < 1000) { //probably wrong distance
-                    if (r.sensorRange2.getDistance(DistanceUnit.INCH) > 3) {
+                /*while (r.FLMotor.getCurrentPosition() < 2000) { //probably wrong distance
+                    if (r.FRDistance.getDistance(DistanceUnit.INCH) > 5) {
 
-                        telemetry.addData("DistanceToWall", (r.sensorRange2.getDistance(DistanceUnit.INCH)));
+                        telemetry.addData("DistanceToWall", (r.FRDistance.getDistance(DistanceUnit.INCH)));
                         telemetry.update();
 
-                        r.FLMotor.setPower(0.2 + (r.sensorRange2.getDistance(DistanceUnit.INCH) / 900)); //no idea if this will work
-                        r.FRMotor.setPower(0.2 - (r.sensorRange2.getDistance(DistanceUnit.INCH) / 900));
-                        r.BLMotor.setPower(0.2 + (r.sensorRange2.getDistance(DistanceUnit.INCH) / 900));
-                        r.BRMotor.setPower(0.2 - (r.sensorRange2.getDistance(DistanceUnit.INCH) / 900));
-                    } else if (r.sensorRange2.getDistance(DistanceUnit.INCH) < 3) {
-                        telemetry.addData("DistanceToWall", (r.sensorRange2.getDistance(DistanceUnit.INCH)));
+                        r.FLMotor.setPower(0.2 + (r.FRDistance.getDistance(DistanceUnit.INCH) / 300)); //no idea if this will work
+                        r.FRMotor.setPower(0.2 - (r.FRDistance.getDistance(DistanceUnit.INCH) / 300));
+                        r.BLMotor.setPower(0.2 + (r.FRDistance.getDistance(DistanceUnit.INCH) / 300));
+                        r.BRMotor.setPower(0.2 - (r.FRDistance.getDistance(DistanceUnit.INCH) / 300));
+                    } else if (r.FRDistance.getDistance(DistanceUnit.INCH) < 3) {
+                        telemetry.addData("DistanceToWall", (r.FRDistance.getDistance(DistanceUnit.INCH)));
                         telemetry.update();
-                        r.FLMotor.setPower(0.2 - (r.sensorRange2.getDistance(DistanceUnit.INCH) / 900));
-                        r.FRMotor.setPower(0.2 + (r.sensorRange2.getDistance(DistanceUnit.INCH) / 900));
-                        r.BLMotor.setPower(0.2 - (r.sensorRange2.getDistance(DistanceUnit.INCH) / 900));
-                        r.BRMotor.setPower(0.2 + (r.sensorRange2.getDistance(DistanceUnit.INCH) / 900));
+                        r.FLMotor.setPower(0.2 - (r.FRDistance.getDistance(DistanceUnit.INCH) / 300));
+                        r.FRMotor.setPower(0.2 + (r.FRDistance.getDistance(DistanceUnit.INCH) / 300));
+                        r.BLMotor.setPower(0.2 - (r.FRDistance.getDistance(DistanceUnit.INCH) / 300));
+                        r.BRMotor.setPower(0.2 + (r.FRDistance.getDistance(DistanceUnit.INCH) / 300));
                     } else {
                         r.FLMotor.setPower(0.2);
                         r.FRMotor.setPower(0.2);
@@ -112,21 +112,22 @@ public class Rover_Wall_Follow extends UltimumStella_AutoMethods {
                     }
 
                    // r.FLMotor.getCurrentPosition();
-                }*/
-                while (r.FLMotor.getCurrentPosition() < 1000) { //probably wrong distance
-                    if (r.sensorRange2.getDistance(DistanceUnit.INCH) > 5) {
+                }
+                */
 
-                        telemetry.addData("DistanceToWall", (r.sensorRange2.getDistance(DistanceUnit.INCH)));
-                        telemetry.update();
+                while (r.FLMotor.getCurrentPosition() < 2000) { //probably wrong distance
+                    if ((r.FRDistance.getDistance(DistanceUnit.INCH) > 5) && (r.BRDistance.getDistance(DistanceUnit.INCH) > 5)) {
 
-                        moveBotcrab(2, LEFT1, 0.3);
+                        //telemetry.addData("DistanceToWall", (r.FRDistance.getDistance(DistanceUnit.INCH)));
+                        //telemetry.update();
 
-                    } else if (r.sensorRange2.getDistance(DistanceUnit.INCH) < 3) {
-                        telemetry.addData("DistanceToWall", (r.sensorRange2.getDistance(DistanceUnit.INCH)));
-                        telemetry.update();
+                        moveBotcrab(1, RIGHT1, 0.5);
 
-                        moveBotcrab(2, RIGHT1, 0.3);
+                    } else if ((r.FRDistance.getDistance(DistanceUnit.INCH) < 3)&& (r.BRDistance.getDistance(DistanceUnit.INCH) <3)) {
+                        //telemetry.addData("DistanceToWall", (r.FRDistance.getDistance(DistanceUnit.INCH)));
+                        //telemetry.update();
 
+                        moveBotcrab(1, LEFT1, 0.5);
 
                     } else {
                         r.FLMotor.setPower(0.2);
@@ -138,6 +139,33 @@ public class Rover_Wall_Follow extends UltimumStella_AutoMethods {
 
                     // r.FLMotor.getCurrentPosition();
                 }
+
+               /* while (r.FLMotor.getCurrentPosition() < 1500) { //probably wrong distance
+                    if (r.FRDistance.getDistance(DistanceUnit.INCH) > 5) {
+
+                        telemetry.addData("DistanceToWall", (r.FRDistance.getDistance(DistanceUnit.INCH)));
+                        telemetry.update();
+
+                        moveBotcrab(1, LEFT1, 0.6);
+
+                    } else if (r.FRDistance.getDistance(DistanceUnit.INCH) < 3) {
+                        telemetry.addData("DistanceToWall", (r.FRDistance.getDistance(DistanceUnit.INCH)));
+                        telemetry.update();
+
+                        moveBotcrab(1, RIGHT1, 0.6);
+
+
+                    } else {
+                        r.FLMotor.setPower(0.6);
+                        r.FRMotor.setPower(0.6);
+                        r.BLMotor.setPower(0.6);
+                        r.BRMotor.setPower(0.6);
+
+                    }
+
+                    // r.FLMotor.getCurrentPosition();
+                }
+                */
                 r.stopDrivetrain();
 
                 TFtrue = true;
