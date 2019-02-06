@@ -20,7 +20,6 @@ public class Auto_Gold_Full2 extends UltimumStella_AutoMethods {
         setupAll();
 
 
-
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
         // provide positional information.
@@ -198,13 +197,13 @@ public class Auto_Gold_Full2 extends UltimumStella_AutoMethods {
 
                     moveBotcrab(18, RIGHT1, 0.5);//was 12
                     sleep(100);
-                   // moveBot(1, BACKWARD, 0.5);
-                   // sleep(100);
-                   // moveBotcrab(6, RIGHT1, 0.5);
+                    // moveBot(1, BACKWARD, 0.5);
+                    // sleep(100);
+                    // moveBotcrab(6, RIGHT1, 0.5);
                     sleep(100);
                     moveBotcrab(5, LEFT1, 0.5);//was 6
                     sleep(100);
-                    imuTurn(90,0.4);
+                    imuTurn(90, 0.4);
                     sleep(100);
                     moveBot(14, FORWARD, 0.5);//was 8
                     //sleep(100);
@@ -248,13 +247,9 @@ public class Auto_Gold_Full2 extends UltimumStella_AutoMethods {
                         moveBot(72, BACKWARD, 0.35);
                         sleep(100);
 
-                    }
+                    } else if (position == 2 || position == 0) { // CENTER -  not tested
 
-                    else if (position == 2 || position == 0) { // CENTER -  not tested
-
-                    }
-
-                    else  { //RIGHT - not tested
+                    } else { //RIGHT - not tested
 
                     }
 
@@ -267,39 +262,68 @@ public class Auto_Gold_Full2 extends UltimumStella_AutoMethods {
                     r.FRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     r.BLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     r.BRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    */
 
                     //checkpoint
-                while (r.FLMotor.getCurrentPosition() < 2000) { //probably wrong distance
-                    if (r.sensorRange1.getDistance(DistanceUnit.INCH) > 3) {
-                        r.FLMotor.setPower(-0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90)); //no idea if this will work
-                        r.FRMotor.setPower(-0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                        r.BLMotor.setPower(-0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                        r.BRMotor.setPower(-0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                    } else if (r.sensorRange1.getDistance(DistanceUnit.INCH) < 3) {
-                        r.FLMotor.setPower(-0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                        r.FRMotor.setPower(-0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                        r.BLMotor.setPower(-0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                        r.BRMotor.setPower(-0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                    while (r.FLMotor.getCurrentPosition() < 2000) { //probably wrong distance
+                        if ((r.FRDistance.getDistance(DistanceUnit.INCH) > 5) && (r.BRDistance.getDistance(DistanceUnit.INCH) > 5)) {
+
+                            //telemetry.addData("DistanceToWall", (r.FRDistance.getDistance(DistanceUnit.INCH)));
+                            //telemetry.update();
+
+                            moveBotcrab(1, RIGHT1, 0.5);
+
+                        } else if ((r.FRDistance.getDistance(DistanceUnit.INCH) < 3) && (r.BRDistance.getDistance(DistanceUnit.INCH) < 3)) {
+                            //telemetry.addData("DistanceToWall", (r.FRDistance.getDistance(DistanceUnit.INCH)));
+                            //telemetry.update();
+
+                            moveBotcrab(1, LEFT1, 0.5);
+
+                        } else {
+                            r.FLMotor.setPower(0.2);
+                            r.FRMotor.setPower(0.2);
+                            r.BLMotor.setPower(0.2);
+                            r.BRMotor.setPower(0.2);
+
+                        }
+
+                        // r.FLMotor.getCurrentPosition();
+                    }
+
+               /* while (r.FLMotor.getCurrentPosition() < 1500) { //probably wrong distance
+                    if (r.FRDistance.getDistance(DistanceUnit.INCH) > 5) {
+
+                        telemetry.addData("DistanceToWall", (r.FRDistance.getDistance(DistanceUnit.INCH)));
+                        telemetry.update();
+
+                        moveBotcrab(1, LEFT1, 0.6);
+
+                    } else if (r.FRDistance.getDistance(DistanceUnit.INCH) < 3) {
+                        telemetry.addData("DistanceToWall", (r.FRDistance.getDistance(DistanceUnit.INCH)));
+                        telemetry.update();
+
+                        moveBotcrab(1, RIGHT1, 0.6);
+
+
                     } else {
-                        r.FLMotor.setPower(-0.5);
-                        r.FRMotor.setPower(-0.5);
-                        r.BLMotor.setPower(-0.5);
-                        r.BRMotor.setPower(-0.5);
+                        r.FLMotor.setPower(0.6);
+                        r.FRMotor.setPower(0.6);
+                        r.BLMotor.setPower(0.6);
+                        r.BRMotor.setPower(0.6);
 
                     }
-                    */
-                    r.FLMotor.getCurrentPosition();
+
+                    // r.FLMotor.getCurrentPosition();
                 }
-                r.stopDrivetrain();
+                */
+                    r.stopDrivetrain();
 
-                    //r.Arm.setPower(0.5);
-                    sleep(1500);
-
-                TFtrue = true;
-                    }
-
-
+                    TFtrue = true;
                 }
+
 
             }
+
         }
+    }
+}

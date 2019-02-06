@@ -272,16 +272,16 @@ public class Auto_Silver_Full extends UltimumStella_AutoMethods  {
                     }
 
                     while (r.FLMotor.getCurrentPosition() < 20000/*probably wrong distance - change*/) {
-                        if (r.sensorRange1.getDistance(DistanceUnit.INCH) > 3) {
-                            r.FLMotor.setPower(0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90)); //no idea if this will work
-                            r.FRMotor.setPower(0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                            r.BLMotor.setPower(0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                            r.BRMotor.setPower(0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                        } else if (r.sensorRange1.getDistance(DistanceUnit.INCH) < 3) {
-                            r.FLMotor.setPower(0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                            r.FRMotor.setPower(0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                            r.BLMotor.setPower(0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                            r.BRMotor.setPower(0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                        if (r.BRDistance.getDistance(DistanceUnit.INCH) > 3) {
+                            r.FLMotor.setPower(0.5 + (r.BRDistance.getDistance(DistanceUnit.INCH) / 90)); //no idea if this will work
+                            r.FRMotor.setPower(0.5 - (r.BRDistance.getDistance(DistanceUnit.INCH) / 90));
+                            r.BLMotor.setPower(0.5 + (r.BRDistance.getDistance(DistanceUnit.INCH) / 90));
+                            r.BRMotor.setPower(0.5 - (r.BRDistance.getDistance(DistanceUnit.INCH) / 90));
+                        } else if (r.BRDistance.getDistance(DistanceUnit.INCH) < 3) {
+                            r.FLMotor.setPower(0.5 - (r.BRDistance.getDistance(DistanceUnit.INCH) / 90));
+                            r.FRMotor.setPower(0.5 + (r.BRDistance.getDistance(DistanceUnit.INCH) / 90));
+                            r.BLMotor.setPower(0.5 - (r.BRDistance.getDistance(DistanceUnit.INCH) / 90));
+                            r.BRMotor.setPower(0.5 + (r.BRDistance.getDistance(DistanceUnit.INCH) / 90));
                         } else {
                             r.FLMotor.setPower(0.5);
                             r.FRMotor.setPower(0.5);
@@ -300,16 +300,16 @@ public class Auto_Silver_Full extends UltimumStella_AutoMethods  {
                     sleep(200);
 
                     while (r.FLMotor.getCurrentPosition() < 20000/*probably wrong distance - change*/) { //needs to be backwards-think this will work, power is opposite and +- is switched
-                        if (r.sensorRange1.getDistance(DistanceUnit.INCH) > 3) {
-                            r.FLMotor.setPower(-0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90)); //no idea if this will work
-                            r.FRMotor.setPower(-0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                            r.BLMotor.setPower(-0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                            r.BRMotor.setPower(-0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                        } else if (r.sensorRange1.getDistance(DistanceUnit.INCH) < 3) {
-                            r.FLMotor.setPower(-0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                            r.FRMotor.setPower(-0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                            r.BLMotor.setPower(-0.5 + (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
-                            r.BRMotor.setPower(-0.5 - (r.sensorRange1.getDistance(DistanceUnit.INCH) / 90));
+                        if (r.BRDistance.getDistance(DistanceUnit.INCH) > 3) {
+                            r.FLMotor.setPower(-0.5 - (r.BRDistance.getDistance(DistanceUnit.INCH) / 90)); //no idea if this will work
+                            r.FRMotor.setPower(-0.5 + (r.BRDistance.getDistance(DistanceUnit.INCH) / 90));
+                            r.BLMotor.setPower(-0.5 - (r.BRDistance.getDistance(DistanceUnit.INCH) / 90));
+                            r.BRMotor.setPower(-0.5 + (r.BRDistance.getDistance(DistanceUnit.INCH) / 90));
+                        } else if (r.BRDistance.getDistance(DistanceUnit.INCH) < 3) {
+                            r.FLMotor.setPower(-0.5 + (r.BRDistance.getDistance(DistanceUnit.INCH) / 90));
+                            r.FRMotor.setPower(-0.5 - (r.BRDistance.getDistance(DistanceUnit.INCH) / 90));
+                            r.BLMotor.setPower(-0.5 + (r.BRDistance.getDistance(DistanceUnit.INCH) / 90));
+                            r.BRMotor.setPower(-0.5 - (r.BRDistance.getDistance(DistanceUnit.INCH) / 90));
                         } else {
                             r.FLMotor.setPower(-0.5);
                             r.FRMotor.setPower(-0.5);

@@ -89,14 +89,15 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
                 while (timeElapsed < 2000 && !isStopRequested()) {
                     timeElapsed = System.currentTimeMillis() - start;
 
-                    if (tfod != null) { //we have not yet activated TFOD
-                        //if (tfod !=null && timeElapsed >= ?) {
-                        // getUpdatedRecognitions() will return null if no new information is available since
-                        // the last time that call was made.
+                    if (tfod != null) {
 
                         /**The following is basically the TFOD sample program code
-                         *  it determines where the gold mineral and the silver minerals are located
+                         *  It determines where the gold mineral and the silver minerals are located
+                         *  EXCEPT: we are only looking for two minerals in the robot controller PHONE'S
+                         *  Field of Vision
                          */
+
+                        //In the following: if we see two objects, are they both silver, or one gold and one silver
                         List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                         if (updatedRecognitions != null) {
                             telemetry.addData("# Object Detected", updatedRecognitions.size());
@@ -105,46 +106,32 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
                             if (updatedRecognitions.size() == 2) {
                                 int goldMineralX = -1;
                                 int silverMineral1X = -1;
-                                int silverMineral2X = -1;
-                                //telemetry.addData("Update Recognitions", updatedRecognitions);
-                                //telemetry.update();
-                                //sleep(250);
                                 for (Recognition recognition : updatedRecognitions) {
                                     if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                                         goldMineralX = (int) recognition.getLeft();
                                     } else if (silverMineral1X == -1) {
                                         silverMineral1X = (int) recognition.getLeft();
-                                    } else {
-                                        silverMineral2X = (int) recognition.getLeft();
                                     }
                                 }
 
-                                //telemetry.addData("gold", goldMineralX);
-                                //telemetry.addData("silver 1", silverMineral1X);
-                                //telemetry.addData("silver 2", silverMineral2X);
-                                //telemetry.update();
-                                //sleep(250);
-
                                 /**
-                                 * If all the min values are being registered then we move on
-                                 * if the gold min val hasn't changed from above
-                                 * Gold Mineral Position will register as left
+                                 * If all the mineral values are being registered then we move on
+                                 * if the gold mineral is still -1 (not seen)
+                                 * Gold Mineral Position will register as right
                                  * tfod = null shows we have gone through this and don't want to go through all of these again
                                  *
-                                 * if the gold min val is less than silver min val 1
+                                 * if the gold mineral val is less than silver mineral val 1
                                  * Gold Mineral Position will register as center
                                  *
-                                 * if gold min val is greater than silver min val 1
-                                 * Gold Mineral Position will register as right
+                                 * if gold mineral val is greater than silver mineral val 1
+                                 * Gold Mineral Position will register as left
                                  */
 
                                 if (goldMineralX != -1 || silverMineral1X != -1) {
-                                    if (goldMineralX == -1) { //needs FIX
+                                    if (goldMineralX == -1) {
                                         position = 3; //was 1
                                         telemetry.addData("Gold Mineral Position", "Right"); //GOOD
                                     } else if (goldMineralX < silverMineral1X) {
-                                        //if (goldMineralX != -1 || silverMineral1X != -1) {
-                                        //(goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
                                         position = 1;
                                         telemetry.addData("Gold Mineral Position", "Left");
 
@@ -170,7 +157,7 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
 
 
                 if (!minCheck) {
-                    moveBotcrab(5, RIGHT1, 0.4);
+                    moveBotcrab(7, RIGHT1, 0.4); //was 5
                     sleep(1000);
                     moveBot(2, FORWARD, 0.4);
                     sleep(100);
@@ -178,6 +165,8 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
                 //moveBotcrab(7, RIGHT1, 0.5);
 
                 if (position == 1 && !minCheck) { //left -good
+                    //the following is the path that our robot will take when recognizing the gold mineral on the left
+                    //With our robots orientation: we move forward, move to the left, forward again, turn, then knock off gold min
 
                     moveBotcrab(12, RIGHT1, 0.5);
                     sleep(100);
@@ -188,9 +177,6 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
                     imuTurn(115, 0.4);//was 90
                     sleep(100);
                     moveBot(8, FORWARD, 0.5);
-                    //r.Arm.setPower(0.5);
-                    //sleep(1000);
-                    //r.Arm.setPower(0);
                     minCheck = true;
 
                 }
@@ -220,9 +206,9 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
 
                 if (position == 3 && !minCheck) { //right -good
 
-                    moveBotcrab(12, RIGHT1, 0.5);
+                    moveBotcrab(16, RIGHT1, 0.5); //was 12
                     sleep(100);
-                    moveBot(10, BACKWARD, 0.5); //was 14
+                    moveBot(5, BACKWARD, 0.5); //was 10
                     sleep(100);
                     moveBotcrab(10, RIGHT1, 0.5);//was 6
                     sleep(100);
@@ -234,7 +220,8 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
 
                 }
 
-                if (TFtrue == false) {
+                if (TFtrue == false) { // this val is used for when we are done looking at the minerals and have completed our path
+                    //we will move forward and release the team marker into the depot
                     moveBot(6, FORWARD, 0.5);
                     sleep(100);
                     r.tfd.setPosition(0.0);

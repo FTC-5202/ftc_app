@@ -120,6 +120,7 @@ public class BigRoverMecTestDrive extends BIGRoverTeleOpMethods {
                        tfd_state = true;
                    } else if (tfd_state == true) {
                        r.tfd.setPosition(0.6);
+                       tfd_state = false;
                    }
                    a_pressed = false;
                }
@@ -134,13 +135,13 @@ public class BigRoverMecTestDrive extends BIGRoverTeleOpMethods {
             rb1Pressed = false;
         }
         if (Math.abs(gamepad1.left_stick_x) <= (zoneWidth) || (Math.abs(gamepad1.right_stick_x)) <= (zoneWidth)) {
-            Tank = 1.0;
-            if (!isForward) {
-                BL = (-gamepad1.right_stick_y);
+            Tank = 1.0; // threshold for joystick val too determine tank of mechanum drive
+            if (!isForward) { //when polarity is flipped
+                BL = (-gamepad1.right_stick_y); //set power for the motors with the right and left stick y val
                 BR = (-gamepad1.left_stick_y);
                 FL = (-gamepad1.right_stick_y);
                 FR = (-gamepad1.left_stick_y);
-            } else {
+            } else { //when polarity isn't flipped
                 BL = (gamepad1.left_stick_y);
                 BR = (gamepad1.right_stick_y);
                 FL = (gamepad1.left_stick_y);
@@ -151,14 +152,14 @@ public class BigRoverMecTestDrive extends BIGRoverTeleOpMethods {
 
 
         if (Math.abs(gamepad1.left_stick_x) >= zoneWidth || (Math.abs(gamepad1.right_stick_x) >= zoneWidth)) {
-            Tank = 2.0;
+            Tank = 2.0; // threshold for joystick val too determine tank of mechanum drive
 
-            if (!isForward) {
-                BL = (-gamepad1.right_stick_x);
+            if (!isForward) { //when polarity is flipped
+                BL = (-gamepad1.right_stick_x); //set power for the motors with the right and left stick y val
                 BR = (gamepad1.left_stick_x);
                 FL = (gamepad1.right_stick_x);
                 FR = (-gamepad1.left_stick_x);
-            } else {
+            } else { //when polarity is flipped
                 BL = (gamepad1.left_stick_x);
                 BR = (-gamepad1.right_stick_x);
                 FL = (-gamepad1.left_stick_x);
@@ -173,15 +174,38 @@ public class BigRoverMecTestDrive extends BIGRoverTeleOpMethods {
         r.FLMotor.setPower(FL);
         r.FRMotor.setPower(FR);
 
-        if (gamepad1.left_trigger > 0.5) {
-            r.Hang.setPower(1.0);
-        } else if (gamepad1.right_trigger > 0.5) {
-            r.Hang.setPower(-1.0);
-        } else {
-            r.Hang.setPower(0);
+        /*if (gamepad1.left_trigger > 0 && gamepad1.left_trigger < 0.5) {
+            r.Hang.setPower(0.25);
         }
 
+        else if (gamepad1.left_trigger >= 0.5 && gamepad1.left_trigger < 0.8) {
+                r.Hang.setPower(0.5);
+            }
 
+        else if (gamepad1.left_trigger >= 0.8){
+            r.Hang.setPower(1.0);
+        }
+        else {
+            r.Hang.setPower(0);
+        }*/
+
+        if (gamepad1.left_trigger > 0.5) {
+            r.Hang.setPower(1.0);
+        }
+
+        if (gamepad1.right_trigger > 0.2 && gamepad1.right_trigger < 0.5) {
+            r.Hang.setPower(-0.25);
+        }
+        else if (gamepad1.right_trigger >= 0.5 && gamepad1.right_trigger < 0.8) {
+            r.Hang.setPower(-0.5);
+        }
+
+        else if (gamepad1.right_trigger >= 0.8){
+            r.Hang.setPower(-1.0);
+        }
+        else {
+            r.Hang.setPower(0);
+        }
 
     }//end of loop
 } //end of extends BIGRoverTeleOpMethods
