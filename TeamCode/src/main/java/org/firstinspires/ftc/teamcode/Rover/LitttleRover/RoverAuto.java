@@ -34,7 +34,7 @@ import static org.firstinspires.ftc.teamcode.Rover.LitttleRover.RoverAutoMethods
 //import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.
 
 @Autonomous(name="RoverAuto", group ="Rover")
-//@Disabled
+@Disabled
 public class RoverAuto extends RoverAutoMethods {
     //    VuforiaLocalizer vuforia;
 //    boolean Target1;

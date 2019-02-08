@@ -18,7 +18,7 @@ import static com.qualcomm.hardware.bosch.BNO055IMU.AngleUnit.DEGREES;
  * Created by FIRSTUser on 6/18/2018.
  */
 @Autonomous (name= "NEWIMU2DummyPID")
-//@Disabled
+@Disabled
 public class NewIMU2DummyPID extends LinearOpMode {
 
    /* public DcMotor BLMotor = null;

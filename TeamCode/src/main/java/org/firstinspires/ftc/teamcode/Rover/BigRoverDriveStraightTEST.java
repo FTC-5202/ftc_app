@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.Rover;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Rover.LitttleRover.RoverAutoMethods;
 
 @Autonomous(name="BRDriveStraightTEST", group ="Rover")
-//@Disabled
+@Disabled
 public class BigRoverDriveStraightTEST extends UltimumStella_AutoMethods {
 
     @Override

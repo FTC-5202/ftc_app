@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous (name="NewRobotHang")
-//@Disabled
+@Disabled
 public class NewRobotHang extends LinearOpMode {
 
     @Override

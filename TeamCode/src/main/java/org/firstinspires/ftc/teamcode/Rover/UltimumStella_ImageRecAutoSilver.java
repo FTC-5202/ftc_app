@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Rover;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
@@ -13,6 +14,7 @@ import static org.firstinspires.ftc.teamcode.Rover.UltimumStella_AutoMethods.Dir
 import static org.firstinspires.ftc.teamcode.Rover.UltimumStella_AutoMethods.Direction.RIGHT;
 
 @Autonomous (name="UltimumStella ImageRecSilver")
+@Disabled
 public class UltimumStella_ImageRecAutoSilver extends UltimumStella_AutoMethods {
 
     @Override

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Rover;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import java.util.List;
 
 @Autonomous (name="Auto Gold Full 2")
+@Disabled
 public class Auto_Gold_Full2 extends UltimumStella_AutoMethods {
 
     @Override

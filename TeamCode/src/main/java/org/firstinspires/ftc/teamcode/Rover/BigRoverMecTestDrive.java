@@ -150,7 +150,6 @@ public class BigRoverMecTestDrive extends BIGRoverTeleOpMethods {
 
         }
 
-
         if (Math.abs(gamepad1.left_stick_x) >= zoneWidth || (Math.abs(gamepad1.right_stick_x) >= zoneWidth)) {
             Tank = 2.0; // threshold for joystick val too determine tank of mechanum drive
 
@@ -174,41 +173,28 @@ public class BigRoverMecTestDrive extends BIGRoverTeleOpMethods {
         r.FLMotor.setPower(FL);
         r.FRMotor.setPower(FR);
 
-        /*if (gamepad1.left_trigger > 0 && gamepad1.left_trigger < 0.5) {
-            r.Hang.setPower(0.25);
-        }
+        if (gamepad1.left_trigger > 0.2 && gamepad1.left_trigger < 0.5) {
+            r.Hang.setPower(0.25); }
 
         else if (gamepad1.left_trigger >= 0.5 && gamepad1.left_trigger < 0.8) {
-                r.Hang.setPower(0.5);
-            }
+                r.Hang.setPower(0.5); }
 
         else if (gamepad1.left_trigger >= 0.8){
-            r.Hang.setPower(1.0);
-        }
-        else {
-            r.Hang.setPower(0);
-        }*/
+            r.Hang.setPower(1.0); }
 
-        if (gamepad1.left_trigger > 0.5) {
-            r.Hang.setPower(1.0);
-        }
+        else if (gamepad1.right_trigger > 0.2 && gamepad1.right_trigger < 0.5) {
+            r.Hang.setPower(-0.25); }
 
-        if (gamepad1.right_trigger > 0.2 && gamepad1.right_trigger < 0.5) {
-            r.Hang.setPower(-0.25);
-        }
         else if (gamepad1.right_trigger >= 0.5 && gamepad1.right_trigger < 0.8) {
-            r.Hang.setPower(-0.5);
-        }
+            r.Hang.setPower(-0.5);        }
 
         else if (gamepad1.right_trigger >= 0.8){
-            r.Hang.setPower(-1.0);
-        }
-        else {
-            r.Hang.setPower(0);
-        }
+            r.Hang.setPower(-1.0);        }
 
-    }//end of loop
-} //end of extends BIGRoverTeleOpMethods
+        else {r.Hang.setPower(0.0);}
+
+    }  //end of loop
+}   //end of extends BIGRoverTeleOpMethods
 
 
 

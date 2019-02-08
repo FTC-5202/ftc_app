@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.robotcontroller.external.samples;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -38,7 +39,7 @@ import com.vuforia.CameraDevice;
  * Demonstrates empty OpMode
  */
 @TeleOp(name = "Concept: Flashlight", group = "Concept")
-//@Disabled
+@Disabled
 public class ConceptFlashlight extends OpMode {
 
   private ElapsedTime runtime = new ElapsedTime();

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OldMisc;
 import android.app.Activity;
 import android.view.View;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -12,7 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
 @TeleOp(name = "Theo: TheoTeleop", group = "Theo")
-//@Disabled
+@Disabled
 public class KLubSpec extends LinearOpMode {
 
     /* Declare OpMode members. */
