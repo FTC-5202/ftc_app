@@ -164,7 +164,7 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
 
 
                 if (!minCheck) {
-                    moveBotcrab(5, RIGHT1, 0.4);
+                    moveBotcrab(7, RIGHT1, 0.4);
                     sleep(1000);
                     moveBot(2, FORWARD, 0.4);
                     sleep(100);
@@ -204,7 +204,7 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
                 }
                 //moveBotcrab(7, RIGHT1, 0.5);
 */
-                if (position == 1 && !minCheck) { //left -need to test
+                if (position == 1 && !minCheck) { //left -good
 
                     moveBotcrab(12, RIGHT1, 0.5);
                     sleep(100);
@@ -222,7 +222,7 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
 
                 }
 
-                if ((position == 2 || position == 0) && !minCheck) { //center -testing
+                if ((position == 2 || position == 0) && !minCheck) { //center -good
 
                     moveBotcrab(18, RIGHT1, 0.5);
                     sleep(100);
@@ -241,7 +241,7 @@ public class Auto_Silver extends UltimumStella_AutoMethods {
 
                 }
 
-                if (position == 3 && !minCheck) { //right -need to test
+                if (position == 3 && !minCheck) { //right -good
 
                     moveBotcrab(12, RIGHT1, 0.5);
                     sleep(100);

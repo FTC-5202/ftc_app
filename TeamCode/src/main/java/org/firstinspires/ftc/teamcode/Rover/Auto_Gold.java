@@ -157,7 +157,7 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
 
 
                 if (!minCheck) {
-                    moveBotcrab(7, RIGHT1, 0.4); //was 5
+                    moveBotcrab(7, RIGHT1, 0.4);
                     sleep(1000);
                     moveBot(2, FORWARD, 0.4);
                     sleep(100);
@@ -170,9 +170,9 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
 
                     moveBotcrab(12, RIGHT1, 0.5);
                     sleep(100);
-                    moveBot(8.5, FORWARD, 0.5); //was 6
+                    moveBot(6, FORWARD, 0.5); // mecanum not working 8.5
                     sleep(100);
-                    moveBotcrab(10, RIGHT1, 0.5);//was 6
+                    moveBotcrab(6, RIGHT1, 0.5);// mecanum not working 10
                     sleep(100);
                     imuTurn(115, 0.4);//was 90
                     sleep(100);
@@ -183,10 +183,11 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
 
                 if ((position == 2 || position == 0) && !minCheck) { //center -good
 
+                    moveBot(3, BACKWARD, 0.5);
                     moveBotcrab(18, RIGHT1, 0.5);//was 12
-                    sleep(100);
-                   // moveBot(1, BACKWARD, 0.5);
-                   // sleep(100);
+                    sleep(100);//                   sleep(100);
+                    //moveBot(3, BACKWARD, 0.5);
+                    //sleep(100);
                    // moveBotcrab(6, RIGHT1, 0.5);
                     sleep(100);
                     moveBotcrab(5, LEFT1, 0.5);//was 6
@@ -208,7 +209,7 @@ public class Auto_Gold extends UltimumStella_AutoMethods {
 
                     moveBotcrab(16, RIGHT1, 0.5); //was 12
                     sleep(100);
-                    moveBot(5, BACKWARD, 0.5); //was 10
+                    moveBot(9, BACKWARD, 0.5); //was 10
                     sleep(100);
                     moveBotcrab(10, RIGHT1, 0.5);//was 6
                     sleep(100);
